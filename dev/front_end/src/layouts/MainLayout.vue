@@ -19,7 +19,7 @@
                 active-color="grey-1"
                 class="text-white">
           <q-route-tab to="/" label="Get Started" />
-          <q-route-tab to="/page2" label="Task" />
+          <q-route-tab to="/analysis" label="Analysis" />
           <q-route-tab to="/page3" label="Toolkit" />
           <q-route-tab to="/page3" label="Document" />
           <q-route-tab to="/page3" label="Ranking" />
