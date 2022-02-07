@@ -1,4 +1,4 @@
-所以说，安装fvcore和的detectron2都是从官方下载下代码文件，自己在本地编译成python的库
+安装fvcore和的detectron2都是从官方下载下代码文件，自己在本地编译成python的库
 
 之后可以在任何地方去调用detectron的库
 
