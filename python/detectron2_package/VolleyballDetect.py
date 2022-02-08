@@ -28,7 +28,7 @@ WINDOW_NAME = "COCO detections"
 # config_file = "D:\迅雷下载\Canvas\detectron2-main\detectron2-main\configs\COCO-InstanceSegmentation\mask_rcnn_R_50_FPN_3x.yaml" # 配置文件位置
 config_file = "configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
 opts = ["MODEL.WEIGHTS", "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"]
-confidence_threshold = 0.1  # 置信度阈值，超出阈值才显示
+confidence_threshold = 0.5  # 置信度阈值，超出阈值才显示
 
 
 def setup_cfg():
