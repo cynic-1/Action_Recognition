@@ -48,6 +48,7 @@ def produce_json():
     information.close()
 
 
+
 if __name__ == "__main__":
     produce_json()  # 先在output_json目录下输出json文件
 
@@ -67,6 +68,8 @@ if __name__ == "__main__":
         pose_keypoints_2d = json_dict["people"][0]["pose_keypoints_2d"]
         for i in range(25):
             x, y, confidence = pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]
+            
+            # 确保confidence参数不为0
             if abs(confidence) > 0.00001:
                 cv2.circle(img, (int(x), int(y)), 10, (0, 0, int(255*confidence)), -1)
 
