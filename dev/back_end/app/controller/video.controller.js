@@ -50,12 +50,15 @@ export const store = (req, res) => {
 }
 
 export const getVideo = (req, res) => {
+        const vid = req.params.id;
+        Video.findById(vid)
+            .then(data => {
+                let videoPath = path.resolve(__dirname, '../../'+data.raw)
 
-        let videoPath = path.resolve(__dirname, '../../videos/video_1644130110475.mp4')
+                let readStream = fs.createReadStream(videoPath)
 
-        let readStream = fs.createReadStream(videoPath)
-
-        readStream.pipe(res);
+                readStream.pipe(res);
+            })
 
     }
 

@@ -5,7 +5,7 @@
 <!--        :ratio="16/9"-->
 <!--        src="http://localhost:8080/api/video/get"-->
 <!--      />-->
-      <video controls width="500" height="400" src="http://localhost:8080/api/video/get" type="video/mp4"></video>
+      <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
 <!--      <q-uploader-->
 <!--        url="http://localhost:8080/api/video/upload"-->
 <!--        label="video"-->
@@ -107,10 +107,11 @@
         <q-card-section>
           <div class="text-h4" style="text-align: center">正确示范</div>
           <q-separator dark inset />
-          <q-video
-            style="width: 60%;height: 300px;margin: 20px auto 10px auto"
-            src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"
-          />
+<!--          <q-video-->
+<!--            style="width: 60%;height: 300px;margin: 20px auto 10px auto"-->
+<!--            src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"-->
+<!--          />-->
+            <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
         </q-card-section>
       </q-card>
     </div>
