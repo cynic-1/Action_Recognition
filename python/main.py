@@ -54,6 +54,35 @@ def produce_json():
     print(information.read())
     information.close()
 
+def drawLineAndRadius(img, humanpoints):
+    line_points_num = (
+    (1, 5), (5, 6), (6, 7), (1, 2), (2, 3), (3, 4), (0, 1), (1, 8), (8, 9), (9, 10), (10, 11), (8, 12), (12, 13),
+    (13, 14))
+    line_points = []
+    for i in range(25):
+        for j in range(i, 25):
+            if ((i, j) in line_points_num):
+                pt1 = (int(humanpoints[0][i][0]), int(humanpoints[0][i][1]))
+                pt2 = (int(humanpoints[0][j][0]), int(humanpoints[0][j][1]))
+                line_points.append((pt1, pt2))
+    color = (0,255,0)  # BGR
+    thickness = 1
+    lineType = 4
+    for k in range(14):
+        cv2.line(img, line_points[k][0], line_points[k][1], color, thickness, cv2.LINE_AA)
+
+    radius_point = [5,6,13,2,3,10]
+    radius = []
+    radius.append(angle.angle_left_shoulder(humanpoints[0]))
+    radius.append(angle.angle_left_elbow(humanpoints[0]))
+    radius.append(angle.angle_left_knee(humanpoints[0]))
+    radius.append(angle.angle_right_shoulder(humanpoints[0]))
+    radius.append(angle.angle_right_elbow(humanpoints[0]))
+    radius.append(angle.angle_right_knee(humanpoints[0]))
+    for n in range(6):
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.putText(img,"%d"%radius[n], (int(humanpoints[0][radius_point[n]][0])-20, (int(humanpoints[0][radius_point[n]][1]))-20), font, 0.8, (255, 255, 255), 2)
+
 
 def hcolor_to_bgr(hcolor):
     r = int(hcolor[1:3], 16)
@@ -114,6 +143,8 @@ if __name__ == "__main__":
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
         print(f"球的长度是{x2-x1}")
 
+
+    drawLineAndRadius(img, humanpoints)
 
     #打印角度 -1 代表不构成三角形
     for i in range(people_cnt):
