@@ -1,1 +1,7 @@
 python/.idea/
+lib/
+models/
+3rdparty/
+bin/
+examples/
+include/
