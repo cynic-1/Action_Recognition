@@ -27,7 +27,12 @@ export default mongoose => {
             videos: [{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Video'
-            }]
+            }],
+            mail: String,
+            pwd: {
+                type: String,
+                required: true
+            }
         },
         { timestamps: true }
     );

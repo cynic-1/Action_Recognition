@@ -42,3 +42,7 @@ export const store = (req, res) => {
             });
         })
 }
+
+export const findVideoById = (req, res) => {
+    Video.findById(req.params.id)
+}

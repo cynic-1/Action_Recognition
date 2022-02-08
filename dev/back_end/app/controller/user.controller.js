@@ -1,18 +1,21 @@
 import db from "../models/index.js"
 const User = db.user;
+import sha256 from 'crypto-js/sha256.js';
 // Create and Save a new user
 export const create = (req, res) => {
     // Validate request
-    if (!(req.body.type && req.body.id && req.body.name && req.body.college)) {
+    if (!(req.body.identity && req.body.id && req.body.name && req.body.college && req.body.pwd)) {
         res.status(400).send({ message: "Content can not be empty!" });
         return;
     }
     // Create a User
     const user = new User({
-        type: req.body.type,
+        identity: req.body.identity,
         id: req.body.id,
         name: req.body.name,
-        college: req.body.college
+        college: req.body.college,
+        mail: req.body.mail || "",
+        pwd: sha256(req.body.pwd)
     });
     // Save User in the database
     user
@@ -26,6 +29,25 @@ export const create = (req, res) => {
                     err.message || "Some error occurred while creating the User."
             });
         });
+}
+export const logIn = (req, res) => {
+    const id = req.body.id;
+    User.findOne(id ? { id: { $regex: new RegExp(id), $options: "i" } } : {})
+        .then(data => {
+            if (data.pwd === sha256(req.body.pwd).toString()) {
+                // res.send("login success!")
+                res.send(data);
+            } else {
+                res.send("ID & Password unmatched ")
+            }
+            // res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving users."
+            });
+        })
 }
 // Retrieve all Users from the database by the name.
 export const findAllByName = (req, res) => {
@@ -42,7 +64,7 @@ export const findAllByName = (req, res) => {
             });
         });
 }
-// Find a single Tutorial with an id
+// Find a single User with an id
 export const findById = (req, res) => {
     const id = req.params.id;
     User.findById(id)
