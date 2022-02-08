@@ -2,6 +2,12 @@ import db from "../models/index.js"
 const Video = db.video;
 import multer from 'multer'
 import path from 'path'
+import fs from 'fs'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const videoStorage = multer.diskStorage({
     destination: 'videos', // Destination to store video
@@ -43,6 +49,13 @@ export const store = (req, res) => {
         })
 }
 
-export const findVideoById = (req, res) => {
-    Video.findById(req.params.id)
-}
+export const getVideo = (req, res) => {
+
+        let videoPath = path.resolve(__dirname, '../../videos/video_1644130110475.mp4')
+
+        let readStream = fs.createReadStream(videoPath)
+
+        readStream.pipe(res);
+
+    }
+

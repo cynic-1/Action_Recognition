@@ -1,10 +1,11 @@
 <template xmlns="http://www.w3.org/1999/html" class="bg-blue-6">
   <div class="row" style="width: 95%;margin:20px auto 20px auto">
     <div class="q-pa-md" style="width: 40%">
-      <q-video
-        :ratio="16/9"
-        src="videos/video_1644130110475.mp4"
-      />
+<!--      <q-video-->
+<!--        :ratio="16/9"-->
+<!--        src="http://localhost:8080/api/video/get"-->
+<!--      />-->
+      <video controls width="500" height="400" src="http://localhost:8080/api/video/get" type="video/mp4"></video>
 <!--      <q-uploader-->
 <!--        url="http://localhost:8080/api/video/upload"-->
 <!--        label="video"-->
