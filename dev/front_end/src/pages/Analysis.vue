@@ -1,16 +1,16 @@
 <template xmlns="http://www.w3.org/1999/html" class="bg-blue-6">
   <div class="row" style="width: 95%;margin:20px auto 20px auto">
     <div class="q-pa-md" style="width: 40%">
-<!--      <q-video-->
-<!--        :ratio="16/9"-->
-<!--        src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"-->
-<!--      />-->
-      <q-uploader
-        url="http://localhost:8080/api/video/upload"
-        label="video"
-        field-name="video"
-        style="max-width: 300px"
+      <q-video
+        :ratio="16/9"
+        src="videos/video_1644130110475.mp4"
       />
+<!--      <q-uploader-->
+<!--        url="http://localhost:8080/api/video/upload"-->
+<!--        label="video"-->
+<!--        field-name="video"-->
+<!--        style="max-width: 300px"-->
+<!--      />-->
 
       <q-card
         class="my-card text-white"

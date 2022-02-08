@@ -7,11 +7,12 @@ export default app => {
     router.post("/", user.create);
     // Retrieve all Users
     router.get("/", user.findAllByName);
+    router.get("/login", user.logIn);
     // Retrieve a single User with id
     router.get("/:id", user.findById);
-    // Update a Tutorial with id
+    // Update a User with id
     router.put("/:id", user.updateById);
-    // Delete a Tutorial with id
+    // Delete a User with id
     router.delete("/:id", user.deleteById);
     // Create a new Tutorial
     app.use('/api/user', router);

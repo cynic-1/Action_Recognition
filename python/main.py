@@ -8,6 +8,9 @@ import time
 
 import cv2
 import numpy
+import numpy as np
+
+import angle
 
 is_low_resolution = True
 
@@ -64,15 +67,27 @@ if __name__ == "__main__":
 
     people_cnt = len(json_dict["people"])
     print(f"一共有{people_cnt}个人在画面中。")
+    humanpoints = np.zeros((10, 25, 3))
     if people_cnt != 0:
         pose_keypoints_2d = json_dict["people"][0]["pose_keypoints_2d"]
         for i in range(25):
+            humanpoints[0][i] = [pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]]
             x, y, confidence = pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]
             
             # 确保confidence参数不为0
             if abs(confidence) > 0.00001:
-                cv2.circle(img, (int(x), int(y)), 10, (0, 0, int(255*confidence)), -1)
+                cv2.circle(img, (int(x), int(y)), 10, (0, 0, int(255*confidence)), -1)  #在图中画出关键点
 
+    #打印角度 -1 代表不构成三角形
+    for i in range(people_cnt):
+        angle.angle_left_shoulder(humanpoints[i])
+        angle.angle_left_elbow(humanpoints[i])
+        angle.angle_left_knee(humanpoints[i])
+        angle.angle_left_ankle(humanpoints[i])
+        angle.angle_right_shoulder(humanpoints[i])
+        angle.angle_right_elbow(humanpoints[i])
+        angle.angle_right_knee(humanpoints[i])
+        angle.angle_right_ankle(humanpoints[i])
 
     # 适应屏幕的尺寸调整
     newW = W = img.shape[1]
