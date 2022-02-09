@@ -9,6 +9,8 @@ export default mongoose => {
             id: {
                 type: String,
                 required: true,
+                index: true,
+                unique: true,
                 max: 20
             },
             name: {
