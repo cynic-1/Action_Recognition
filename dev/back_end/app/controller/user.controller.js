@@ -66,59 +66,59 @@ export const findAllByName = (req, res) => {
 }
 // Find a single User with an id
 export const findById = (req, res) => {
-    const id = req.params.id;
-    User.findById(id)
+    const _id = req.params._id;
+    User.findById(_id)
         .then(data => {
             if (!data)
-                res.status(404).send({ message: "Not found Tutorial with id " + id });
+                res.status(404).send({ message: "Not found user with _id " + _id });
             else res.send(data);
         })
         .catch(() => {
             res
                 .status(500)
-                .send({ message: "Error retrieving Tutorial with id=" + id });
+                .send({ message: "Error retrieving user with _id=" + _id });
         });
 }
-// Update a Tutorial by the id in the request
+// Update a user by the id in the request
 export const updateById = (req, res) => {
     if (!req.body) {
         return res.status(400).send({
             message: "Data to update can not be empty!"
         });
     }
-    const id = req.params.id;
-    User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    const _id = req.params._id;
+    User.findByIdAndUpdate(_id, req.body, { useFindAndModify: false })
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot update User with id=${id}. Maybe User was not found!`
+                    message: `Cannot update user with _id=${_id}. Maybe User was not found!`
                 });
             } else res.send({ message: "User was updated successfully." });
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Tutorial with id=" + id
+                message: "Error updating user with _id=" + _id
             });
         });
 }
 // Delete a User with the specified id in the request
 export const deleteById = (req, res) => {
-    const id = req.params.id;
-    User.findByIdAndRemove(id)
+    const _id = req.params._id;
+    User.findByIdAndRemove(_id)
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+                    message: `Cannot delete user with id=${_id}. Maybe Tutorial was not found!`
                 });
             } else {
                 res.send({
-                    message: "Tutorial was deleted successfully!"
+                    message: "User was deleted successfully!"
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Tutorial with id=" + id
+                message: "Could not delete user with id=" + _id
             });
         });
 }

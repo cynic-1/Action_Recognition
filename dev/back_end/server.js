@@ -4,7 +4,8 @@ import cors from 'cors'
 import db from './app/models/index.js'
 import userRoutes from "./app/routes/user.routes.js";
 import videoRoutes from "./app/routes/video.routes.js";
-import fs from 'fs'
+import courseRoutes from "./app/routes/course.routes.js";
+// import fs from 'fs'
 
 const app = express();
 
@@ -27,8 +28,9 @@ app.get("/", (req, res) => {
 
 userRoutes(app);
 videoRoutes(app);
+courseRoutes(app);
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
