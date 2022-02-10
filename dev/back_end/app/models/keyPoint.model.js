@@ -42,6 +42,11 @@ export default mongoose => {
                     type: Number,
                     min: 0,
                     max: 100
+                },
+                rate: {
+                    type: Number,
+                    min: 0,
+                    max: 180
                 }
             }
         },
