@@ -8,6 +8,10 @@ export default mongoose => {
             },
             raw: String, // file location
             processed: String, // file location
+            keyPoints: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'keyPoint'
+            }]
         },
         { timestamps: true }
     );
