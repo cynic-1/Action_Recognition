@@ -11,5 +11,9 @@ export default app => {
     router.put("/:id", course.updateById);
     // delete a course by id
     router.delete("/:id", course.deleteById)
+    // insert students into the course
+    router.post("/:id/students", course.insertStudents)
+    // get students who attend the course
+    router.get("/:id/students", course.getStudents)
     app.use('/api/course', router);
 };

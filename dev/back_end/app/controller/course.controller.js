@@ -108,8 +108,8 @@ export const getStudents = (req, res) => {
 
 export const insertStudents = (req, res) => {
     const id = req.params.id;
-    const sid = req.body.sid;
-    Course.findByIdAndUpdate(id, {$addToSet: {students: { $each: sid }}})
+    const _ids = req.body._ids;
+    Course.findByIdAndUpdate(id, {$addToSet: {students: { $each: _ids }}})
         .then(data => {
             if (!data) {
                 res.status(404).send({
