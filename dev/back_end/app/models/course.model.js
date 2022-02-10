@@ -1,3 +1,4 @@
+import integerValidator from 'mongoose-integer'
 export default mongoose => {
     let schema = mongoose.Schema(
         {
@@ -8,7 +9,24 @@ export default mongoose => {
             semester: {
                 type: Number,
                 required: true,
+                integer: true,
                 enum: [1, 2] // autumn, spring
+            },
+            courseTime: {
+                day: {
+                    type: Number,
+                    required: true,
+                    integer: true,
+                    min: 1,
+                    max: 7
+                },
+                class: {
+                    type: Number,
+                    required: true,
+                    integer: true,
+                    min: 1,
+                    max: 9
+                }
             },
             name: {
                 type: String, // e.g. volleyball
@@ -25,6 +43,19 @@ export default mongoose => {
                 required: true,
                 ref: "user"
             }],
+            lessons: [{
+                week: {
+                    type: Number,
+                    required: true,
+                    integer: true,
+                    min: 1,
+                    max: 18
+                },
+                videos: [{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "video"
+                }]
+            }]
         },
         { timestamps: true }
     );
@@ -33,5 +64,6 @@ export default mongoose => {
     //     object.id = _id;
     //     return object;
     // });
+    schema.plugin(integerValidator);
     return mongoose.model("course", schema);
 };

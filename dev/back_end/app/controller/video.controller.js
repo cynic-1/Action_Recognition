@@ -1,5 +1,6 @@
 import db from "../models/index.js"
 const Video = db.video;
+const User = db.user;
 import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
@@ -32,14 +33,26 @@ export const videoUpload = multer({
 })
 
 export const store = (req, res) => {
+    const id = req.params.id;
     const video = new Video({
         name: req.file.filename,
+        uploader: id,
         raw: req.file.path
     });
     video
         .save(video)
-        .then(() => {
-            res.send(req.file);
+        .then(data => {
+            User.findByIdAndUpdate(id,
+                {$push: {videos: data._id}})
+                .then(() => {
+                    res.send(req.file);
+                })
+                .catch(err => {
+                    res.status(500).send({
+                        message:
+                            err.message || "user id is invalid."
+                    });
+                })
         })
         .catch(err => {
             res.status(500).send({
