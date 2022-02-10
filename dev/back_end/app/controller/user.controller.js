@@ -4,7 +4,7 @@ import sha256 from 'crypto-js/sha256.js';
 // Create and Save a new user
 export const create = (req, res) => {
     // Validate request
-    if (!(req.body.identity && req.body.id && req.body.name && req.body.college && req.body.pwd)) {
+    if (!(req.body.identity !== undefined && req.body.id && req.body.name && req.body.college && req.body.pwd)) {
         res.status(400).send({ message: "Content can not be empty!" });
         return;
     }
@@ -66,17 +66,17 @@ export const findAllByName = (req, res) => {
 }
 // Find a single User with an id
 export const findById = (req, res) => {
-    const _id = req.params._id;
-    User.findById(_id)
+    const id = req.params.id;
+    User.findById(id)
         .then(data => {
             if (!data)
-                res.status(404).send({ message: "Not found user with _id " + _id });
+                res.status(404).send({ message: "Not found user with id " + id });
             else res.send(data);
         })
         .catch(() => {
             res
                 .status(500)
-                .send({ message: "Error retrieving user with _id=" + _id });
+                .send({ message: "Error retrieving user with id=" + id });
         });
 }
 // Update a user by the id in the request
@@ -86,29 +86,29 @@ export const updateById = (req, res) => {
             message: "Data to update can not be empty!"
         });
     }
-    const _id = req.params._id;
-    User.findByIdAndUpdate(_id, req.body, { useFindAndModify: false })
+    const id = req.params.id;
+    User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot update user with _id=${_id}. Maybe User was not found!`
+                    message: `Cannot update user with id=${id}. Maybe User was not found!`
                 });
             } else res.send({ message: "User was updated successfully." });
         })
-        .catch(err => {
+        .catch(() => {
             res.status(500).send({
-                message: "Error updating user with _id=" + _id
+                message: "Error updating user with id=" + id
             });
         });
 }
 // Delete a User with the specified id in the request
 export const deleteById = (req, res) => {
-    const _id = req.params._id;
-    User.findByIdAndRemove(_id)
+    const id = req.params.id;
+    User.findByIdAndRemove(id)
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot delete user with id=${_id}. Maybe Tutorial was not found!`
+                    message: `Cannot delete user with id=${id}. Maybe user was not found!`
                 });
             } else {
                 res.send({
@@ -116,9 +116,9 @@ export const deleteById = (req, res) => {
                 });
             }
         })
-        .catch(err => {
+        .catch(() => {
             res.status(500).send({
-                message: "Could not delete user with id=" + _id
+                message: "Could not delete user with id=" + id
             });
         });
 }

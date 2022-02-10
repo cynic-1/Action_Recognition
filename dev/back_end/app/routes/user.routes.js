@@ -14,6 +14,6 @@ export default app => {
     router.put("/:id", user.updateById);
     // Delete a User with id
     router.delete("/:id", user.deleteById);
-    // Create a new Tutorial
+    // Create a new user
     app.use('/api/user', router);
 };
