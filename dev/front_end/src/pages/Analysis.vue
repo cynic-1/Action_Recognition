@@ -105,13 +105,15 @@
         </q-card-section>
 
         <q-card-section>
-          <div class="text-h4" style="text-align: center">正确示范</div>
+          <div class="text-h4" style="text-align: center">老师评价</div>
           <q-separator dark inset />
+          <div class="text-h5" style="margin-top: 20px;margin-bottom: 20px">评分： 85</div>
 <!--          <q-video-->
 <!--            style="width: 60%;height: 300px;margin: 20px auto 10px auto"-->
 <!--            src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"-->
 <!--          />-->
-            <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
+<!--            <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>-->
+        <div class="text-subtitle1">达拉克斯基的离开洒家的打开拉萨机立刻大家阿斯利康决定了空间啊滤镜老咔叽陈卡雷就拉开差距萨洛克插卡就是v出来的洒家扩大除了卡v就立刻数据来看v可垃圾啊v地理空间率考虑到了恐惧绿蜡卡拉居留卡v空间的v离开v拉开点距离看见立刻除了卡具v考虑阿娇v安洁丽卡v扩大距离v离开的v了恐惧v点卡v率的卡距离打开v就卡了大局来看v的恐惧啦v将来肯定是v建立打开吃撒吃撒从建立凯撒距离喀什滤镜啊v老咔叽定律v快乐大居留卡就 离开数据利空打击了v利空打击率及的角色v离开家</div>
         </q-card-section>
       </q-card>
     </div>
