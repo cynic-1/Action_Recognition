@@ -11,6 +11,7 @@ const routes = [
       { "path": "/student", "component": () => import("pages/Student") },
       { "path": "/stuvideolist", "component": () => import("pages/StuVideoList") },
       { "path": "/rate", "component": () => import("pages/Rate") },
+      { "path": "/upload", "component": () => import("pages/PersonalUpload") },
     ]
   },
   {

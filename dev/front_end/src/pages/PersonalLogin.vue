@@ -171,6 +171,8 @@ export default {
       this.validate();
       if(this.role === "教师")
         this.$router.push("/class")
+      else if(this.role === "学生")
+        this.$router.push("/upload")
       else
         alert("尚未开放")
       // this.$axios({

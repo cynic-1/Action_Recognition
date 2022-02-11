@@ -18,7 +18,8 @@
                 dense
                 active-color="grey-1"
                 class="text-white">
-          <q-route-tab to="/" label="Get Started" />
+<!--          <q-route-tab to="/" label="Get Started" />-->
+          <q-route-tab to="/upload" label="Upload" />
           <q-route-tab to="/analysis" label="Analysis" />
           <q-route-tab to="/class" label="Class" />
           <q-route-tab to="/course" label="Course" />
