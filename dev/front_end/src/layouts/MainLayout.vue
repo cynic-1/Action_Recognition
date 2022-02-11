@@ -20,13 +20,13 @@
                 class="text-white">
           <q-route-tab to="/" label="Get Started" />
           <q-route-tab to="/analysis" label="Analysis" />
-          <q-route-tab to="/page3" label="Toolkit" />
-          <q-route-tab to="/page3" label="Document" />
-          <q-route-tab to="/page3" label="Ranking" />
-          <q-route-tab to="/page3" label="Tutorial" />
-          <q-route-tab to="/page3" label="Paper" />
-          <q-route-tab to="/page3" label="About" />
-          <q-route-tab to="/page3" label="Github" />
+          <q-route-tab to="/class" label="Class" />
+          <q-route-tab to="/course" label="Course" />
+          <q-route-tab to="/student" label="Student" />
+          <q-route-tab to="/stuvideolist" label="List" />
+          <q-route-tab to="/rate" label="Rate" />
+          <q-route-tab to="/register" label="Register" />
+          <q-route-tab to="/login" label="Login" />
         </q-tabs>
 
       </q-toolbar>
