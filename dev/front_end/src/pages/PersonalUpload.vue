@@ -26,11 +26,10 @@
         </q-card-section>
         </q-card-section>
       </q-card>
-      <br><br>
     </div>
-    <div class="row" style="width: 100%;">
+    <div class="row">
       <div>
-        <q-card v-if="!editing" class="info q-pa-md">
+        <q-card class="info q-pa-md">
           <div class="text-h4">
             课程信息
             <q-btn rounded icon="more" flat class="text-right text-h5">更多</q-btn>
@@ -53,36 +52,37 @@
 <!--        </q-card>-->
       </div>
       <div class="upload">
-        <div class="text-h4 text-grey row" style="width: 80%; margin-left: auto; margin-right: auto;margin-bottom: 30px">
+        <div class="text-h4 text-grey row width-80-center q-mb-lg">
           <span style="margin-right: 60%">我的上传</span>
           <q-btn rounded color="blue" icon="upload">上传视频</q-btn>
         </div>
-        <q-card
-          class="my-card text-white"
-          style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%); width: 80%; margin-left: auto; margin-right: auto;margin-bottom: 30px"
-        >
-          <q-card-section horizontal>
-            <q-card-section>
-              <q-video
-                style="width: 200px;height: 150px;"
-                src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"
-              />
-            </q-card-section>
+<!--        <q-card-->
+<!--          class="my-card text-white"-->
+<!--          style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%); width: 80%; margin-left: auto; margin-right: auto;margin-bottom: 30px"-->
+<!--        >-->
+<!--          <q-card-section horizontal>-->
+<!--            <q-card-section>-->
+<!--              <video controls width="500" height="300" src="http://localhost:3000/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>-->
 
-            <q-card-section style="margin-right: 150px">
-              <div class="text-h6">学号：1234566</div>
-              <div class="text-h6">上传者：jack</div>
-              <div class="text-subtitle2">授课老师：李红</div>
-              <div class="text-subtitle2">上传时间：2021.7.6</div>
-              <div class="text-subtitle2">视频编号：123456789</div>
-              <div class="text-subtitle2">视频评分：80</div>
-            </q-card-section>
+<!--            </q-card-section>-->
 
-            <q-card-section>
-              <q-btn size="lg" icon-right="arrow_forward" style="margin-top: 80px" to="/analysis">查看分析</q-btn>
-            </q-card-section>
-          </q-card-section>
-        </q-card>
+<!--            <q-card-section style="margin-right: 10%">-->
+<!--              <div class="text-h6">学号：1234566</div>-->
+<!--              <div class="text-h6">上传者：jack</div>-->
+<!--              <div class="text-subtitle2">授课老师：李红</div>-->
+<!--              <div class="text-subtitle2">上传时间：2021.7.6</div>-->
+<!--              <div class="text-subtitle2">视频编号：123456789</div>-->
+<!--              <div class="text-subtitle2">视频评分：80</div>-->
+<!--            </q-card-section>-->
+
+<!--            <q-card-section>-->
+<!--              <q-btn size="lg" icon-right="arrow_forward" style="margin-top: 80px" to="/analysis">查看分析</q-btn>-->
+<!--            </q-card-section>-->
+<!--          </q-card-section>-->
+<!--        </q-card>-->
+        <div class="width-80-center">
+          <video-item/>
+        </div>
       </div>
     </div>
   </div>
@@ -91,11 +91,12 @@
 <script>
 import {defineAsyncComponent} from 'vue'
 const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
-
+const videoItem = defineAsyncComponent(() => import("components/VideoItem"));
 export default {
   name: "PersonalUpload",
   components: {
-    lineChart
+    lineChart,
+    videoItem
   },
   data() {
     return  {
@@ -135,6 +136,9 @@ export default {
   box-shadow: #1D1D1D;
 }
 .upload{
-  width: 80%;
+  width: 75%;
+}
+.width-80-center {
+  width: 80%; margin-left: auto; margin-right: auto;
 }
 </style>
