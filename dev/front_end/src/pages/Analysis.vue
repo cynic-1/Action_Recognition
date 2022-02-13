@@ -22,10 +22,10 @@
           infinite
           height="300px"
         >
-          <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
-          <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
-          <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
-          <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
+          <q-carousel-slide :name="1" img-src="../assets/1.webp" />
+          <q-carousel-slide :name="2" img-src="../assets/2.webp" />
+          <q-carousel-slide :name="3" img-src="../assets/3.webp" />
+          <q-carousel-slide :name="4" img-src="../assets/4.webp" />
 
           <template v-slot:control>
             <q-carousel-control
@@ -63,15 +63,15 @@
           <q-separator dark inset />
           <div class="row q-pa-md">
             <div class="text-h6 col text-center">
-              动作质量评估<br>{{quality}}
+              动作质量评估<br>{{quality[slide-1]}}
             </div>
             <q-separator dark inset vertical/>
             <div class="text-h6 col text-center">
-              动作稳定性<br>{{stability}}
+              动作稳定性<br>{{stability[slide-1]}}
             </div>
             <q-separator dark inset vertical/>
             <div class="text-h6 col text-center">
-              动作准确性<br>{{accuracy}}
+              动作准确性<br>{{accuracy[slide-1]}}
             </div>
           </div>
         </q-card-section>
@@ -160,9 +160,9 @@ name: "Analysis",
   data() {
   return {
     evaluate: {
-      stability: 48,
-      accuracy: 80,
-      quality: 70
+      stability: [48,45,68,56],
+      accuracy: [80,78,79,81],
+      quality: [70,56,67,73]
     },
     slide: 1,
     fullscreen: false,
