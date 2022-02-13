@@ -45,13 +45,22 @@
           </q-card-section>
         </q-card>
       </q-tab-panel>
+
+      <q-tab-panel name="analysis">
+        <line-chart/>
+      </q-tab-panel>
     </q-tab-panels>
   </div>
 </template>
 
 <script>
+import {defineAsyncComponent} from "vue";
+const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
 export default {
   name: "StuVideoList",
+  components: {
+    lineChart
+  },
   data(){
     return {
       tab: 'list',

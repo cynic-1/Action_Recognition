@@ -33,7 +33,7 @@
         <q-card v-if="!editing" class="info q-pa-md">
           <div class="text-h4">
             课程信息
-            <q-btn rounded icon="more" flat class="text-right text-h5" @click="edit">更多</q-btn>
+            <q-btn rounded icon="more" flat class="text-right text-h5">更多</q-btn>
           </div>
 
 <!--          <div class="text-h5 text-grey" style="margin: 20px">学号：{{id}}</div>-->
