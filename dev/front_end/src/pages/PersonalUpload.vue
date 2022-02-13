@@ -102,8 +102,8 @@ export default {
     return  {
       imgUrl: 'https://cdn.quasar.dev/img/boy-avatar.png',
       alert: false,
-      id: 12345678,
-      name: 'jack london',
+      id: 19231061,
+      name: '宋永欣',
       teacher: '李红',
       course: '周三第四节',
       email: 'ca1312@163.com',

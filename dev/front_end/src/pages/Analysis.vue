@@ -26,6 +26,7 @@
           <q-carousel-slide :name="2" img-src="../assets/2.webp" />
           <q-carousel-slide :name="3" img-src="../assets/3.webp" />
           <q-carousel-slide :name="4" img-src="../assets/4.webp" />
+          <q-carousel-slide :name="5" img-src="../assets/1.jpg" />
 
           <template v-slot:control>
             <q-carousel-control
@@ -160,17 +161,17 @@ name: "Analysis",
   data() {
   return {
     evaluate: {
-      stability: [48,45,68,56],
-      accuracy: [80,78,79,81],
-      quality: [70,56,67,73],
-      position: [1.0,1.2,1.4,1.1],
-      catchAngle: [60.3,65.4,100.8,123.1],
-      hitAngle: [50.1,90.8,67.8,98.2],
-      armAngle: [72.1,67.5,56.3,78.9],
-      catchPosition: [1.0,1.5,0.8,2.1],
-      hitPosition: [1.5,1.4,1.6,1.5],
-      height: [0.7,0.56,1.1,0.98],
-      legAngle: [72.1,34.5,56.7,78.5]
+      stability: [48,45,68,56,64],
+      accuracy: [80,78,79,81,92],
+      quality: [70,56,67,73,63],
+      position: [1.0,1.2,1.4,1.1,1.3],
+      catchAngle: [60.3,65.4,100.8,123.1,119.2],
+      hitAngle: [50.1,90.8,67.8,98.2,123.1],
+      armAngle: [72.1,67.5,56.3,78.9, 66.2],
+      catchPosition: [1.0,1.5,0.8,2.1,1.3],
+      hitPosition: [1.5,1.4,1.6,1.5,1.6],
+      height: [0.7,0.56,1.1,0.98,0.98],
+      legAngle: [72.1,34.5,56.7,78.5,72.9]
     },
     slide: 1,
     fullscreen: false,
