@@ -1,23 +1,16 @@
 <template>
   <div style="margin-top: 30px">
     <div class="personal-menu-card">
-      <q-card class="personal">
+      <q-card>
+        <q-card-section horizontal>
         <q-card-section
           horizontal
-          style="padding-top: 30px;padding-bottom: 30px"
         >
-          <q-btn
-            round
-            @click="alert = true"
-          >
-            <q-avatar size="120px" >
+            <q-avatar size="120px">
               <img :src="this.imgUrl" alt="用户头像">
             </q-avatar>
-          </q-btn>
-
-          <q-card-actions
+          <q-card-section
             vertical
-            class="justify-around"
             style="padding-left: 100px"
           >
             <div class="q-py-sm">
@@ -26,45 +19,47 @@
             <div class="q-py-sm">
               <span class="text-grey text-h5">学号--{{ id }}</span>
             </div>
-          </q-card-actions>
+          </q-card-section>
+        </q-card-section>
+        <q-card-section vertical>
+          <line-chart/>
+        </q-card-section>
         </q-card-section>
       </q-card>
       <br><br>
     </div>
-
     <div class="row" style="width: 100%;">
       <div>
-        <q-card v-if="!editing" class="info">
-          <div class="text-h3">个人信息</div>
-          <q-btn rounded icon="edit" flat style="float: right" @click="edit">编辑</q-btn>
-          <div class="text-h5 text-grey" style="margin: 20px">学号：{{id}}</div>
-          <div class="text-h5 text-grey" style="margin: 20px">姓名：{{name}}</div>
-          <div class="text-h5 text-grey" style="margin: 20px">邮箱：{{email}}</div>
-          <div class="text-h5 text-grey" style="margin: 20px">课程：{{course}}</div>
-          <div class="text-h5 text-grey" style="margin: 20px">任课老师：{{teacher}}</div>
-        </q-card>
-        <q-card v-else class="info">
-          <div class="text-h3">个人信息</div>
-          <q-input label="学号" v-model="id"></q-input>
-          <q-input label="姓名" v-model="name"></q-input>
-          <q-input label="邮箱" v-model="email"></q-input>
-          <q-input label="课程" v-model="course"></q-input>
-          <q-input label="任课老师" v-model="teacher"></q-input>
-          <q-btn rounded style="margin-left: 35%;margin-top: 30px" size="lg" @click="save">保存</q-btn>
-        </q-card>
-        <div id="chart" style="width: 360px;height:240px;"></div>
-      </div>
+        <q-card v-if="!editing" class="info q-pa-md">
+          <div class="text-h4">
+            课程信息
+            <q-btn rounded icon="more" flat class="text-right text-h5" @click="edit">更多</q-btn>
+          </div>
 
+<!--          <div class="text-h5 text-grey" style="margin: 20px">学号：{{id}}</div>-->
+<!--          <div class="text-h5 text-grey" style="margin: 20px">姓名：{{name}}</div>-->
+<!--          <div class="text-h5 text-grey" style="margin: 20px">邮箱：{{email}}</div>-->
+          <div class="text-h5 text-grey">当前课程：{{course}}</div>
+          <div class="text-h5 text-grey">任课老师：{{teacher}}</div>
+        </q-card>
+<!--        <q-card v-else class="info">-->
+<!--          <div class="text-h3">个人信息</div>-->
+<!--          <q-input label="学号" v-model="id"></q-input>-->
+<!--          <q-input label="姓名" v-model="name"></q-input>-->
+<!--          <q-input label="邮箱" v-model="email"></q-input>-->
+<!--          <q-input label="课程" v-model="course"></q-input>-->
+<!--          <q-input label="任课老师" v-model="teacher"></q-input>-->
+<!--          <q-btn rounded style="margin-left: 35%;margin-top: 30px" size="lg" @click="save">保存</q-btn>-->
+<!--        </q-card>-->
+      </div>
       <div class="upload">
-        <div class="text-h4 text-grey row" style="width: 80%; margin-left: auto; margin-right: auto;margin-bottom: 30px">
-          <span style="margin-right: 600px">我的上传</span>
+        <div class="text-h4 text-grey row" style="width: 70%; margin-left: auto; margin-right: auto;margin-bottom: 30px">
+          <span style="margin-right: 55%">我的上传</span>
           <q-btn rounded color="blue" icon="upload">上传视频</q-btn>
         </div>
         <q-card
           class="my-card text-white"
           style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%); width: 80%; margin-left: auto; margin-right: auto;margin-bottom: 30px"
-          v-for="x in 6"
-          :key="x"
         >
           <q-card-section horizontal>
             <q-card-section>
@@ -94,8 +89,14 @@
 </template>
 
 <script>
+import {defineAsyncComponent} from 'vue'
+const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
+
 export default {
   name: "PersonalUpload",
+  components: {
+    lineChart
+  },
   data() {
     return  {
       imgUrl: 'https://cdn.quasar.dev/img/boy-avatar.png',
@@ -129,12 +130,11 @@ export default {
   padding-left: 30%;
 }
 .info {
-  width: 80%;
-  margin-left: 100px;
+  width: 100%;
+  margin-left: 20%;
   box-shadow: #1D1D1D;
-  padding: 20px;
 }
 .upload{
-  width: 70%;
+  width: 80%;
 }
 </style>
