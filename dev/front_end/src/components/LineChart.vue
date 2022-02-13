@@ -45,7 +45,7 @@ export default {
         "textStyle": {
           "fontSize": "20"
         },
-        "data": ["历次课综合得分"]
+        "data": ["动作质量得分", "动作稳定性得分"]
       },
       "grid": {
         "left": "3%",
@@ -63,11 +63,16 @@ export default {
       },
       "series": [
         {
-          "name": "历次课综合得分",
+          "name": "动作质量得分",
           "type": "line",
-          "stack": "Total",
           "data": [65, 74, 70, 82, 86, 92, 98, 97, 98]
         },
+        {
+          name: "动作稳定性得分",
+          type: "line",
+          stack: "Total",
+          data: [33, 42, 46, 24, 56, 88, 79, 92, 96]
+        }
       ]
     };
     function initChart () {

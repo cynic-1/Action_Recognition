@@ -53,8 +53,8 @@
 <!--        </q-card>-->
       </div>
       <div class="upload">
-        <div class="text-h4 text-grey row" style="width: 70%; margin-left: auto; margin-right: auto;margin-bottom: 30px">
-          <span style="margin-right: 55%">我的上传</span>
+        <div class="text-h4 text-grey row" style="width: 80%; margin-left: auto; margin-right: auto;margin-bottom: 30px">
+          <span style="margin-right: 60%">我的上传</span>
           <q-btn rounded color="blue" icon="upload">上传视频</q-btn>
         </div>
         <q-card
