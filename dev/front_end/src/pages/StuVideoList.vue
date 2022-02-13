@@ -33,7 +33,7 @@
 
             <q-card-section style="margin-right: 200px">
               <div class="text-h6">学号：1234566</div>
-              <div class="text-h6" style="margin-bottom: 20px">上传者：jack</div>
+              <div class="text-h6" style="margin-bottom: 20px">上传者：张三</div>
               <div class="text-subtitle2">授课老师：李红</div>
               <div class="text-subtitle2">上传时间：2021.7.6</div>
               <div class="text-subtitle2">视频编号：123456789</div>

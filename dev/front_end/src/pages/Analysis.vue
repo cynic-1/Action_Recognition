@@ -82,24 +82,24 @@
           <div class="text-h6 row text-center">
             <div class="col">
               击球部位<br>
-              1.0/3<br>
+              {{evaluate.position[slide-1]}}/3<br>
               <span class="text-warning">击球部位靠后</span>
             </div>
             <q-separator dark inset vertical/>
             <div class="col">
               接球角度<br>
-              60.3/180<br>
+              {{evaluate.catchAngle[slide-1]}}/180<br>
             </div>
             <q-separator dark inset vertical/>
             <div class="col">
               击球角度<br>
-              50.1/180<br>
+              {{evaluate.hitAngle[slide-1]}}/180<br>
               <span class="text-warning">接球角度偏小</span>
             </div>
             <q-separator dark inset vertical/>
             <div class="col">
               手臂与躯干角度<br>
-              72.1/180<br>
+              {{evaluate.armAngle[slide-1]}}/180<br>
               <span class="text-warning">正常</span>
             </div>
           </div>
@@ -111,27 +111,27 @@
           <div class="text-h6 row text-center">
             <div class="col">
               接球姿势<br>
-              1.0/3<br>
+              {{evaluate.catchPosition[slide-1]}}/3<br>
               <span class="text-warning">下蹲角度太小</span>
             </div>
 
             <q-separator dark inset vertical/>
             <div class="col">
               击球姿势<br>
-              1.5/3.0<br>
+              {{evaluate.hitPosition[slide-1]}}/3.0<br>
             </div>
 
             <q-separator dark inset vertical style="margin-left: 5px;margin-right: 5px"/>
             <div class="col">
               击球时起跳高度<br>
-              0.7<br>
+              {{evaluate.height[slide-1]}}<br>
               <span class="text-warning">尝试更早起跳</span>
             </div>
 
             <q-separator dark inset vertical/>
             <div class="col">
               大腿与小腿弯曲角度<br>
-              72.1/180<br>
+              {{evaluate.legAngle[slide-1]}}/180<br>
               <span class="text-warning">正常</span>
             </div>
 
@@ -162,7 +162,15 @@ name: "Analysis",
     evaluate: {
       stability: [48,45,68,56],
       accuracy: [80,78,79,81],
-      quality: [70,56,67,73]
+      quality: [70,56,67,73],
+      position: [1.0,1.2,1.4,1.1],
+      catchAngle: [60.3,65.4,100.8,123.1],
+      hitAngle: [50.1,90.8,67.8,98.2],
+      armAngle: [72.1,67.5,56.3,78.9],
+      catchPosition: [1.0,1.5,0.8,2.1],
+      hitPosition: [1.5,1.4,1.6,1.5],
+      height: [0.7,0.56,1.1,0.98],
+      legAngle: [72.1,34.5,56.7,78.5]
     },
     slide: 1,
     fullscreen: false,
