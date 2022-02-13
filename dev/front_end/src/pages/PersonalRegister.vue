@@ -87,6 +87,7 @@
                 v-model="rePassword"
                 :type="show3 ? 'text' : 'password'"
                 :rules="[passwordRules, affirmPass]"
+                lazy-rules
                 label="确认密码"
                 type="password"
                 required
@@ -122,6 +123,7 @@
                 :rules="emailRules"
                 label="邮箱"
                 type="email"
+                lazy-rules
                 required
               >
                 <template #label>
@@ -147,7 +149,6 @@
                 :disabled="!valid"
                 class="button"
                 large
-                to="/Login"
                 @click="Register"
               >
                 <p class="login_">
@@ -200,37 +201,41 @@ export default {
     }),
 
     "methods": {
-        Register () {
+        postCreate() {
+          // console.log(this.role, this.options, this.options.indexOf(this.role))
+          this.$api({
+            "method": "POST",
+            "url": "api/user",
+            "data": {
+              identity: this.options.indexOf(this.role),
+              id: this.id,
+              name: this.name,
+              college: this.college,
+              pwd: this.password,
+              mail: this.Email
+            },
+          }).then(res => {
+            console.log("注册", res);
+            if (res.status === 200) {
 
-            this.validate();
-            this.$axios({
-                "method": "POST",
-                "url": "api/user",
-                "data": {
-                    identity: this.role.indexOf(this.options),
-                    id: this.id,
-                    name: this.name,
-                    college: this.college,
-                    pwd: this.password,
-                    mail: this.Email
-                },
-            }).then(res => {
-                console.log("注册", res);
-                if (res.status === 200) {
+              alert("注册成功，正在前往登录界面");
+              this.$router.push({ "path": "/login" });
 
-                    alert("注册成功，正在前往登录界面");
-                    this.$router.push({ "path": "/login" });
+            } else if (res.status === 0) {
+              alert(res.message)
+              // this.clear()
+            }
 
-                } else if (res.status === 0) {
-                    alert(res.message)
-                    // this.clear()
-                }
-
-            });
-
+          });
         },
-        validate () {
-            this.$refs.form.validate();
+        Register () {
+          this.$refs.form.validate()
+          .then(success => {
+            if (success) {
+              this.postCreate()
+            }
+          })
+
         },
         clear () {
 
