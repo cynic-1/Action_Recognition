@@ -5,7 +5,7 @@
 <!--        :ratio="16/9"-->
 <!--        src="http://localhost:8080/api/video/get"-->
 <!--      />-->
-      <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
+      <video controls width="500" height="400" src="http://localhost:3000/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
 <!--      <q-uploader-->
 <!--        url="http://localhost:8080/api/video/upload"-->
 <!--        label="video"-->

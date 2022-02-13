@@ -1,4 +1,3 @@
-/* eslint-disable vue/multi-word-component-names */
 <template>
   <div class="login-register">
     <div class="card">
@@ -22,19 +21,25 @@
           >
             <div>
               <div class="row items-center">
-                <div class="col-12 ">
+                <div class="col-12">
                   <q-input
                     v-model="id"
                     :rules="idRules"
-                    label="邮箱/学工号"
+                    label=""
                     required
-                  />
+                  >
+                    <template #label>
+                      <div class="text-h5">
+                        学工号
+                      </div>
+                    </template>
+                  </q-input>
 
                   <q-input
                     v-model="password"
                     :rules="passwordRules"
                     :type="show1 ? 'text' : 'password'"
-                    label="密码"
+                    label=""
                     required
                   >
                     <template #append>
@@ -55,16 +60,14 @@
                         />
                       </q-avatar>
                     </template>
+                    <template #label>
+                      <div class="text-h5">
+                        密码
+                      </div>
+                    </template>
                   </q-input>
-                  <q-select
-                    v-model="role"
-                    :options="options"
-                    label="身份"
-                  />
-
                   <!--                  :disabled="!valid"-->
                   <q-btn
-
                     class="button"
                     large
                     @click="Login"
@@ -141,12 +144,9 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
-  "inject": ["reload"],
+  // "inject": ["reload"],
   data() {
-
     return {
       toolbar: false,
       toolbar1: false,
@@ -163,91 +163,63 @@ export default {
       "role" : "学生",
       "options" : ["学生", "教师", "管理员"]
     };
-
   },
   "methods": {
     Login() {
-
       this.validate();
-      if(this.role === "教师")
-        this.$router.push("/class")
-      else if(this.role === "学生")
-        this.$router.push("/upload")
-      else
-        alert("尚未开放")
-      // this.$axios({
-      //   "method": "POST",
-      //   "url": "http://114.116.235.94/login/",
-      //   "data": {
-      //     "line1": this.id,
-      //     "line2": this.password
-      //   },
-      //   "transformRequest": [function (data) {
-      //
-      //     let ret = "";
-      //     for (const it in data) {
-      //
-      //       ret += `${encodeURIComponent(it)}=${encodeURIComponent(data[it])}&`;
-      //
-      //     }
-      //     return ret;
-      //
-      //   }],
-      // }).then(response => {
-      //
-      //   console.log("登录", response);
-      //   if (response.data.code === "200") {
-      //
-      //     // alert("登录成功");
-      //     this.toolbar = true
-      //     this.$store.commit("setLogin");
-      //     this.$store.commit("setUserName", response.data.data.username);
-      //     this.$store.commit("setUserID", response.data.data.userid);
-      //     this.$store.commit("setUserHeadImage", response.data.data.image);
-      //     console.log(response.data.data.image);
-      //     this.$store.commit("setUserAssociated", response.data.data.is_associated);
-      //     clearTimeout(this.timer);  //清除延迟执行
-      //     this.timer = setTimeout(()=>{   //设置延迟执行
-      //       this.$router.push({"path": "/home", "query": {"user_id": response.data.data.userid}});
-      //     },2000);
-      //     // this.$router.push({ path: "/home" });
-      //   } else if (response.data.code === "0") {
-      //
-      //     alert(response.data.message);
-      //     this.clear();
-      //   } else if (response.data.code === "800") {
-      //
-      //     this.toolbar1 = true;
-      //     clearTimeout(this.timer);  //清除延迟执行
-      //     this.timer = setTimeout(()=>{   //设置延迟执行
-      //       this.$router.push({"path": "/administrator"});
-      //     },2000);
-      //
-      //   }
-      //
-      // });
+      // if(this.role === "教师")
+      //   this.$router.push("/class")
+      // else if(this.role === "学生")
+      //   this.$router.push("/upload")
+      // else
+      //   alert("尚未开放")
+      // console.log(this.id, this.password)
+      this.$api({
+        "method": "POST",
+        "url": "api/user/login",
+        "header": {'Content-Type': 'application/json'},
+        "data": {
+          id: this.id,
+          pwd: this.password
+        },
+      }).then(res => {
+        console.log("登录", res);
+        if (res.data.code === "200") {
+          alert("登录成功");
+          this.toolbar = true
+          console.log(res.data)
+          clearTimeout(this.timer);  //清除延迟执行
+          // this.timer = setTimeout(()=>{   //设置延迟执行
+          //   this.$router.push({"path": "/", "query": {"user_id": response.data.data.userid}});
+          // },2000);
+          // this.$router.push({ path: "/home" });
+        } else if (res.data.code === "0") {
+          alert(res.data.message);
+          this.clear();
+        } else if (res.data.code === "800") {
+          this.toolbar1 = true;
+          clearTimeout(this.timer);  //清除延迟执行
+          this.timer = setTimeout(()=>{   //设置延迟执行
+            this.$router.push({"path": "/administrator"});
+          },2000);
+
+        }
+
+      });
 
     },
     validate() {
-
       this.$refs.form.validate();
-
     },
     clear() {
-
       this.id = "";
       this.password = "";
-
     },
     affirmPass(val) {
-
       if (val !== this.password) {
-
         return "两次密码不一致";
-
       }
       return true;
-
     },
   },
 };

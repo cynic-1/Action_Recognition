@@ -38,7 +38,10 @@ export const logIn = (req, res) => {
                 // res.send("login success!")
                 res.send(data);
             } else {
-                res.send("ID & Password unmatched ")
+                res.status(800).send({
+                    message:
+                        data.pwd + " " + req.toJSON()
+                });
             }
             // res.send(data)
         })

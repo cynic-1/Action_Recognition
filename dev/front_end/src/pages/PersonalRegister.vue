@@ -1,4 +1,3 @@
-/* eslint-disable vue/multi-word-component-names */
 <template>
   <div class="login">
     <div class="card">
@@ -19,7 +18,38 @@
                 :rules="idRules"
                 label="学号/工号"
                 required
-              />
+              >
+                <template #label>
+                  <div class="text-h5">
+                    学号/工号
+                  </div>
+                </template>
+              </q-input>
+
+              <q-input
+                v-model="name"
+                label=""
+                required
+                maxlength="5"
+              >
+                <template #label>
+                  <div class="text-h5">
+                    姓名
+                  </div>
+                </template>
+              </q-input>
+
+              <q-input
+                v-model="college"
+                label=""
+                required
+              >
+                <template #label>
+                  <div class="text-h5">
+                    学院
+                  </div>
+                </template>
+              </q-input>
 
               <q-input
                 v-model="password"
@@ -46,6 +76,11 @@
                     />
                   </q-avatar>
                 </template>
+                <template #label>
+                  <div class="text-h5">
+                    密码
+                  </div>
+                </template>
               </q-input>
 
               <q-input
@@ -53,6 +88,7 @@
                 :type="show3 ? 'text' : 'password'"
                 :rules="[passwordRules, affirmPass]"
                 label="确认密码"
+                type="password"
                 required
               >
                 <template #append>
@@ -73,27 +109,45 @@
                     />
                   </q-avatar>
                 </template>
+                <template #label>
+                  <div class="text-h5">
+                    确认密码
+                  </div>
+                </template>
               </q-input>
 
 
               <q-input
                 v-model="Email"
                 :rules="emailRules"
-                label="E-mail"
+                label="邮箱"
+                type="email"
                 required
-              />
+              >
+                <template #label>
+                  <div class="text-h5">
+                    邮箱
+                  </div>
+                </template>
+              </q-input>
 
               <q-select
                 v-model="role"
                 :options="options"
                 label="身份"
-              />
+              >
+                <template #label>
+                  <div class="text-h5">
+                    身份
+                  </div>
+                </template>
+              </q-select>
 
               <q-btn
                 :disabled="!valid"
                 class="button"
                 large
-                href="/Login"
+                to="/Login"
                 @click="Register"
               >
                 <p class="login_">
@@ -130,6 +184,8 @@ export default {
         "valid": true,
         "id": "",
         "idRules": [(v) => !!v || "ID is required"],
+        "name": "",
+        "college": "",
         "password": "",
         "passwordRules": (v) => !!v || "请填写密码",
         "rePassword": "",
@@ -140,7 +196,7 @@ export default {
         ],
         "checkbox": false,
         "role" : "学生",
-        "options" : ["学生", "教师", "管理员"]
+        "options" : ["管理员", "教师", "学生"]
     }),
 
     "methods": {
@@ -149,24 +205,15 @@ export default {
             this.validate();
             this.$axios({
                 "method": "POST",
-                "url": "http://114.116.235.94/register/",
+                "url": "api/user",
                 "data": {
-                    "user": this.id,
-                    "pass1": this.password,
-                    "pass2": this.rePassword,
-                    "Email": this.Email
+                    identity: this.role.indexOf(this.options),
+                    id: this.id,
+                    name: this.name,
+                    college: this.college,
+                    pwd: this.password,
+                    mail: this.Email
                 },
-                "transformRequest": [function (data) {
-
-                    let ret = "";
-                    for (const it in data) {
-
-                        ret += `${encodeURIComponent(it)}=${encodeURIComponent(data[it])}&`;
-
-                    }
-                    return ret;
-
-                }],
             }).then(response => {
 
                 console.log("注册", response);
