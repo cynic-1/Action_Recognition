@@ -214,28 +214,23 @@ export default {
                     pwd: this.password,
                     mail: this.Email
                 },
-            }).then(response => {
-
-                console.log("注册", response);
-                if (response.data.code === "200") {
+            }).then(res => {
+                console.log("注册", res);
+                if (res.status === 200) {
 
                     alert("注册成功，正在前往登录界面");
                     this.$router.push({ "path": "/login" });
 
-                } else if (response.data.code === "0") {
-
-                    alert(response.data.message);
-                    this.clear();
-
+                } else if (res.status === 0) {
+                    alert(res.message)
+                    // this.clear()
                 }
 
             });
 
         },
         validate () {
-
             this.$refs.form.validate();
-
         },
         clear () {
 

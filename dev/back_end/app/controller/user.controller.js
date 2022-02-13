@@ -40,7 +40,7 @@ export const logIn = (req, res) => {
             } else {
                 res.status(800).send({
                     message:
-                        data.pwd + " " + req.toJSON()
+                        data.pwd + " " + req
                 });
             }
             // res.send(data)

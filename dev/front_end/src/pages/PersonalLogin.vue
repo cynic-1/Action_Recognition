@@ -173,7 +173,7 @@ export default {
       //   this.$router.push("/upload")
       // else
       //   alert("尚未开放")
-      // console.log(this.id, this.password)
+      console.log(this.id, this.password)
       this.$api({
         "method": "POST",
         "url": "api/user/login",
@@ -184,27 +184,25 @@ export default {
         },
       }).then(res => {
         console.log("登录", res);
-        if (res.data.code === "200") {
+        if (res.status === 200) {
           alert("登录成功");
           this.toolbar = true
           console.log(res.data)
           clearTimeout(this.timer);  //清除延迟执行
+          localStorage.setItem('userId', res.data._id)
+          this.$router.push({"path": "/"})
           // this.timer = setTimeout(()=>{   //设置延迟执行
-          //   this.$router.push({"path": "/", "query": {"user_id": response.data.data.userid}});
+          //   this.$router.push({"path": "/", "query": {"user_id": localStorage.getItem('userId')}});
           // },2000);
-          // this.$router.push({ path: "/home" });
-        } else if (res.data.code === "0") {
-          alert(res.data.message);
-          this.clear();
-        } else if (res.data.code === "800") {
+        } else if (res.status === 800) {
+          alert(res.message)
+        } else if (res.status === 0) {
           this.toolbar1 = true;
           clearTimeout(this.timer);  //清除延迟执行
           this.timer = setTimeout(()=>{   //设置延迟执行
             this.$router.push({"path": "/administrator"});
           },2000);
-
         }
-
       });
 
     },
