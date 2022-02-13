@@ -1,5 +1,37 @@
 <template>
   <div style="margin-top: 30px">
+    <div class="personal-menu-card">
+      <q-card class="personal">
+        <q-card-section
+          horizontal
+          style="padding-top: 30px;padding-bottom: 30px"
+        >
+          <q-btn
+            round
+            @click="alert = true"
+          >
+            <q-avatar size="120px" >
+              <img :src="this.imgUrl" alt="用户头像">
+            </q-avatar>
+          </q-btn>
+
+          <q-card-actions
+            vertical
+            class="justify-around"
+            style="padding-left: 100px"
+          >
+            <div class="q-py-sm">
+              <span class="text-weight-bold text-h4">姓名--{{ name }}</span>
+            </div>
+            <div class="q-py-sm">
+              <span class="text-grey text-h5">学号--{{ id }}</span>
+            </div>
+          </q-card-actions>
+        </q-card-section>
+      </q-card>
+      <br><br>
+    </div>
+
     <div class="text-h4 row" style="margin-left: 100px;margin-bottom: 30px">
       <span>我的上传：</span>
       <q-btn color="blue" rounded style="margin-left: 70%">上传视频</q-btn>
@@ -38,10 +70,25 @@
 
 <script>
 export default {
-name: "PersonalUpload"
+  name: "PersonalUpload",
+  data() {
+    return  {
+      imgUrl: '',
+      alert: false,
+      id: 12345678,
+      name: 'jack london'
+    }
+  }
+
 }
 </script>
 
 <style scoped>
-
+.personal-menu-card {
+  width: 100%;
+  padding-bottom: 40px;
+}
+.personal{
+  padding-left: 30%;
+}
 </style>

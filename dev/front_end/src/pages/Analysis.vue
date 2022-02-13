@@ -1,40 +1,53 @@
 <template xmlns="http://www.w3.org/1999/html" class="bg-blue-6">
+  <q-dialog v-model="commentShow" >
+    <q-card bordered style="padding: 30px;width: 700px; max-width: 80vw;">
+      <q-input rounded outlined v-model="rate" label="评分" style="width: 50%;margin-bottom: 30px"/>
+      <q-input rounded outlined type="textarea" v-model="comment" label="评价"/>
+      <q-btn rounded color="blue" size="lg" align="center" style="margin-top: 30px;margin-left: 40%">提交评价</q-btn>
+    </q-card>
+  </q-dialog>
   <div class="row" style="width: 95%;margin:20px auto 20px auto">
     <div class="q-pa-md" style="width: 40%">
 <!--      <q-video-->
 <!--        :ratio="16/9"-->
 <!--        src="http://localhost:8080/api/video/get"-->
 <!--      />-->
-      <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
+      <div style="width: 90%;margin-bottom: 20px">
+        <q-carousel
+          swipeable
+          animated
+          arrows
+          v-model="slide"
+          :fullscreen.sync="fullscreen"
+          infinite
+          height="300px"
+        >
+          <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
+          <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
+          <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
+          <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
+
+          <template v-slot:control>
+            <q-carousel-control
+              position="bottom-right"
+              :offset="[18, 18]"
+            >
+              <q-btn
+                push round dense color="white" text-color="primary"
+                :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                @click="fullscreen = !fullscreen"
+              />
+            </q-carousel-control>
+          </template>
+        </q-carousel>
+      </div>
+      <video controls width="500" height="300" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
 <!--      <q-uploader-->
 <!--        url="http://localhost:8080/api/video/upload"-->
 <!--        label="video"-->
 <!--        field-name="video"-->
 <!--        style="max-width: 300px"-->
 <!--      />-->
-
-      <q-card
-        class="my-card text-white"
-        style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%);margin-top: 30px"
-      >
-        <q-card-section>
-          <div class="text-h4 q-pa-sm"><q-icon name="fas fa-volleyball-ball" class="q-pa-sm"/>动作评估</div>
-          <q-separator dark inset />
-          <div class="row q-pa-md">
-            <div class="text-h5 col text-center">
-              动作质量评估<br>{{quality}}
-            </div>
-          </div>
-          <div class="row q-pa-md">
-            <div class="text-h5 col text-center">
-              动作稳定性<br>{{stability}}
-            </div>
-            <div class="text-h5 col text-center">
-              动作准确性<br>{{accuracy}}
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
     </div>
 
     <div class="q-pa-md" style="width: 60%">
@@ -42,6 +55,27 @@
         class="my-card text-white"
         style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"
       >
+        <q-card-section>
+          <div class="text-h4 q-pa-sm"><q-icon name="fas fa-volleyball-ball" class="q-pa-sm"/>
+            动作评估
+            <q-btn label="发布评价" color="blue" @click="commentShow = true" align="right" rounded size="lg" style="margin-left: 400px"/>
+          </div>
+          <q-separator dark inset />
+          <div class="row q-pa-md">
+            <div class="text-h6 col text-center">
+              动作质量评估<br>{{quality}}
+            </div>
+            <q-separator dark inset vertical/>
+            <div class="text-h6 col text-center">
+              动作稳定性<br>{{stability}}
+            </div>
+            <q-separator dark inset vertical/>
+            <div class="text-h6 col text-center">
+              动作准确性<br>{{accuracy}}
+            </div>
+          </div>
+        </q-card-section>
+
         <q-card-section>
           <div class="text-h4 q-pa-sm"><q-icon name="fas fa-hands" class="q-pa-sm"/>上肢动作</div>
           <q-separator dark inset />
@@ -104,17 +138,17 @@
           </div>
         </q-card-section>
 
-        <q-card-section>
-          <div class="text-h4" style="text-align: center">老师评价</div>
-          <q-separator dark inset />
-          <div class="text-h5" style="margin-top: 20px;margin-bottom: 20px">评分： 85</div>
-<!--          <q-video-->
-<!--            style="width: 60%;height: 300px;margin: 20px auto 10px auto"-->
-<!--            src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"-->
-<!--          />-->
-<!--            <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>-->
-        <div class="text-subtitle1">达拉克斯基的离开洒家的打开拉萨机立刻大家阿斯利康决定了空间啊滤镜老咔叽陈卡雷就拉开差距萨洛克插卡就是v出来的洒家扩大除了卡v就立刻数据来看v可垃圾啊v地理空间率考虑到了恐惧绿蜡卡拉居留卡v空间的v离开v拉开点距离看见立刻除了卡具v考虑阿娇v安洁丽卡v扩大距离v离开的v了恐惧v点卡v率的卡距离打开v就卡了大局来看v的恐惧啦v将来肯定是v建立打开吃撒吃撒从建立凯撒距离喀什滤镜啊v老咔叽定律v快乐大居留卡就 离开数据利空打击了v利空打击率及的角色v离开家</div>
-        </q-card-section>
+<!--        <q-card-section>-->
+<!--          <div class="text-h4" style="text-align: center">老师评价</div>-->
+<!--          <q-separator dark inset />-->
+<!--          <div class="text-h5" style="margin-top: 20px;margin-bottom: 20px">评分： 85</div>-->
+<!--&lt;!&ndash;          <q-video&ndash;&gt;-->
+<!--&lt;!&ndash;            style="width: 60%;height: 300px;margin: 20px auto 10px auto"&ndash;&gt;-->
+<!--&lt;!&ndash;            src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"&ndash;&gt;-->
+<!--&lt;!&ndash;          />&ndash;&gt;-->
+<!--&lt;!&ndash;            <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>&ndash;&gt;-->
+<!--        <div class="text-subtitle1">达拉克斯基的离开洒家的打开拉萨机立刻大家阿斯利康决定了空间啊滤镜老咔叽陈卡雷就拉开差距萨洛克插卡就是v出来的洒家扩大除了卡v就立刻数据来看v可垃圾啊v地理空间率考虑到了恐惧绿蜡卡拉居留卡v空间的v离开v拉开点距离看见立刻除了卡具v考虑阿娇v安洁丽卡v扩大距离v离开的v了恐惧v点卡v率的卡距离打开v就卡了大局来看v的恐惧啦v将来肯定是v建立打开吃撒吃撒从建立凯撒距离喀什滤镜啊v老咔叽定律v快乐大居留卡就 离开数据利空打击了v利空打击率及的角色v离开家</div>-->
+<!--        </q-card-section>-->
       </q-card>
     </div>
   </div>
@@ -130,6 +164,11 @@ name: "Analysis",
       accuracy: 80,
       quality: 70
     },
+    slide: 1,
+    fullscreen: false,
+    commentShow: false,
+    comment:'',
+    rate: 0
   }
   },
   computed: {

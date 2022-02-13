@@ -3,6 +3,7 @@
     class="q-pa-md"
     style="width: 72%; margin-left: auto; margin-right: auto"
   >
+
     <q-table
       v-model:pagination="pagination"
       :rows="rows"
