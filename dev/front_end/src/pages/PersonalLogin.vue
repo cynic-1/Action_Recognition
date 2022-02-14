@@ -190,7 +190,8 @@ export default {
           console.log(res.data)
           clearTimeout(this.timer);  //清除延迟执行
           localStorage.setItem('userId', res.data._id)
-          this.$router.push({"path": "/"})
+          console.log(localStorage.getItem('userId'))
+          this.$router.push({"path": "/home/"+res.data._id})
           // this.timer = setTimeout(()=>{   //设置延迟执行
           //   this.$router.push({"path": "/", "query": {"user_id": localStorage.getItem('userId')}});
           // },2000);
