@@ -15,7 +15,8 @@ export const create = (req, res) => {
         year: req.body.year,
         semester: req.body.semester,
         name: req.body.name,
-        teachers: req.body.teachers
+        teachers: req.body.teachers,
+        courseTime: req.body.courseTime
         // students: req.body.students || [],
     });
     // Save User in the database

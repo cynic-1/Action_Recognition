@@ -57,7 +57,6 @@ export default mongoose => {
                 }]
             }]
         },
-        { timestamps: true }
     );
     // schema.method("toJSON", function() {
     //     const { __v, _id, ...object } = this.toObject();

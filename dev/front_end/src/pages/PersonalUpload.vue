@@ -19,15 +19,12 @@
             <div class="q-py-sm">
               <span class="text-grey text-h5">学号--{{ id }}</span>
             </div>
-            <div class="q-py-sm">
-            <span class="text-grey text-h5">id--{{ userId }}</span>
-          </div>
           </q-card-section>
         </q-card-section>
         <q-card-section vertical>
           <line-chart/>
         </q-card-section>
-        </q-card-section>
+        </q-card-section>f
       </q-card>
     </div>
     <div class="row">
@@ -72,8 +69,30 @@ export default {
       id: 123123123,
       name: 'cynic',
       college: 23,
-      teacher: '李红',
-      course: '周三第四节',
+      course: {
+        "year": 2022,
+        "semester": 2,
+        "name": "排球1",
+        "teachers": [
+          "6204739beee4baf583222961"
+        ],
+        courseTime: {
+          day: {
+            type: Number,
+            required: true,
+            integer: true,
+            min: 1,
+            max: 7
+          },
+          class: {
+            type: Number,
+            required: true,
+            integer: true,
+            min: 1,
+            max: 9
+          }
+        },
+      },
       email: 'ca1312@163.com',
       userId: this.$route.params.id
     }
@@ -82,12 +101,18 @@ export default {
     getUserInfo() {
       let courseId;
       this.$api.get('api/user/'+this.userId)
-      .then(res => {
+      .then(function (res) {
         this.name = res.data.name;
         this.email = res.data.mail;
         this.id = res.data.id;
         this.college = res.data.college;
-        courseId = res.data.course[-1]
+        courseId = res.data.courses[res.data.courses.length-1]
+        console.log(courseId)
+        this.$api.get('api/course/'+courseId)
+        .then(res => {
+          this.teacher = res.data.teacher;
+
+        })
       })
     }
   },
