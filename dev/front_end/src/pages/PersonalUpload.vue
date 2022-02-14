@@ -69,30 +69,7 @@ export default {
       id: 123123123,
       name: 'cynic',
       college: 23,
-      course: {
-        "year": 2022,
-        "semester": 2,
-        "name": "排球1",
-        "teachers": [
-          "6204739beee4baf583222961"
-        ],
-        courseTime: {
-          day: {
-            type: Number,
-            required: true,
-            integer: true,
-            min: 1,
-            max: 7
-          },
-          class: {
-            type: Number,
-            required: true,
-            integer: true,
-            min: 1,
-            max: 9
-          }
-        },
-      },
+      course: "",
       email: 'ca1312@163.com',
       userId: this.$route.params.id
     }
@@ -101,7 +78,7 @@ export default {
     getUserInfo() {
       let courseId;
       this.$api.get('api/user/'+this.userId)
-      .then(function (res) {
+      .then(res => {
         this.name = res.data.name;
         this.email = res.data.mail;
         this.id = res.data.id;
@@ -110,8 +87,8 @@ export default {
         console.log(courseId)
         this.$api.get('api/course/'+courseId)
         .then(res => {
-          this.teacher = res.data.teacher;
-
+          this.course = res.data;
+          console.log(this.course)
         })
       })
     }
