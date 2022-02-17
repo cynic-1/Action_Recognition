@@ -1,6 +1,5 @@
 # 本程序用于以命令行方式调用OpenPoseDemo.exe，得到想要的JSON文件
 # 目前暂时使用图像为材料，后期会考虑使用视频
-
 import json
 import os
 import sys
@@ -12,6 +11,7 @@ import numpy as np
 
 import angle
 import keypoints
+import cut_video
 
 # 引入排球识别
 from detectron2_package import VolleyballDetect as Detect
@@ -81,7 +81,9 @@ def drawLineAndRadius(img, humanpoints):
     radius.append(angle.angle_right_knee(humanpoints[0]))
     for n in range(6):
         font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(img,"%d"%radius[n], (int(humanpoints[0][radius_point[n]][0])-20, (int(humanpoints[0][radius_point[n]][1]))-20), font, 0.8, (255, 255, 255), 2)
+        cv2.putText(img,"%d"%radius[n], 
+        (int(humanpoints[0][radius_point[n]][0])-20, (int(humanpoints[0][radius_point[n]][1]))-20),
+         font, 0.4, (255, 255, 255), 1)
 
 
 def hcolor_to_bgr(hcolor):
@@ -97,12 +99,12 @@ if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
     os.chdir(dir_path) # 切换回原来的路径
 
-    img = cv2.imread("./images/1.jpg")  # numpy.ndarray类型
+    img = cv2.imread("./images/3.jpg")  # numpy.ndarray类型
     img_origin = img.copy()
     print(img.shape)  # 输出 几行几列几维颜色
 
     # 读取和转化JSON文件
-    with open("output_json/1_keypoints.json", "r") as f:
+    with open("output_json/3_keypoints.json", "r") as f:
         json_dict = json.load(f)
 
     people_cnt = len(json_dict["people"])
@@ -131,6 +133,7 @@ if __name__ == "__main__":
             if abs(confidence) > 0.0001:
                 if(i < len(keypoints.color_table)):
                     font = cv2.FONT_HERSHEY_SIMPLEX
+                    # 绘制关键点数字标记
                     cv2.putText(img,str(i),(int(x)-2,int(y)+4),font,0.3,(255,255,255),1,cv2.LINE_AA)
 
     # 获取球的信息

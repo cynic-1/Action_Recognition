@@ -15,6 +15,10 @@ def parse_args():
 
 
 def process_video(input_video, output_path, num):
+    if not os.path.exists(output_path):
+        print("指定的路径不存在，将自动建立路径。")
+        os.makedirs(output_path)
+
     cap = cv2.VideoCapture(input_video)
     name = str(input_video)[0:str(input_video).rfind(".")]  # 截掉最后一个.及之后的内容
     name = name[name.rfind("/")+1:]
@@ -39,21 +43,18 @@ def process_video(input_video, output_path, num):
         # 读取帧
         ret, frame = cap.read()
         frame_cnt += 1
+        # 如果达到视频的结尾，那么ret返回值就是False，这时将自动退出
+        if not ret:
+            break
         if frame_cnt % num == 0:
             image_cnt += 1
             path = os.path.join(output_path, f"{image_cnt}.jpg")
             success = cv2.imwrite(path, frame)  # 文件路径还不能出现中文！！！
             print(path, "success" if success else "failure")
 
-        if not ret:
-            break
-
 
 if __name__ == "__main__":
     arg = parse_args()
-    if not os.path.exists(arg.output_path):
-        print("指定的路径不存在，将自动建立路径。")
-        os.makedirs(arg.output_path)
     process_video(arg.input, arg.output_path, arg.skip_frame)
 
 # 推荐的命令行调用方式

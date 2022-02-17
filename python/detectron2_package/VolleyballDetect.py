@@ -23,11 +23,15 @@ import torch
 # constants
 WINDOW_NAME = "COCO detections"
 
+file_path = os.path.dirname(os.path.realpath(__file__))
 
 # 设置的一些关于模型的常量
-# config_file = "D:\迅雷下载\Canvas\detectron2-main\detectron2-main\configs\COCO-InstanceSegmentation\mask_rcnn_R_50_FPN_3x.yaml" # 配置文件位置
-config_file = "configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
+config_file = os.path.join(file_path, "configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
 opts = ["MODEL.WEIGHTS", "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"]
+
+# 切换为快速检测模型
+# config_file = "configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"
+# opts = ["MODEL.WEIGHTS", "model_final_280758.pkl"]
 confidence_threshold = 0.5  # 置信度阈值，超出阈值才显示
 
 
@@ -185,10 +189,6 @@ class AsyncPredictor:
 
 
 #------------ 模块的初始化代码 -----------------------
-# 恢复默认路径为本文件所在路径
-file_path = os.path.dirname(os.path.realpath(__file__))
-os.chdir(file_path)
-
 mp.set_start_method("spawn", force=True)
 setup_logger(name="fvcore")
 logger = setup_logger()
@@ -212,7 +212,7 @@ def getBox(predictions):
     scores = instances.scores if instances.has("scores") else None  # 可信度列表
     classes = instances.pred_classes.tolist() if instances.has("pred_classes") else None  # 类别序号，对应labels的名称
     keypoints = instances.pred_keypoints if instances.has("pred_keypoints") else None  # 关键点，一般是没有
-    masks = instances.pred_masks  # 指定物体的遮罩，是n*height*width的np布尔数组
+    masks = instances.pred_masks if instances.has("pred_masks") else None # 指定物体的遮罩，是n*height*width的np布尔数组
 
     volley_box = []
 

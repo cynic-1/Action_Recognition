@@ -40,7 +40,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description="Detectron2 demo for builtin configs")
     parser.add_argument(
         "--config-file",
-        default="../configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml",
+        default="configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml",
         metavar="FILE",
         help="path to config file",
     )
@@ -67,7 +67,7 @@ def get_parser():
     parser.add_argument(
         "--opts",
         help="Modify config options using the command-line 'KEY VALUE' pairs",
-        default=["MODEL.WEIGHTS", "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl"],
+        default=["MODEL.WEIGHTS", "model_final_280758.pkl"],
         nargs=argparse.REMAINDER,
     )
     return parser
