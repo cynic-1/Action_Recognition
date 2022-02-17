@@ -15,11 +15,11 @@ const routes = [
   },
   {
     "path": "/login",
-    "component": () => import("pages/PersonalLogin")
+    "component": () => import("pages/Login")
   },
   {
     "path": "/register",
-    "component": () => import("pages/PersonalRegister")
+    "component": () => import("pages/Register")
   },
   // Always leave this as last one,
   // but you can also remove it

@@ -24,7 +24,7 @@
         <q-card-section vertical>
           <line-chart/>
         </q-card-section>
-        </q-card-section>f
+        </q-card-section>
       </q-card>
     </div>
     <div class="row">
@@ -34,8 +34,8 @@
             课程信息
             <q-btn rounded icon="more" flat class="text-right text-h5">更多</q-btn>
           </div>
-          <div class="text-h5 text-grey">当前课程：{{course}}</div>
-          <div class="text-h5 text-grey">任课老师：{{teacher}}</div>
+          <div class="text-h5 text-grey">当前课程：{{courseTime}}</div>
+          <div class="text-h5 text-grey">任课老师：{{course.teacher}}</div>
         </q-card>
       </div>
       <div class="upload">
@@ -56,6 +56,9 @@ import {defineAsyncComponent} from 'vue'
 const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
 const videoItem = defineAsyncComponent(() => import("components/VideoItem"));
 
+const dayMap = ['零', '一', '二', '三', '四', '五', '六', '日']
+const numberMap = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+const semMap = ['', '秋季学期', '春季学期']
 export default {
   name: "PersonalUpload",
   components: {
@@ -92,6 +95,11 @@ export default {
         })
       })
     }
+  },
+  computed: {
+    courseTime() {
+      return this.course.year + '年 ' + semMap[this.course.year] + ' 周 ' + dayMap[this.course.courseTime.day] + ' 第 ' + numberMap[this.course.courseTime.class] + '节';
+    },
   },
   created() {
     this.getUserInfo()
