@@ -21,7 +21,12 @@
       <q-tab-panel name="list">
         <left-drawer>
           <template #leftDrawer>
-            此处应有一个列表进行筛选
+            <q-tree
+              :nodes="props"
+              node-key="label"
+              v-model:selected="selected"
+              default-expand-all
+            />
           </template>
           <template #main>
             <template
@@ -43,6 +48,7 @@
 
 <script>
 import {defineAsyncComponent} from "vue";
+import { ref } from 'vue'
 const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
 const videoItem = defineAsyncComponent(() => import("components/VideoItem"));
 const leftDrawer = defineAsyncComponent(() => import("../layouts/LeftDrawer"))
@@ -54,8 +60,44 @@ export default {
     leftDrawer
   },
   data(){
+    const selected = ref(null)
     return {
       tab: 'list',
+      selected,
+      props: [
+        {
+          label: '我的上传',
+          children: [
+            {
+              label: '2019年春季学期',
+              children: [
+                { label: '2019.03.12' },
+                { label: '2019.03.19' },
+                { label: '2019.03.26' },
+                { label: '2019.04.05' },
+              ]
+            },
+            {
+              label: '2019年秋季学期',
+              children: [
+                { label: '2019.09.03' },
+                { label: '2019.09.10' },
+                { label: '2019.09.17' },
+                { label: '2019.09.24' },
+              ]
+            },
+            {
+              label: '2020年春季学期',
+              children: [
+                { label: '2020.03.17' },
+                { label: '2019.04.12' },
+                { label: '2019.05.16' },
+                { label: '2019.06.02' },
+              ]
+            }
+          ]
+        }
+      ]
     }
   }
 }
