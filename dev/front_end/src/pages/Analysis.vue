@@ -100,7 +100,7 @@
             <q-separator dark inset vertical/>
             <div class="col">
               手臂与躯干角度<br>
-              {{evaluate.armAngle[slide-1]}}/180<br>
+              {{evaluate.armAngle[slide-1][0]}},{{evaluate.armAngle[slide-1][1]}}/180<br>
               <span class="text-warning">正常</span>
             </div>
           </div>
@@ -132,7 +132,7 @@
             <q-separator dark inset vertical/>
             <div class="col">
               大腿与小腿弯曲角度<br>
-              {{evaluate.legAngle[slide-1]}}/180<br>
+              {{evaluate.legAngle[slide-1][0]}},{{evaluate.legAngle[slide-1][1]}}/180<br>
               <span class="text-warning">正常</span>
             </div>
 
@@ -167,11 +167,11 @@ name: "Analysis",
       position: [1.0,1.2,1.4,1.1,1.3],
       catchAngle: [60.3,65.4,100.8,123.1,119.2],
       hitAngle: [50.1,90.8,67.8,98.2,123.1],
-      armAngle: [72.1,67.5,56.3,78.9, 66.2],
+      armAngle: [[72.1,72.1],[67.5,66.5],[56.3,67.8],[78.9,89.7], [66.2,56.4]],
       catchPosition: [1.0,1.5,0.8,2.1,1.3],
       hitPosition: [1.5,1.4,1.6,1.5,1.6],
       height: [0.7,0.56,1.1,0.98,0.98],
-      legAngle: [72.1,34.5,56.7,78.5,72.9]
+      legAngle: [[72.1,71.1],[34.5,33.5],[56.7,57.8],[78.5,56.4],[72.9,71.8]]
     },
     slide: 1,
     fullscreen: false,
