@@ -8,10 +8,12 @@ import time
 import cv2
 import numpy
 import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 
 import angle
 import keypoints
 import cut_video
+import pic_info
 
 # 引入排球识别
 from detectron2_package import VolleyballDetect as Detect
@@ -81,9 +83,28 @@ def drawLineAndRadius(img, humanpoints):
     radius.append(angle.angle_right_knee(humanpoints[0]))
     for n in range(6):
         font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(img,"%d"%radius[n], 
-        (int(humanpoints[0][radius_point[n]][0])-20, (int(humanpoints[0][radius_point[n]][1]))-20),
-         font, 0.4, (255, 255, 255), 1)
+        # cv2.putText(img, "%d度"%radius[n],
+        #             (int(humanpoints[0][radius_point[n]][0])+20, (int(humanpoints[0][radius_point[n]][1]))-20),
+        #             font, 0.4, (255, 255, 255), 1)
+        img = cv2ImgAddText(img, "%d"%radius[n]+chr(0x00b0), (int(humanpoints[0][radius_point[n]][0])+20),
+                      (int(humanpoints[0][radius_point[n]][1])-40), (255, 255, 255), 20)
+        cv2.line(img, (int(humanpoints[0][radius_point[n]][0])+8, (int(humanpoints[0][radius_point[n]][1]))-3),
+                 (int(humanpoints[0][radius_point[n]][0])+20, (int(humanpoints[0][radius_point[n]][1]))-20),
+                 (255, 255, 255), 2, cv2.LINE_AA)
+    return img
+
+def cv2ImgAddText(img, text, left, top, textColor, textSize):
+    if (isinstance(img, np.ndarray)):  # 判断是否OpenCV图片类型
+        img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    # 创建一个可以在给定图像上绘图的对象
+    draw = ImageDraw.Draw(img)
+    # 字体的格式
+    fontStyle = ImageFont.truetype(
+        "simsun.ttc", textSize, encoding="utf-8")
+    # 绘制文本
+    draw.text((left, top), text, textColor, font=fontStyle)
+    # 转换回OpenCV格式
+    return cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
 
 
 def hcolor_to_bgr(hcolor):
@@ -145,20 +166,25 @@ if __name__ == "__main__":
         # 以绿色边框描出球的位置
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
         print(f"球的长度是{x2-x1}")
+        ball_hei = pic_info.ball_height(humanpoints, box)
+        print(f"球离地面的高度是{ball_hei}cm")
 
+    img = drawLineAndRadius(img, humanpoints)
 
-    drawLineAndRadius(img, humanpoints)
+    #人的高度
+    person_hei = pic_info.person_height(humanpoints, box)
+    print(f"人的高度约是{person_hei}cm")
 
     #打印角度 -1 代表不构成三角形
     for i in range(people_cnt):
         angle.angle_left_shoulder(humanpoints[i])
         angle.angle_left_elbow(humanpoints[i])
         angle.angle_left_knee(humanpoints[i])
-        angle.angle_left_ankle(humanpoints[i])
+        # angle.angle_left_ankle(humanpoints[i])
         angle.angle_right_shoulder(humanpoints[i])
         angle.angle_right_elbow(humanpoints[i])
         angle.angle_right_knee(humanpoints[i])
-        angle.angle_right_ankle(humanpoints[i])
+        # angle.angle_right_ankle(humanpoints[i])
 
     # 适应屏幕的尺寸调整
     newW = W = img.shape[1]
