@@ -1,51 +1,39 @@
 <template>
-  <div style="margin-top: 30px">
+  <div class="row" style="width: 85%;margin-left: auto;margin-right: auto">
     <div class="personal-menu-card">
+      <q-avatar size="280px">
+        <img :src="this.imgUrl" alt="用户头像">
+      </q-avatar>
+      <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
+        <span class="text-weight-bold text-h4">姓名--{{ name }}</span>
+      </div>
+      <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
+        <span class="text-grey text-h5">学号--{{ id }}</span>
+      </div>
+      <q-card class="info q-pa-md">
+        <div class="text-h4 row">
+          <span>课程信息</span>
+          <q-btn rounded icon-right="more" flat class="text-right text-subtitle2">更多</q-btn>
+        </div>
+        <div class="text-h5 text-grey" style="margin: 20px">当前课程：{{courseTime}}</div>
+        <div class="text-h5 text-grey" style="margin: 20px">任课老师：{{course.teacher}}</div>
+      </q-card>
+    </div>
+
+    <div class="upload">
       <q-card>
-        <q-card-section horizontal>
-        <q-card-section
-          horizontal
-        >
-            <q-avatar size="120px">
-              <img :src="this.imgUrl" alt="用户头像">
-            </q-avatar>
-          <q-card-section
-            vertical
-            style="padding-left: 100px"
-          >
-            <div class="q-py-sm">
-              <span class="text-weight-bold text-h4">姓名--{{ name }}</span>
-            </div>
-            <div class="q-py-sm">
-              <span class="text-grey text-h5">学号--{{ id }}</span>
-            </div>
-          </q-card-section>
-        </q-card-section>
         <q-card-section vertical>
           <line-chart/>
         </q-card-section>
-        </q-card-section>
       </q-card>
-    </div>
-    <div class="row">
-      <div>
-        <q-card class="info q-pa-md">
-          <div class="text-h4">
-            课程信息
-            <q-btn rounded icon="more" flat class="text-right text-h5">更多</q-btn>
-          </div>
-          <div class="text-h5 text-grey">当前课程：{{courseTime}}</div>
-          <div class="text-h5 text-grey">任课老师：{{course.teacher}}</div>
-        </q-card>
+      <div class="text-h5 text-grey row q-mb-lg" style="margin-top: 20px">
+        <span style="margin-right: 60%">我的上传</span>
+        <q-btn rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
+        <q-btn rounded color="blue" icon="more" to="/stuvideolist">更多</q-btn>
       </div>
-      <div class="upload">
-        <div class="text-h4 text-grey row width-80-center q-mb-lg">
-          <span style="margin-right: 60%">我的上传</span>
-          <q-btn rounded color="blue" icon="upload">上传视频</q-btn>
-        </div>
-        <div class="width-80-center">
-          <video-item/>
-        </div>
+      <div class="row">
+        <video-item style="width: 48%;margin-right: 2%"/>
+        <video-item style="width: 48%"/>
       </div>
     </div>
   </div>
@@ -96,11 +84,11 @@ export default {
       })
     }
   },
-  computed: {
-    courseTime() {
-      return this.course.year + '年 ' + semMap[this.course.year] + ' 周 ' + dayMap[this.course.courseTime.day] + ' 第 ' + numberMap[this.course.courseTime.class] + '节';
-    },
-  },
+  // computed: {
+  //   courseTime() {
+  //     return this.course.year + '年 ' + semMap[this.course.year] + ' 周 ' + dayMap[this.course.courseTime.day] + ' 第 ' + numberMap[this.course.courseTime.class] + '节';
+  //   },
+  // },
   created() {
     this.getUserInfo()
   }
@@ -111,16 +99,17 @@ export default {
 
 <style scoped>
 .personal-menu-card {
-  width: 100%;
-  padding-bottom: 40px;
+  width: 25%;
+  padding: 30px;
 }
 .info {
+  margin-top: 30px;
   width: 100%;
-  margin-left: 20%;
   box-shadow: #1D1D1D;
 }
 .upload{
   width: 75%;
+  margin-top: 30px;
 }
 .width-80-center {
   width: 80%; margin-left: auto; margin-right: auto;

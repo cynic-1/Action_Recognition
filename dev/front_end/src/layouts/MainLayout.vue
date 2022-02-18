@@ -22,6 +22,7 @@
           <q-route-tab :to="'/home/'+userId" label="个人中心" />
           <q-route-tab to="/analysis" label="动作分析" />
 <!--          <q-route-tab to="/class" label="课程" />-->
+          <q-route-tab to="/class" label="班级详情" />
           <q-route-tab to="/course" label="课程详情" />
           <q-route-tab to="/student" label="学生管理" />
           <q-route-tab to="/stuvideolist" label="视频列表" />
