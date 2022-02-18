@@ -1,21 +1,18 @@
 # 本程序用于以命令行方式调用OpenPoseDemo.exe，得到想要的JSON文件
 # 目前暂时使用图像为材料，后期会考虑使用视频
+from audioop import reverse
 import json
 import os
-import sys
-import time
 
 import cv2
-import numpy
 import numpy as np
 
-import angle
+import graphics
 import keypoints
 import cut_video
+import mathtools
 
-# 引入排球识别
-from detectron2_package import VolleyballDetect as Detect
-
+# 低分辨率开关
 is_low_resolution = True
 
 
@@ -65,146 +62,63 @@ def produce_json(images_path="images", json_path="output_json"):
     os.chdir(dir_path)
 
 
-# 绘制骨骼连接和角度文字
-def drawLineAndRadius(img, humanpoints, people_id):
-    line_points_num = (
-    (1, 5), (5, 6), (6, 7), (1, 2), (2, 3), (3, 4), (0, 1), (1, 8), (8, 9), (9, 10), (10, 11), (8, 12), (12, 13),
-    (13, 14))
-    line_points = []
-    eps = 0.01
-    for i in range(25):
-        for j in range(i, 25):
-            if ((i, j) in line_points_num) and (humanpoints[people_id][i][2] > eps) \
-                 and (humanpoints[people_id][j][2] > eps):
-                pt1 = (int(humanpoints[people_id][i][0]), int(humanpoints[people_id][i][1]))
-                pt2 = (int(humanpoints[people_id][j][0]), int(humanpoints[people_id][j][1]))
-                line_points.append((pt1, pt2))
-    color = (0,255,0)  # BGR
-    thickness = 1
-    lineType = 4
-    for k in range(len(line_points)):
-        cv2.line(img, line_points[k][0], line_points[k][1], color, thickness, cv2.LINE_AA)
 
-    radius_point = [5,6,13,2,3,10]
-    radius = []
-    radius.append(angle.angle_left_shoulder(humanpoints[people_id]))
-    radius.append(angle.angle_left_elbow(humanpoints[people_id]))
-    radius.append(angle.angle_left_knee(humanpoints[people_id]))
-    radius.append(angle.angle_right_shoulder(humanpoints[people_id]))
-    radius.append(angle.angle_right_elbow(humanpoints[people_id]))
-    radius.append(angle.angle_right_knee(humanpoints[people_id]))
-    for n in range(6):
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        if radius[n] is not None:
-            cv2.putText(img,"%d"%radius[n],
-                (int(humanpoints[people_id][radius_point[n]][0])-20, (int(humanpoints[people_id][radius_point[n]][1]))-20),
-                font, 0.4, (255, 255, 255), 1)
-
-
-def hcolor_to_bgr(hcolor):
-    r = int(hcolor[1:3], 16)
-    g = int(hcolor[3:5], 16)
-    b = int(hcolor[5:7], 16)
-    return (b, g, r)
-
-
-# 将传入的源图像转化为标注图像
-# image_path: 原图像目录
-# json_path:  图像转化成的JSON文件目录
-# num:        图像的次序标号
-def process_img(image_path, json_path, num):
+# 计算球与人之间的距离
+def calc_distance(image_path, json_path, num, volley_position, distance1, distance2, horizontal_dist):
     img = cv2.imread(os.path.join(image_path, f"{num}.jpg"))
-    img_origin = img.copy()
-    print(f"[image {num}] 图片的分辨率为：{img.shape}")  # 输出 几行几列几维颜色
-
     # 读取和转化JSON文件
     with open(os.path.join(json_path, f"{num}_keypoints.json"), "r") as f:
         json_dict = json.load(f)
-
-    people_cnt = len(json_dict["people"])
-    print(f"[image {num}] 一共有{people_cnt}个人在画面中。")
-    humanpoints = np.zeros((10, 25, 3))
-    if people_cnt != 0:
-        # 目前支持获取多个人的姿态数据，但还需要研究对单个人的追踪
-        for people_id in range(people_cnt):
-            pose_keypoints_2d = json_dict["people"][people_id]["pose_keypoints_2d"]
-            for i in range(25):
-                humanpoints[people_id][i] = [pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]]
-
-            # 在图像上标注关节序号
-            for i in range(25):
-                x, y, confidence = pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]
-                
-                # 确保confidence参数不为0
-                if abs(confidence) > 0.0001:
-                    # 只标注有限的关键点
-                    if(i < len(keypoints.color_table)):
-                        color = hcolor_to_bgr(keypoints.color_table[i])
-                        cv2.circle(img, (int(x), int(y)), 8, color, -1)  #在图中画出关键点
-                else:
-                    print(f"[image {num}] keypoint {i} not exists.")
-
-            # 参照位置：鼻子
-            keypoint_id = 0
-            x, y = pose_keypoints_2d[keypoint_id*3], pose_keypoints_2d[keypoint_id*3+1]
-            cv2.putText(img, f"Person {people_id}", (int(x), max(int(y)-100, 0)), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
-
-            for i in range(25):
-                x, y, confidence = pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]
-                
-                # 确保confidence参数不为0
-                if abs(confidence) > 0.0001:
-                    if(i < len(keypoints.color_table)):
-                        font = cv2.FONT_HERSHEY_SIMPLEX
-                        # 绘制关键点数字标记
-                        cv2.putText(img,str(i),(int(x)-2,int(y)+4),font,0.3,(255,255,255),1,cv2.LINE_AA)
-
-            # 骨骼连接 & 标注角度数据
-            drawLineAndRadius(img, humanpoints, people_id)
-
+        graphics.people_track(json_dict)
 
     # 获取球的信息，并在图像上标注球
-    boxes = Detect.detect_ball(img_origin)
-    print(f"检测到{len(boxes)}个球。")
-    for box in boxes:
+    boxes = volley_position[num-1]
+    # print(f"检测到{len(boxes)}个球。")
+
+    people_cnt = len(json_dict["people"])
+
+    # 目前只考虑一个球的情况
+    if len(boxes) != 0:
+        box = boxes[0]
         x1, y1, x2, y2 = box
         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
         # 以绿色边框描出球的位置
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
-        print(f"球的长度是{x2-x1}")
+        # print(f"球的长度是{x2-x1}")
 
         center_x = (x1 + x2) // 2
         center_y = (y1 + y2) // 2
         
+        for people_id in range(people_cnt):
+            pose_keypoints_2d = json_dict["people"][people_id]["pose_keypoints_2d"]
+            elbow_pair = (6, 7)
+            x1 = int(pose_keypoints_2d[elbow_pair[0]*3])
+            y1 = int(pose_keypoints_2d[elbow_pair[0]*3+1])
+            x2 = int(pose_keypoints_2d[elbow_pair[1]*3])
+            y2 = int(pose_keypoints_2d[elbow_pair[1]*3+1])
 
-    #打印角度 -1 代表不构成三角形
-    for i in range(people_cnt):
-        angle.angle_left_shoulder(humanpoints[i])
-        angle.angle_left_elbow(humanpoints[i])
-        angle.angle_left_knee(humanpoints[i])
-        angle.angle_left_ankle(humanpoints[i])
-        angle.angle_right_shoulder(humanpoints[i])
-        angle.angle_right_elbow(humanpoints[i])
-        angle.angle_right_knee(humanpoints[i])
-        angle.angle_right_ankle(humanpoints[i])
+            dist = mathtools.get_vertical_distance(x1, y1, x2, y2, center_x, center_y)
+            # print(f"[image {num}] 距离Person{people_id} {int(dist)} pixel.")
 
-    # 适应屏幕的尺寸调整
-    newW = W = img.shape[1]
-    newH = H = img.shape[0]
-    if W > 1600:
-        newW = 1600
-        newH = int(newW / (W / H))
-    elif H > 700:
-        newH = 700
-        newW = int(newH * (W / H))
+            while num >= len(distance1): distance1.append([])
+            distance1[num].append(int(dist))
 
-    # cv2.namedWindow("image", cv2.WINDOW_NORMAL)
-    # cv2.resizeWindow("image", newW, newH) # 重设窗体宽高
-    # cv2.imshow("image", img)
-    # cv2.imwrite("img.jpg", img)
-    return img
-    # cv2.waitKey(0)
+            # distance1数组访问方式：
+            # distance1[图片编号][people_id(人物编号，从0开始)] = 距离
+            # 特点：可以直接用图片编号访问
+
+            if people_id >= len(distance2): distance2.append([])
+            distance2[people_id].append((num, int(dist)))
+            # distance2数组访问方式：
+            # distance2[people_id(人物编号，从0开始)] = tuple(图片编号, 距离)
+            # 特点：图片编号是递增不连续的，便于在相邻下标位置访问到距离
+
+            while num >= len(horizontal_dist): horizontal_dist.append([])
+            dist2 = int(mathtools.get_horizontal_distance(x1, y1, x2, y2, center_x, center_y))
+            horizontal_dist[num].append(dist2)
+            # horizontal_dist存储球中心与人胳膊中垂线的距离
+            # 存储方式与distance1完全相同
+
 
 
 if __name__ == "__main__":
@@ -234,8 +148,53 @@ if __name__ == "__main__":
         os.makedirs(result_path)
 
     total_num = len(os.listdir(save_path))
+
+    # 生成排球识别信息的json文件
+    volley_position_path = os.path.join(result_path, "volleyball_detect.json")
+    if not os.path.exists(volley_position_path):
+        # 引入排球识别
+        print("排球识别信息不存在，将开始生成！")
+        from detectron2_package import VolleyballDetect as Detect
+        lst = []
+        for i in range(total_num):
+            img = cv2.imread(os.path.join(save_path, f"{i+1}.jpg"))
+            boxes = Detect.detect_ball(img)
+            boxes_new = []
+            for box in boxes:
+                box = list(map(lambda x: float(x), box))
+                boxes_new.append(box)
+            lst.append(boxes_new)
+            print(f"[image {i+1}] completed.")
+        str = json.dumps(lst)
+        with open(volley_position_path, "w") as f:
+            f.write(str)
+
+    with open(volley_position_path, "r") as f:
+        volley_position = json.load(f)
+
+    
+    distance1 = []
+    distance2 = []
+    horizontal_dist = []
     for i in range(total_num):
-        img = process_img(save_path, json_path, i+1)
+        calc_distance(save_path, json_path, i+1, volley_position, distance1, distance2, horizontal_dist)
+
+    lst = distance2[0]
+    min_imageID = []
+    max_imageID = []
+    for i in range(len(lst)):
+        # 某个点的距离比前后两个点的距离都小，认定为最小值
+        if (i != 0) and (lst[i][1] < lst[i-1][1]) and (i != len(lst)-1) and (lst[i][1] < lst[i+1][1]):
+            min_imageID.append(lst[i][0])
+        elif (i != 0) and (lst[i][1] > lst[i-1][1]) and (i != len(lst)-1) and (lst[i][1] > lst[i+1][1]):
+            max_imageID.append(lst[i][0])
+    dynamic_info = {"min_imageID": min_imageID, "max_imageID": max_imageID, \
+                    "distance": distance1, "horizontal_dist": horizontal_dist, 
+                    "volley_position": volley_position}
+    print(min_imageID)
+
+    for i in range(total_num):
+        img = graphics.annotate_img(save_path, json_path, i+1, dynamic_info)
         # cv2.imshow("image", img)
         # cv2.waitKey()
         cv2.imwrite(os.path.join(result_path, f"{i+1}.jpg"), img)
