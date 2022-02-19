@@ -11,6 +11,7 @@ import graphics
 import keypoints
 import cut_video
 import mathtools
+import shutil
 
 # 低分辨率开关
 is_low_resolution = True
@@ -69,7 +70,7 @@ def calc_distance(image_path, json_path, num, volley_position, distance1, distan
     # 读取和转化JSON文件
     with open(os.path.join(json_path, f"{num}_keypoints.json"), "r") as f:
         json_dict = json.load(f)
-        graphics.people_track(json_dict)
+        mathtools.people_track(json_dict)
 
     # 获取球的信息，并在图像上标注球
     boxes = volley_position[num-1]
@@ -181,14 +182,16 @@ if __name__ == "__main__":
 
     lst = distance2[0]
     min_imageID = []
-    max_imageID = []
     for i in range(len(lst)):
-        # 某个点的距离比前后两个点的距离都小，认定为最小值
-        if (i != 0) and (lst[i][1] < lst[i-1][1]) and (i != len(lst)-1) and (lst[i][1] < lst[i+1][1]):
-            min_imageID.append(lst[i][0])
-        elif (i != 0) and (lst[i][1] > lst[i-1][1]) and (i != len(lst)-1) and (lst[i][1] > lst[i+1][1]):
-            max_imageID.append(lst[i][0])
-    dynamic_info = {"min_imageID": min_imageID, "max_imageID": max_imageID, \
+        # 某个点的距离距离胳膊已经足够近
+        box = volley_position[lst[i][0]-1][0]
+        ball_width = box[2]-box[0]
+        imageID = lst[i][0]
+        # 横向距离尽量放宽，避免误判
+        if lst[i][1] - ball_width < 20 and horizontal_dist[imageID][0] < 4*ball_width:
+            min_imageID.append(imageID)
+
+    dynamic_info = {"min_imageID": min_imageID, \
                     "distance": distance1, "horizontal_dist": horizontal_dist, 
                     "volley_position": volley_position}
     print(min_imageID)
@@ -197,4 +200,8 @@ if __name__ == "__main__":
         img = graphics.annotate_img(save_path, json_path, i+1, dynamic_info)
         # cv2.imshow("image", img)
         # cv2.waitKey()
-        cv2.imwrite(os.path.join(result_path, f"{i+1}.jpg"), img)
+        if (i+1) in min_imageID:
+            cv2.imwrite(os.path.join(result_path, f"{i+1}.jpg"), img)
+
+    # for id in min_imageID:
+    #     shutil.copyfile(f"pose_results/{id}.jpg", f"pose_results/catch/{id}.jpg")

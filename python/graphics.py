@@ -1,3 +1,5 @@
+# 此文件用于放置绘图相关的函数
+
 import cv2
 import angle
 import numpy as np
@@ -5,8 +7,7 @@ import os
 import json
 import keypoints
 import mathtools
-from functools import cmp_to_key
-
+import calculation
 
 # 绘制骨骼连接和角度文字
 def drawLineAndRadius(img, humanpoints, people_id):
@@ -50,29 +51,6 @@ def hcolor_to_bgr(hcolor):
     return (b, g, r)
 
 
-def people_track(json_dict):
-    # 如果人数大于3，则把远处的人（鼻子到腿最短）删去
-    dist_pair = (0, 14)
-    if(len(json_dict["people"]) >= 3):
-        def cmp(people1, people2):
-            y1_1 = people1["pose_keypoints_2d"][dist_pair[0]*3+1]
-            y1_2 = people1["pose_keypoints_2d"][dist_pair[1]*3+1]
-            y2_1 = people2["pose_keypoints_2d"][dist_pair[0]*3+1]
-            y2_2 = people2["pose_keypoints_2d"][dist_pair[1]*3+1]
-            return (y1_2 - y1_1) - (y2_2 - y2_1)
-        # 降序排序
-        json_dict["people"].sort(key=cmp_to_key(cmp), reverse=True)
-        for i in range(2, len(json_dict["people"])):
-            del json_dict["people"][i]
-
-    def cmp2(people1, people2):
-        part_id = 0
-        x1 = people1["pose_keypoints_2d"][part_id*3]
-        x2 = people2["pose_keypoints_2d"][part_id*3]
-        return x1 - x2
-    # 升序排列
-    json_dict["people"].sort(key=cmp_to_key(cmp2))
-
 
 # 将传入的源图像转化为标注图像
 # 标注内容：关节、肢体连接、身体部位角度等
@@ -80,17 +58,22 @@ def people_track(json_dict):
 # json_path:  图像转化成的JSON文件目录
 # num:        图像的次序标号
 # dynamic_info: 经过计算处理过的动态信息
+# dynamic_info = {"min_imageID":  接球的图片编号
+                # "distance":     球到手臂的距离
+                # "horizontal_dist": 球到手臂的水平距离
+                # "volley_position": 球的位置}
+                # volley_position 访问方式：volley_position[num-1][第几个球]
 def annotate_img(image_path, json_path, num, dynamic_info):
     img = cv2.imread(os.path.join(image_path, f"{num}.jpg"))
-    print(f"[image {num}] 图片的分辨率为：{img.shape}")  # 输出 几行几列几维颜色
+    # print(f"[image {num}] 图片的分辨率为：{img.shape}")  # 输出 几行几列几维颜色
 
     # 读取和转化JSON文件
     with open(os.path.join(json_path, f"{num}_keypoints.json"), "r") as f:
         json_dict = json.load(f)
-        people_track(json_dict)
+        mathtools.people_track(json_dict)
 
     people_cnt = len(json_dict["people"])
-    print(f"[image {num}] 一共有{people_cnt}个人在画面中。")
+    # print(f"[image {num}] 一共有{people_cnt}个人在画面中。")
     humanpoints = np.zeros((10, 25, 3))
 
     if people_cnt != 0:
@@ -111,12 +94,20 @@ def annotate_img(image_path, json_path, num, dynamic_info):
                         color = hcolor_to_bgr(keypoints.color_table[i])
                         cv2.circle(img, (int(x), int(y)), 8, color, -1)  #在图中画出关键点
                 else:
-                    print(f"[image {num}] keypoint {i} not exists.")
+                    # print(f"[image {num}] keypoint {i} not exists.")
+                    pass
 
             # 参照位置：鼻子
             keypoint_id = 0
             x, y = pose_keypoints_2d[keypoint_id*3], pose_keypoints_2d[keypoint_id*3+1]
-            cv2.putText(img, f"Person {people_id}", (int(x), max(int(y)-100, 0)), 
+
+            # 计算出鼻子到腿的距离为dist
+            dist_pair = (0, 14)
+            y1 = json_dict["people"][people_id]["pose_keypoints_2d"][dist_pair[0]*3+1]
+            y2 = json_dict["people"][people_id]["pose_keypoints_2d"][dist_pair[1]*3+1]
+            dist = abs(y2-y1)
+
+            cv2.putText(img, f"Person {people_id}: ", (int(x), max(int(y)-100, 0)), 
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
 
             for i in range(25):
@@ -132,13 +123,15 @@ def annotate_img(image_path, json_path, num, dynamic_info):
             # 骨骼连接 & 标注角度数据
             drawLineAndRadius(img, humanpoints, people_id)
 
+
+    # 打印手臂离球的距离
     distance = dynamic_info["distance"][num]
     for people_id in range(len(distance)):
         cv2.putText(img,f"Person{people_id}: {int(distance[people_id])} px.", \
                 (0,(people_id+1)*40),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),1,cv2.LINE_AA)
 
-    boxes = dynamic_info["volley_position"][num-1]
     # 描出球的位置
+    boxes = dynamic_info["volley_position"][num-1]
     if len(boxes) != 0:
         box = boxes[0]
         x1, y1, x2, y2 = box
@@ -146,6 +139,8 @@ def annotate_img(image_path, json_path, num, dynamic_info):
         # 以绿色边框描出球的位置
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
 
+
+    # 获取横向距离
     pose_keypoints_2d = json_dict["people"][people_id]["pose_keypoints_2d"]
     elbow_pair = (6, 7)
     x1 = int(pose_keypoints_2d[elbow_pair[0]*3])
@@ -154,9 +149,18 @@ def annotate_img(image_path, json_path, num, dynamic_info):
     y2 = int(pose_keypoints_2d[elbow_pair[1]*3+1])
     length = mathtools.get_distance(x1, y1, x2, y2)
     horizontal_dist = dynamic_info["horizontal_dist"][num]
-    # 接到球满足两个条件：1. 局部极小值  2. 与胳膊中垂线距离不超过胳膊长度
-    if num in dynamic_info["min_imageID"] and horizontal_dist[0] <= length:
-        cv2.putText(img,f"Person0 Catch ball!", (0,3*40), \
+
+
+    # 打印接到球的信息！
+    # 接到球满足两个条件：1. 距离胳膊较近  2. 与胳膊中垂线距离不超过胳膊长度
+    if num in dynamic_info["min_imageID"]:
+        print(f"[image {num}] 横向距离={horizontal_dist[0]}, 胳膊长度={length}")
+        people = json_dict["people"][people_id]
+        ball = dynamic_info["volley_position"][num-1][0]
+
+        # 获取接球部位
+        catch_part = calculation.get_catch_part(people, ball)
+        cv2.putText(img,f"Person0 Catch ball! {catch_part}", (0,3*40), \
             cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2,cv2.LINE_AA)
 
 

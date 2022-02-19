@@ -58,12 +58,12 @@ def get_angle_point(human, pos):  #human是每个人得到的json文件转化的
     elif pos == 'right_ankle':
         pos_list = (2,9,11)
     else:
-        print('Unknown  [%s]', pos)
+        # print('Unknown  [%s]', pos)
         return pnts
 
     for i in range(3):
         if human[pos_list[i]][2] <= 0.1:    #置信度过小
-            print('component [%d] incomplete'%(pos_list[i]))
+            # print('component [%d] incomplete'%(pos_list[i]))
             return pnts
 
         pnts.append((int( human[pos_list[i]][0]), int( human[pos_list[i]][1])))
@@ -72,95 +72,95 @@ def get_angle_point(human, pos):  #human是每个人得到的json文件转化的
 def angle_left_shoulder(human):
     pnts = get_angle_point(human, 'left_shoulder')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return -1
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('left shoulder angle: %f'%(angle))
+        # print('left shoulder angle: %f'%(angle))
     return angle
 
 def angle_left_elbow(human):
     pnts = get_angle_point(human, 'left_elbow')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('left elbow angle: %f'%(angle))
+        # print('left elbow angle: %f'%(angle))
     return angle
 
 def angle_left_knee(human):
     pnts = get_angle_point(human, 'left_knee')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('left knee angle:%f'%(angle))
+        # print('left knee angle:%f'%(angle))
     return angle
 
 def angle_left_ankle(human):
     pnts = get_angle_point(human, 'left_ankle')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('left ankle angle:%f'%(angle))
+        # print('left ankle angle:%f'%(angle))
     return angle
 
 def angle_right_shoulder(human):
     pnts = get_angle_point(human, 'right_shoulder')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('right shoulder angle:%f'%(angle))
+        # print('right shoulder angle:%f'%(angle))
     return angle
 
 def angle_right_elbow(human):
     pnts = get_angle_point(human, 'right_elbow')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('right elbow angle:%f'%(angle))
+        # print('right elbow angle:%f'%(angle))
     return angle
 
 def angle_right_knee(human):
     pnts = get_angle_point(human, 'right_knee')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('right knee angle:%f'%(angle))
+        # print('right knee angle:%f'%(angle))
     return angle
 
 def angle_right_ankle(human):
     pnts = get_angle_point(human, 'right_ankle')
     if len(pnts) != 3:
-        print('component incomplete')
+        # print('component incomplete')
         return
 
     angle = 0
     if pnts is not None:
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
-        print('right ankle angle:%f'%(angle))
+        # print('right ankle angle:%f'%(angle))
     return angle
