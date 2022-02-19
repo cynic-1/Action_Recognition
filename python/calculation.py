@@ -15,10 +15,10 @@ def get_part_position(people, part_pair, cx, cy):
     dist = mathtools.get_distance(x1, y1, x2, y2)
     left_dist = mathtools.get_horizontal_distance_on(x1, y1, x2, y2, cx, cy, x1, y1)
     right_dist = mathtools.get_horizontal_distance_on(x1, y1, x2, y2, cx, cy, x2, y2)
+    print("[getposition] length=%.2f, left=%.2f, right=%.2f" % (dist, left_dist, right_dist))
     # 在part0->part1的射线延长线上
-    print(f"[get_position] left: {left_dist}, right: {right_dist}, part: {part_pair}, length: {dist}")
     if left_dist > dist and right_dist < left_dist:
-        return -right_dist/dist
+        return -(right_dist/dist)
     else:
         return right_dist/dist
 
@@ -26,12 +26,13 @@ def get_part_position(people, part_pair, cx, cy):
 def get_catch_part(people, ball):
     front_elbow = (3,4)
     back_elbow = (2,3)
-    cx = int((ball[0]+ball[2])/2)
-    cy = int((ball[1]+ball[3])/2)
+    x1, y1, x2, y2 = ball
+    cx = (x1 + x2) // 2
+    cy = (y1 + y2) // 2
     front = get_part_position(people, front_elbow, cx, cy)
     back = get_part_position(people, back_elbow, cx, cy)
-    return "front%.2f, back %.2f" % (front, back)
+    # return "front%.2f, back %.2f" % (front, back)
     if front < 1:
-        return "front%.2f" % front
+        return "front:%.2f" % front
     else:
-        return "back%.2f" % back
+        return "back:%.2f" % back

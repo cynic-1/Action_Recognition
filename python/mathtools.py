@@ -9,6 +9,7 @@ def get_vertical_distance(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int):
         b = -1
         c = -a*x1 + y1
         distance = abs(a*cx + b*cy + c) / math.sqrt(a**2 + b**2)
+        # print(a, b, c)
     else:
         # 防止除以0
         distance = abs(x1 - cx)
@@ -18,7 +19,7 @@ def get_vertical_distance(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int):
 def get_horizontal_distance_on(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int, x0: int, y0: int):
     # 求过点(x0, y0)且与当前直线垂直的直线
     if y2-y1 != 0:
-        k = (x2-x1)/(y2-y1)
+        k = -(x2-x1)/(y2-y1)
 
         a = k
         b = -1
@@ -38,13 +39,15 @@ def get_horizontal_distance(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int
     y0 = (y1+y2) / 2
 
     if y2-y1 != 0:
-        k = (x2-x1)/(y2-y1)
+        # 斜率应该是-1/k, 我傻了
+        k = -(x2-x1)/(y2-y1)
 
         a = k
         b = -1
         c = -k*x0 + y0
 
         distance = abs(a*cx + b*cy + c) / math.sqrt(a**2 + b**2)
+        # print(a, b, c)
     else:
         distance = abs(x0 - cx)
 
@@ -89,3 +92,8 @@ def people_track(json_dict):
         return x1 - x2
     # 升序排列
     json_dict["people"].sort(key=cmp_to_key(cmp2))
+
+
+if __name__ == "__main__":
+    print(get_horizontal_distance(13, 15, 21, 56, 7, 7))
+    pass

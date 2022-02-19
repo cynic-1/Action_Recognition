@@ -154,9 +154,10 @@ def annotate_img(image_path, json_path, num, dynamic_info):
     # 打印接到球的信息！
     # 接到球满足两个条件：1. 距离胳膊较近  2. 与胳膊中垂线距离不超过胳膊长度
     if num in dynamic_info["min_imageID"]:
-        print(f"[image {num}] 横向距离={horizontal_dist[0]}, 胳膊长度={length}")
-        people = json_dict["people"][people_id]
+        people = json_dict["people"][0]
         ball = dynamic_info["volley_position"][num-1][0]
+        # horizontal_dist = [mathtools.get_horizontal_distance(x1,y1,x2,y2,(ball[0]+ball[2])//2, (ball[1]+ball[3])//2)]
+        print(f"[image {num}] 横向距离={horizontal_dist[0]}, 胳膊长度=" + "%.2f" % length)
 
         # 获取接球部位
         catch_part = calculation.get_catch_part(people, ball)
