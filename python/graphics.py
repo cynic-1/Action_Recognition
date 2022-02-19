@@ -8,6 +8,23 @@ import json
 import keypoints
 import mathtools
 import calculation
+from PIL import Image, ImageDraw, ImageFont
+
+
+# 支持绘制中文的绘图函数
+def cv2ImgAddText(img, text, left, top, textColor, textSize):
+    if (isinstance(img, np.ndarray)):  # 判断是否OpenCV图片类型
+        img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    # 创建一个可以在给定图像上绘图的对象
+    draw = ImageDraw.Draw(img)
+    # 字体的格式
+    fontStyle = ImageFont.truetype(
+        "simsun.ttc", textSize, encoding="utf-8")
+    # 绘制文本
+    draw.text((left, top), text, textColor, font=fontStyle)
+    # 转换回OpenCV格式
+    return cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+
 
 # 绘制骨骼连接和角度文字
 def drawLineAndRadius(img, humanpoints, people_id):
@@ -39,9 +56,16 @@ def drawLineAndRadius(img, humanpoints, people_id):
     for n in range(6):
         font = cv2.FONT_HERSHEY_SIMPLEX
         if radius[n] is not None:
-            cv2.putText(img,"%d"%radius[n],
-                (int(humanpoints[people_id][radius_point[n]][0])-20, (int(humanpoints[people_id][radius_point[n]][1]))-20),
-                font, 0.4, (255, 255, 255), 1)
+            # cv2.putText(img,"%d"%radius[n],
+            #     (int(humanpoints[people_id][radius_point[n]][0])-20, (int(humanpoints[people_id][radius_point[n]][1]))-20),
+            #     font, 0.4, (255, 255, 255), 1)
+            img = cv2ImgAddText(img, "%d" % radius[n] + chr(0x00b0), (int(humanpoints[people_id][radius_point[n]][0]) + 20),
+                                (int(humanpoints[people_id][radius_point[n]][1]) - 40), (255, 255, 255), 20)
+            cv2.line(img, (int(humanpoints[people_id][radius_point[n]][0]) + 8, (int(humanpoints[people_id][radius_point[n]][1])) - 3),
+                     (int(humanpoints[people_id][radius_point[n]][0]) + 20, (int(humanpoints[people_id][radius_point[n]][1])) - 20),
+                     (255, 255, 255), 2, cv2.LINE_AA)
+
+    return img
 
 
 def hcolor_to_bgr(hcolor):
@@ -121,7 +145,7 @@ def annotate_img(image_path, json_path, num, dynamic_info):
                         cv2.putText(img,str(i),(int(x)-2,int(y)+4),font,0.3,(255,255,255),1,cv2.LINE_AA)
 
             # 骨骼连接 & 标注角度数据
-            drawLineAndRadius(img, humanpoints, people_id)
+            img = drawLineAndRadius(img, humanpoints, people_id)
 
 
     # 打印手臂离球的距离
