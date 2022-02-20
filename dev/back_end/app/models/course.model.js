@@ -12,21 +12,19 @@ export default mongoose => {
                 integer: true,
                 enum: [1, 2] // autumn, spring
             },
-            courseTime: {
-                day: {
-                    type: Number,
-                    required: true,
-                    integer: true,
-                    min: 1,
-                    max: 7
-                },
-                class: {
-                    type: Number,
-                    required: true,
-                    integer: true,
-                    min: 1,
-                    max: 9
-                }
+            day: {
+                type: Number,
+                required: true,
+                integer: true,
+                min: 1,
+                max: 7
+            },
+            classNo: {
+                type: Number,
+                required: true,
+                integer: true,
+                min: 1,
+                max: 9
             },
             name: {
                 type: String, // e.g. volleyball

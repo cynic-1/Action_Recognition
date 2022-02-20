@@ -60,7 +60,11 @@ export default {
       id: 123123123,
       name: 'cynic',
       college: 23,
-      course: "",
+      course: {
+        year: 2022,
+        semester: 1,
+
+      },
       email: 'ca1312@163.com',
       userId: this.$route.params.id
     }
@@ -111,7 +115,7 @@ export default {
   width: 75%;
   margin-top: 30px;
 }
-.width-80-center {
-  width: 80%; margin-left: auto; margin-right: auto;
-}
+/*.width-80-center {*/
+/*  width: 80%; margin-left: auto; margin-right: auto;*/
+/*}*/
 </style>

@@ -10,14 +10,15 @@ export const create = (req, res) => {
         res.status(400).send({ message: "Content can not be empty!" });
         return;
     }
+    const {year, semester, name, teachers, day, classNo} = req.body
     // Create a course
-    const course = new Course({
-        year: req.body.year,
-        semester: req.body.semester,
-        name: req.body.name,
-        teachers: req.body.teachers,
-        courseTime: req.body.courseTime
-        // students: req.body.students || [],
+    const course = new Course({ // cannot use word 'class', so replace it with classNo
+        year,
+        semester,
+        name,
+        teachers,
+        day,
+        classNo
     });
     // Save User in the database
     course
