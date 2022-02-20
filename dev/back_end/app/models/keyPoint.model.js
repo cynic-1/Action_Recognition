@@ -4,7 +4,12 @@ export default mongoose => {
             imgLoc: String, // file location
             data: {
                 upper: {
-                    hitPosition: String,
+                    hitPosition: String, // 击球部位
+                    hitAngle: { // 小臂与水平方向夹角
+                        type: Number,
+                        min: 0,
+                        max: 180
+                    },
                     angleForearmArm: { // 小臂与大臂夹角
                         type: Number,
                         min: 0,
@@ -26,24 +31,37 @@ export default mongoose => {
                         type: Number,
                         min: 0,
                         max: 180
+                    },
+                    jumpHeight: {
+                        type: Number,
+                        min: 0
                     }
                 },
                 ball: {
-                    lastHeight: {
+                    lastHeight: { // 上次击球至今的球最大高度
                         type: Number
                     },
-                    initialAngle: {
+                    initialAngle: { // 初速度方向与水平夹角
                         type: Number,
                         min: 0,
                         max: 180
+                    },
+                    initialVelocity: { // 初速度 (m/s)
+                        type: Number,
+                        min: 0
                     }
                 },
-                coordination: {
+                coordination: { // 协调性得分
                     type: Number,
                     min: 0,
                     max: 100
                 },
-                rate: {
+                accuracy: { // 准确性得分
+                    type: Number,
+                    min: 0,
+                    max: 100
+                },
+                rate: { // 该动作总得分
                     type: Number,
                     min: 0,
                     max: 180
