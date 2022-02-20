@@ -1,7 +1,7 @@
 import db from "../models/index.js"
 
 const Course = db.course;
-// const User = db.user;
+const User = db.user;
 
 // Create and Save a new course
 export const create = (req, res) => {
@@ -109,19 +109,29 @@ export const getStudents = (req, res) => {
 }
 
 export const insertStudents = (req, res) => {
-    const id = req.params.id;
-    const _ids = req.body._ids;
+    const id = req.params.id;// course id
+    const _ids = req.body._ids; // student _id
     Course.findByIdAndUpdate(id, {$addToSet: {students: { $each: _ids }}})
         .then(data => {
             if (!data) {
                 res.status(404).send({
                     message: `Cannot update course with id=${id}. Maybe course was not found!`
                 });
-            } else res.send({ message: "Course was updated successfully." });
+            }
+            // else res.send({ message: "Course was updated successfully." });
         })
         .catch(() => {
             res.status(500).send({
                 message: "Error updating course with id=" + id
             });
         });
+    _ids.forEach(v => {
+        User.findByIdAndUpdate(v, {$push: {courses: id}})
+            .catch(() => {
+                res.status(500).send({
+                    message: "Error insert student with _id=" + id
+                });
+            })
+    })
+    res.send({ message: "Course was updated successfully." });
 }
