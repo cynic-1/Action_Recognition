@@ -30,10 +30,8 @@ def getboxes(imgpath, jsonpath, balljson):
 
 def find_distance(imgpath, jsonpath, balljson):
     # getboxes(imgpath, jsonpath, balljson)  # 得到boxes信息的json文件
-    # 需要注意图片的编号是通过imgpath中的文件数来决定的，那么imgpath里不要放置其他文件！！
-
     files = os.listdir(imgpath)  # 得到图片文件夹下的所有文件名称
-    ball_loc = [[0] for n in range(len(files)+2)]  # 声明二维数组装每张图片的球信息——# x1, y1, x2, y2, diatance
+    ball_loc = [[0] for n in range(1000)]  # 声明二维数组装每张图片的球信息——# x1, y1, x2, y2, diatance
     # 获取球的位置信息
     with open(balljson, "r") as f:  # 获取boxes信息
         json_dict = json.load(f)
@@ -42,7 +40,7 @@ def find_distance(imgpath, jsonpath, balljson):
         if json_dict[i]:
             boxes.append(json_dict[i][0])  # 从下标0开始
         else:
-            boxes.append([0,0,0,0])
+            boxes.append([0, 0, 0, 0])
     # 获取distance信息
     for i in range(1, len(files) + 1):  # 遍历文件夹
         img = cv2.imread(imgpath + "/" + str(i) + ".jpg")
@@ -69,7 +67,8 @@ def distance(humanpoints, ball):
     A = elbow[1] - hand[1]  # A = y1 - y2
     B = elbow[0] - hand[0]  # B = x1 - x2
     C = elbow[0] * (elbow[1] - hand[1]) - elbow[1] * (elbow[0] - hand[0])  #
-    d = abs(A * center[0] + B * center[1] + C) / math.sqrt(A ** 2 + B ** 2)
+    domi = math.sqrt(A ** 2 + B ** 2) if math.sqrt(A ** 2 + B ** 2) > 0 else 0.000000001
+    d = abs(A * center[0] + B * center[1] + C) / domi
     return d
 
 
@@ -117,7 +116,7 @@ def height(imgpath, jsonpath, balljson):  # humanpoints 是关节坐标的三维
                                      pose_keypoints_2d[j * 3 + 2]]
         # 计算每张图中球的高度
         x1, y1, x2, y2, d = ball_loc[i]
-        if x1==0 and y1==0 and x2==0 and y2==0:
+        if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
             height_all.update({i: None})
         else:
             length = x2 - x1
@@ -129,10 +128,12 @@ def height(imgpath, jsonpath, balljson):  # humanpoints 是关节坐标的三维
             height_3d = height_2d * 21 / length
             height_all.update({i: height_3d})
             # 画图
-            img1 = cv2.imread(os.path.join(imgpath, str(i) + ".jpg"))
-            img3 = cv2ImgAddText(img1, "球离地面的高度：%.0f cm" % height_3d, ball_loc[i][2] + 10, ball_loc[i][3] - 50,
-                                 (166, 202, 240), 20)
-            cv2.imwrite("img4.jpg", img3)
+            img1 = cv2.imread(imgpath + "/" + str(i) + ".jpg")
+            img1 = cv2.arrowedLine(img1, (int(ball_center[0]), int(ball_center[1])),
+                                   (int(ball_center[0] + 30), int(ball_center[1] - 20)), (179, 113, 60), 2, 8)
+            img1 = cv2ImgAddText(img1, "球离地面的高度：%.0f cm" % height_3d, ball_loc[i][2] + 20, ball_loc[i][3] - 50,
+                                 (0, 100, 0), 20)
+            cv2.imwrite(imgpath + "/" + str(i) + ".jpg", img1)
     return height_all
 
 
@@ -155,10 +156,10 @@ def speed(imgpath, jsonpath, balljson, interval):  # interval 是时间间隔
     for j in target:
         img1 = cv2.imread(imgpath + "/" + str(j - 1) + ".jpg")
         img2 = cv2.imread(imgpath + "/" + str(j) + ".jpg")
-        img3 = cv2ImgAddText(img1, "球的速度：%.2f m/s" % speed_all.get(j), ball_loc[j - 1][2] + 10, ball_loc[j - 1][3] - 30,
-                             (166, 202, 240), 20)
-        img4 = cv2ImgAddText(img2, "球的速度：%.2f m/s" % speed_all.get(j), ball_loc[j][2] + 10, ball_loc[j][3] - 30,
-                             (166, 202, 240), 20)
+        img3 = cv2ImgAddText(img1, "球的速度：%.2f m/s" % speed_all.get(j), ball_loc[j - 1][2] + 20, ball_loc[j - 1][3] - 30,
+                             (0, 100, 0), 20)
+        img4 = cv2ImgAddText(img2, "球的速度：%.2f m/s" % speed_all.get(j), ball_loc[j][2] + 20, ball_loc[j][3] - 30,
+                             (0, 100, 0), 20)
         cv2.imwrite(imgpath + "/" + str(j - 1) + ".jpg", img3)
         cv2.imwrite(imgpath + "/" + str(j) + ".jpg", img4)
     return speed_all
@@ -191,27 +192,29 @@ def direction(imgpath, jsonpath, balljson):  # length是文件夹中的个数, b
             v1y = center2[1] - center1[1]
             v2x = humanpoints[0][7][0] - humanpoints[0][6][0]
             v2y = humanpoints[0][7][1] - humanpoints[0][6][1]
-            cos = (v1x * v2x + v1y * v2y) / ((math.sqrt(v1x * v1x + v1y * v1y)) * (math.sqrt(v2x * v2x + v2y * v2y)))
+            domi = math.sqrt(v1x * v1x + v1y * v1y) * math.sqrt(v2x * v2x + v2y * v2y) if math.sqrt(v1x * v1x + v1y * v1y) * math.sqrt(v2x * v2x + v2y * v2y)>0 else 0.0000000001
+            cos = (v1x * v2x + v1y * v2y) / domi
             theta = math.acos(cos)
-            direction_all.update({i: theta})
+            direction_all.update({i: theta * (180.0 / math.pi)})
             print(f"第{i - 1}和{i}张图:球与小臂的夹角为{theta * (180.0 / math.pi)}度")
         # 在图中标注
     for j in target:
         img1 = cv2.imread(imgpath + "/" + str(j - 1) + ".jpg")
         img2 = cv2.imread(imgpath + "/" + str(j) + ".jpg")
-        img3 = cv2ImgAddText(img1, "球与小臂的角度：%.0f" % direction_all.get(j) + chr(0x00b0), ball_loc[j - 1][2] - 10,
-                             ball_loc[j - 1][3] - 10, (166, 202, 240), 20)
-        img4 = cv2ImgAddText(img2, "球与小臂的角度：%.0f" % direction_all.get(j) + chr(0x00b0), ball_loc[j][2] - 10,
-                             ball_loc[j][3] - 10, (166, 202, 240), 20)
+        img3 = cv2ImgAddText(img1, "球与小臂的角度：%.0f" % direction_all.get(j) + chr(0x00b0),
+                             ball_loc[j - 1][2] + 20,
+                             ball_loc[j - 1][3] - 10, (0, 100, 0), 20)
+        img4 = cv2ImgAddText(img2, "球与小臂的角度：%.0f" % direction_all.get(j) + chr(0x00b0), ball_loc[j][2] + 20,
+                             ball_loc[j][3] - 10, (0, 100, 0), 20)
         cv2.imwrite(imgpath + "/" + str(j - 1) + ".jpg", img3)
         cv2.imwrite(imgpath + "/" + str(j) + ".jpg", img4)
     return direction_all
 
 
 if __name__ == "__main__":
-    imgpath = "pose_results"
-    jsonpath = "pose_images_json"
-    balljson = "volleyball_detect.json"
+    imgpath = os.path.dirname(os.path.realpath(__file__)) + "/images/rightPadding"
+    jsonpath = os.path.dirname(os.path.realpath(__file__)) + "/pose_images_json"
+    balljson = os.path.dirname(os.path.realpath(__file__)) + "/volleyball_detect.json"
     interval = 1 / 12  # 两帧间隔——1/12秒
     height(imgpath, jsonpath, balljson)
     speed(imgpath, jsonpath, balljson, interval)
