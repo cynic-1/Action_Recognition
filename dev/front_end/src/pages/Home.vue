@@ -13,10 +13,10 @@
       <q-card class="info q-pa-md">
         <div class="text-h4 row">
           <span>课程信息</span>
-          <q-btn rounded icon-right="more" flat class="text-right text-subtitle2">更多</q-btn>
+          <q-btn rounded icon-right="read_more" flat class="text-right text-subtitle2">查看更多</q-btn>
         </div>
         <div class="text-h5 text-grey" style="margin: 20px">当前课程：{{courseTime}}</div>
-        <div class="text-h5 text-grey" style="margin: 20px">任课老师：{{course.teacher}}</div>
+        <div class="text-h5 text-grey" style="margin: 20px">任课老师：{{teachers}}</div>
       </q-card>
     </div>
 
@@ -29,7 +29,7 @@
       <div class="text-h5 text-grey row q-mb-lg" style="margin-top: 20px">
         <span style="margin-right: 60%">我的上传</span>
         <q-btn rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
-        <q-btn rounded color="blue" icon="more" to="/stuvideolist">更多</q-btn>
+        <q-btn rounded color="blue" icon="read_more" to="/videos">更多</q-btn>
       </div>
       <div class="row">
         <video-item style="width: 48%;margin-right: 2%"/>
@@ -65,6 +65,11 @@ export default {
         semester: 1,
         day: 3,
         classNo: 4,
+        teachers: [{
+          _id: "62020090fc4badc851a96a99",
+          name: "梁秀英"
+        }
+        ]
       },
       email: 'ca1312@163.com',
       userId: this.$route.params.id
@@ -87,15 +92,19 @@ export default {
           console.log(this.course)
         })
       })
-    }
+    },
   },
   computed: {
     courseTime() {
       return this.course.year + '年 ' + semMap[this.course.semester] + ' 周 ' + dayMap[this.course.day] + ' 第 ' + numberMap[this.course.classNo] + '节';
     },
+    teachers() {
+      return this.course.teachers.reduce((sum, current) => sum + current.name, "")
+    }
   },
   created() {
     this.getUserInfo()
+
   }
 
 

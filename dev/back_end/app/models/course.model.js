@@ -32,9 +32,14 @@ export default mongoose => {
                 max: 20
             },
             teachers: [{
-                type: mongoose.Schema.Types.ObjectId,
-                required: true,
-                ref: "user"
+                _id: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    required: true,
+                    ref: "user"
+                },
+                name: {
+                    type: String
+                }
             }],
             students: [{
                 type: mongoose.Schema.Types.ObjectId,
