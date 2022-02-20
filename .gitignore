@@ -8,3 +8,4 @@ include/
 python/pose_images
 python/pose_images_json
 python/pose_results
+python/__pycache__

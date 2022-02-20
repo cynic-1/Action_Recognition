@@ -30,8 +30,10 @@ def getboxes(imgpath, jsonpath, balljson):
 
 def find_distance(imgpath, jsonpath, balljson):
     # getboxes(imgpath, jsonpath, balljson)  # 得到boxes信息的json文件
+    # 需要注意图片的编号是通过imgpath中的文件数来决定的，那么imgpath里不要放置其他文件！！
+
     files = os.listdir(imgpath)  # 得到图片文件夹下的所有文件名称
-    ball_loc = [[0] for n in range(500)]  # 声明二维数组装每张图片的球信息——# x1, y1, x2, y2, diatance
+    ball_loc = [[0] for n in range(len(files)+2)]  # 声明二维数组装每张图片的球信息——# x1, y1, x2, y2, diatance
     # 获取球的位置信息
     with open(balljson, "r") as f:  # 获取boxes信息
         json_dict = json.load(f)
@@ -127,7 +129,7 @@ def height(imgpath, jsonpath, balljson):  # humanpoints 是关节坐标的三维
             height_3d = height_2d * 21 / length
             height_all.update({i: height_3d})
             # 画图
-            img1 = cv2.imread(imgpath + "/" + str(i) + ".jpg")
+            img1 = cv2.imread(os.path.join(imgpath, str(i) + ".jpg"))
             img3 = cv2ImgAddText(img1, "球离地面的高度：%.0f cm" % height_3d, ball_loc[i][2] + 10, ball_loc[i][3] - 50,
                                  (166, 202, 240), 20)
             cv2.imwrite("img4.jpg", img3)
@@ -207,9 +209,9 @@ def direction(imgpath, jsonpath, balljson):  # length是文件夹中的个数, b
 
 
 if __name__ == "__main__":
-    imgpath = os.path.dirname(os.path.realpath(__file__)) + "/images/wrongSelfPadding1"
-    jsonpath = os.path.dirname(os.path.realpath(__file__)) + "/images/json"
-    balljson = os.path.dirname(os.path.realpath(__file__)) + "/volleyball_detect.json"
+    imgpath = "pose_results"
+    jsonpath = "pose_images_json"
+    balljson = "volleyball_detect.json"
     interval = 1 / 12  # 两帧间隔——1/12秒
     height(imgpath, jsonpath, balljson)
     speed(imgpath, jsonpath, balljson, interval)

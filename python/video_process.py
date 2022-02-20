@@ -126,7 +126,7 @@ def calc_distance(image_path, json_path, num, volley_position, distance1, distan
 if __name__ == "__main__":
     # 在pose_images文件夹生成视频的全切片
     save_path = "pose_images"
-    mp4_path = "video/正确对垫姿势.mp4"
+    mp4_path = "video/错误对垫姿势3.mp4"
     json_path = "pose_images_json"
     result_path = "pose_results"
 
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     total_num = len(os.listdir(save_path))
 
     # 生成排球识别信息的json文件
-    volley_position_path = os.path.join(result_path, "volleyball_detect.json")
+    volley_position_path = "volleyball_detect.json"
     if not os.path.exists(volley_position_path):
         # 引入排球识别
         print("排球识别信息不存在，将开始生成！")
