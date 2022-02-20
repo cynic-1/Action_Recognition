@@ -130,7 +130,7 @@ def height(imgpath, jsonpath, balljson):  # humanpoints 是关节坐标的三维
             # 画图
             img1 = cv2.imread(imgpath + "/" + str(i) + ".jpg")
             img1 = cv2.arrowedLine(img1, (int(ball_center[0]), int(ball_center[1])),
-                                   (int(ball_center[0] + 30), int(ball_center[1] - 30)), (179, 113, 60), 2, 8)
+                                   (int(ball_center[0] + 30), int(ball_center[1] - 20)), (179, 113, 60), 2, 8)
             img1 = cv2ImgAddText(img1, "球离地面的高度：%.0f cm" % height_3d, ball_loc[i][2] + 20, ball_loc[i][3] - 50,
                                  (0, 100, 0), 20)
             cv2.imwrite(imgpath + "/" + str(i) + ".jpg", img1)
@@ -192,7 +192,8 @@ def direction(imgpath, jsonpath, balljson):  # length是文件夹中的个数, b
             v1y = center2[1] - center1[1]
             v2x = humanpoints[0][7][0] - humanpoints[0][6][0]
             v2y = humanpoints[0][7][1] - humanpoints[0][6][1]
-            cos = (v1x * v2x + v1y * v2y) / ((math.sqrt(v1x * v1x + v1y * v1y)) * (math.sqrt(v2x * v2x + v2y * v2y)))
+            domi = math.sqrt(v1x * v1x + v1y * v1y) * math.sqrt(v2x * v2x + v2y * v2y) if math.sqrt(v1x * v1x + v1y * v1y) * math.sqrt(v2x * v2x + v2y * v2y)>0 else 0.0000000001
+            cos = (v1x * v2x + v1y * v2y) / domi
             theta = math.acos(cos)
             direction_all.update({i: theta * (180.0 / math.pi)})
             print(f"第{i - 1}和{i}张图:球与小臂的夹角为{theta * (180.0 / math.pi)}度")
