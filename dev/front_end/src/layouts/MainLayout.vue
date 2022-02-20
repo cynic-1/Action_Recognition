@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
 
-    <q-header v-ripple class="text-white" :class="classes" height-hint="150">
+    <q-header v-ripple class="text-white bg-blue-8" height-hint="150">
       <q-toolbar>
 
 
@@ -50,12 +50,8 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { computed } from 'vue'
 
-const colors = [
-  'primary', 'amber', 'secondary', 'orange', 'accent',
-  'lime', 'cyan', 'purple', 'brown', 'blue'
-]
 
 export default {
   data () {
@@ -64,26 +60,8 @@ export default {
     }
   },
   setup () {
-    const color = ref(colors[ 0 ])
-    const index = ref(0)
-
-    let timer
-
-    onMounted(() => {
-      timer = setInterval(() => {
-        index.value = (index.value + 1) % colors.length
-        color.value = colors[ index.value ]
-      }, 2000)
-    })
-
-    onBeforeUnmount(() => {
-      clearTimeout(timer)
-    })
 
     return {
-      color,
-      index,
-      classes: computed(() => `bg-${color.value}`),
       userId: computed(() => sessionStorage.getItem('userId'))
     }
   }
