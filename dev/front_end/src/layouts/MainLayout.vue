@@ -7,7 +7,7 @@
 
         <q-toolbar-title class="q-px-xl" shrink>
           <q-avatar>
-            <img src="http://www.buaa.edu.cn/__local/B/CD/A6/968D8F6600C0B8195CD59008BF5_9249A080_12AB7.jpg?e=.jpg">
+            <img src="http://www.buaa.edu.cn/__local/B/CD/A6/968D8F6600C0B8195CD59008BF5_9249A080_12AB7.jpg?e=.jpg" alt="北京航空航天大学">
           </q-avatar>
           北航智慧排球教学系统
         </q-toolbar-title>
@@ -25,7 +25,7 @@
           <q-route-tab to="/class" label="班级详情" />
           <q-route-tab to="/course" label="课程详情" />
           <q-route-tab to="/student" label="学生管理" />
-          <q-route-tab to="/stuvideolist" label="视频列表" />
+          <q-route-tab to="/videos" label="视频列表" />
 <!--          <q-route-tab to="/rate" label="Rate" />-->
 <!--          <q-route-tab to="/register" label="Register" />-->
           <q-route-tab to="/login" label="登录/注册" />
@@ -84,7 +84,7 @@ export default {
       color,
       index,
       classes: computed(() => `bg-${color.value}`),
-      userId: computed(() => localStorage.getItem('userId'))
+      userId: computed(() => sessionStorage.getItem('userId'))
     }
   }
 }

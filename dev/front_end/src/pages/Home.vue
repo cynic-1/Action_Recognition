@@ -63,7 +63,8 @@ export default {
       course: {
         year: 2022,
         semester: 1,
-
+        day: 3,
+        classNo: 4,
       },
       email: 'ca1312@163.com',
       userId: this.$route.params.id
@@ -88,11 +89,11 @@ export default {
       })
     }
   },
-  // computed: {
-  //   courseTime() {
-  //     return this.course.year + '年 ' + semMap[this.course.year] + ' 周 ' + dayMap[this.course.courseTime.day] + ' 第 ' + numberMap[this.course.courseTime.class] + '节';
-  //   },
-  // },
+  computed: {
+    courseTime() {
+      return this.course.year + '年 ' + semMap[this.course.semester] + ' 周 ' + dayMap[this.course.day] + ' 第 ' + numberMap[this.course.classNo] + '节';
+    },
+  },
   created() {
     this.getUserInfo()
   }

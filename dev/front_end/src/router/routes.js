@@ -3,14 +3,14 @@ const routes = [
     "path": "/",
     "component": () => import("layouts/MainLayout.vue"),
     "children": [
-      // { "path": "", "component": () => import("pages/Index.vue") },
+      { "path": "", redirect: '/home/:id' },
       { "path": "analysis", "component": () => import("pages/Analysis") },
       { "path": "class", "component": () => import("pages/Class") },
       { "path": "course", "component": () => import("pages/Course") },
       { "path": "student", "component": () => import("pages/Student") },
-      { "path": "stuvideolist", "component": () => import("pages/StuVideoList") },
+      { "path": "videos", "component": () => import("pages/StuVideoList") },
       { "path": "rate", "component": () => import("pages/Rate") },
-      { "path": "home/:id", "component": () => import("pages/PersonalUpload") },
+      { "path": "home/:id", "component": () => import("pages/Home") },
     ]
   },
   {
