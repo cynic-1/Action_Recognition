@@ -15,5 +15,6 @@ export default app => {
     router.post("/:id/students", course.insertStudents)
     // get students who attend the course
     router.get("/:id/students", course.getStudents)
+    router.get("?teacher", course.findByTeacher)
     app.use('/api/course', router);
 };
