@@ -28,7 +28,7 @@
       </q-card>
       <div class="text-h5 text-grey row q-mb-lg" style="margin-top: 20px">
         <span style="margin-right: 60%">我的上传</span>
-        <q-btn rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
+        <q-btn @click="isUpload=true" rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
         <q-btn rounded color="blue" icon="read_more" to="/videos">更多</q-btn>
       </div>
       <div class="row">
@@ -37,6 +37,17 @@
       </div>
     </div>
   </div>
+  <q-dialog v-model="isUpload">
+    <q-uploader
+      label="上传视频"
+      auto-upload
+      accept="mp4"
+      @rejected="onRejected"
+      @finish="isUpload=false"
+      field-name="video"
+      :url="getUrl"
+    />
+  </q-dialog>
 </template>
 
 <script>
@@ -60,6 +71,7 @@ export default {
       id: 123123123,
       name: 'cynic',
       college: 23,
+      isUpload: false,
       course: {
         year: 2022,
         semester: 1,
@@ -93,6 +105,20 @@ export default {
         })
       })
     },
+    getUrl() {
+      return "http://localhost:3000/api/videos/upload";
+    },
+    checkFileType(file) {
+      return file.type === 'mp4';
+    },
+    onRejected (rejectedEntries) {
+      // Notify plugin needs to be installed
+      // https://quasar.dev/quasar-plugins/notify#Installation
+      this.$q.notify({
+        type: 'negative',
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+      })
+    }
   },
   computed: {
     courseTime() {

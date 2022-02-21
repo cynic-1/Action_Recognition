@@ -125,4 +125,3 @@ export const deleteById = (req, res) => {
             });
         });
 }
-

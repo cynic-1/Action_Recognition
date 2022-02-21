@@ -78,7 +78,6 @@ export const getVideo = (req, res) => {
                         err.message || "Some error occurred while storing the video."
                 });
             })
-
 }
 
 export const getVideoChunk = function(req, res) {
