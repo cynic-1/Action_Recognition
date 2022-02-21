@@ -44,6 +44,8 @@
       accept="mp4"
       @rejected="onRejected"
       @finish="isUpload=false"
+      @uploaded="onSuccess"
+      @failed="onFail"
       field-name="video"
       :url="getUrl"
     />
@@ -108,15 +110,24 @@ export default {
     getUrl() {
       return "http://localhost:3000/api/videos/upload";
     },
-    checkFileType(file) {
-      return file.type === 'mp4';
-    },
     onRejected (rejectedEntries) {
       // Notify plugin needs to be installed
       // https://quasar.dev/quasar-plugins/notify#Installation
       this.$q.notify({
         type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+        message: "文件未通过属性验证"
+      })
+    },
+    onSuccess() {
+      this.$q.notify({
+        type: 'positive',
+        message: "成功上传视频"
+      })
+    },
+    onFail() {
+      this.$q.notify({
+        type: 'negative',
+        message: "文件上传失败"
       })
     }
   },
