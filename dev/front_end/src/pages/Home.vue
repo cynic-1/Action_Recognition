@@ -32,8 +32,8 @@
         <q-btn rounded color="blue" icon="read_more" to="/videos">更多</q-btn>
       </div>
       <div class="flex">
-        <template v-for="id in videos">
-          <video-item :id="id" style="width: 48%"/>
+        <template v-for="video in videos">
+          <video-item :video="video" style="width: 48%"/>
         </template>
       </div>
     </div>

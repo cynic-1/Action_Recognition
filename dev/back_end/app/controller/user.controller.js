@@ -71,6 +71,7 @@ export const findAllByName = (req, res) => {
 export const findById = (req, res) => {
     const id = req.params.id;
     User.findById(id)
+        .populate('videos')
         .then(data => {
             if (!data)
                 res.status(404).send({ message: "Not found user with id " + id });

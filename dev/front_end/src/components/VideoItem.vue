@@ -4,7 +4,7 @@
   >
     <q-card-section horizontal>
       <q-card-section>
-        <video controls width="270" height="180" :src="'http://localhost:3000/api/videos/' + id" type="video/mp4"></video>
+        <video controls width="270" height="180" :src="'http://localhost:3000/api/videos/' + video._id" type="video/mp4"></video>
       </q-card-section>
 
       <q-card-section>
@@ -23,8 +23,8 @@
 export default {
   name: "VideoItem",
   props: {
-    id: String
-  }
+    video: Object
+  },
 }
 </script>
 
