@@ -53,7 +53,7 @@
 
       <template v-slot:body-cell-check="props">
         <q-td :props="props">
-          <q-btn flat rounded to="/stuvideolist">查看详情</q-btn>
+          <q-btn flat rounded to="/videos">查看详情</q-btn>
         </q-td>
       </template>
     </q-table>
