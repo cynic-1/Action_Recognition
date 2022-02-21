@@ -31,9 +31,10 @@
         <q-btn @click="isUpload=true" rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
         <q-btn rounded color="blue" icon="read_more" to="/videos">更多</q-btn>
       </div>
-      <div class="row">
-        <video-item style="width: 48%;margin-right: 2%"/>
-        <video-item style="width: 48%"/>
+      <div class="flex">
+        <template v-for="id in videos">
+          <video-item :id="id" style="width: 48%"/>
+        </template>
       </div>
     </div>
   </div>
@@ -43,7 +44,7 @@
       auto-upload
       accept="mp4"
       @rejected="onRejected"
-      @finish="isUpload=false"
+      @finish="isUpload=false;"
       @uploaded="onSuccess"
       @failed="onFail"
       field-name="video"
@@ -53,13 +54,16 @@
 </template>
 
 <script>
-import {defineAsyncComponent} from 'vue'
+import {defineAsyncComponent} from 'vue';
+import { useQuasar } from 'quasar';
 const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
 const videoItem = defineAsyncComponent(() => import("components/VideoItem"));
 
 const dayMap = ['零', '一', '二', '三', '四', '五', '六', '日']
 const numberMap = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
 const semMap = ['', '秋季学期', '春季学期']
+
+const $q = useQuasar()
 export default {
   name: "PersonalUpload",
   components: {
@@ -86,7 +90,8 @@ export default {
         ]
       },
       email: 'ca1312@163.com',
-      userId: this.$route.params.id
+      userId: this.$route.params.id,
+      videos: []
     }
   },
   methods : {
@@ -98,6 +103,7 @@ export default {
         this.email = res.data.mail;
         this.id = res.data.id;
         this.college = res.data.college;
+        this.videos = res.data.videos;
         courseId = res.data.courses[res.data.courses.length-1]
         console.log(courseId)
         this.$api.get('api/courses/'+courseId)
@@ -119,15 +125,19 @@ export default {
       })
     },
     onSuccess() {
+      this.isUpload = false;
       this.$q.notify({
         type: 'positive',
-        message: "成功上传视频"
+        message: "成功上传视频",
+        position: 'center'
       })
     },
     onFail() {
+      this.isUpload = false;
       this.$q.notify({
         type: 'negative',
-        message: "文件上传失败"
+        message: "文件上传失败",
+        position: 'center'
       })
     }
   },
