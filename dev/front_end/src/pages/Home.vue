@@ -47,6 +47,7 @@
       @finish="isUpload=false;"
       @uploaded="onSuccess"
       @failed="onFail"
+      :form-fields="[{name: 'id', value: this.userId}]"
       field-name="video"
       :url="getUrl"
     />

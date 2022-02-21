@@ -33,7 +33,7 @@ export const videoUpload = multer({
 })
 
 export const store = (req, res) => {
-    const id = req.params.id;
+    const id = req.body.id;
     const video = new Video({
         name: req.file.filename,
         uploader: id,
