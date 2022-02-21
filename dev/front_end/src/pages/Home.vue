@@ -86,7 +86,7 @@ export default {
         this.college = res.data.college;
         courseId = res.data.courses[res.data.courses.length-1]
         console.log(courseId)
-        this.$api.get('api/course/'+courseId)
+        this.$api.get('api/courses/'+courseId)
         .then(res => {
           this.course = res.data;
           console.log(this.course)
