@@ -138,17 +138,17 @@ export const insertStudents = (req, res) => {
 
 export const findByTeacher = (req, res) => {
     const tid = req.query.teacher;
-    Course.find({teachers: {$elemMatch: {$eq: tid}}})
+    Course.find({"teachers.id": tid})
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot update course with id=${id}. Maybe course was not found!`
+                    message: `Cannot find courses taught by teacher with id=${tid}. Maybe course was not found!`
                 });
             } else res.send(data);
         })
         .catch(() => {
             res.status(500).send({
-                message: "Error updating course with id=" + id
+                message: "Error find courses taught by teacher with id=" + tid
             });
         });
 }

@@ -5,6 +5,7 @@ export default app => {
     const router = Router()
     // Create a new course
     router.post("/", course.create);
+    router.get("", course.findByTeacher)
     // Retrieve a single User with id
     router.get("/:id", course.findById);
     // Update a User with id
@@ -15,6 +16,5 @@ export default app => {
     router.post("/:id/students", course.insertStudents)
     // get students who attend the course
     router.get("/:id/students", course.getStudents)
-    router.get("?teacher", course.findByTeacher)
-    app.use('/api/course', router);
+    app.use('/api/courses', router);
 };

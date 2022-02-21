@@ -8,5 +8,5 @@ export default app => {
         res.status(400).send({ error: error.message })
     });
     router.get('/get/:id', video.getVideo)
-    app.use('/api/video', router);
+    app.use('/api/videos', router);
 };
