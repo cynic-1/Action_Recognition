@@ -6,10 +6,10 @@ import path from 'path'
 // import fs from 'fs'
 import { fileURLToPath } from 'url';
 import fs from "fs";
-// import { dirname } from 'path';
+import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+const __dirname = dirname(__filename);
 
 const imageStorage = multer.diskStorage({
     destination: 'images', // Destination to store video
@@ -78,6 +78,7 @@ export const getImage = (req, res) => {
                 }
                 res.writeHead(200, {'Content-Type': 'image/jpeg'})
                 res.write(file, 'binary')
+                res.end()
             })
         })
         .catch(err => {
