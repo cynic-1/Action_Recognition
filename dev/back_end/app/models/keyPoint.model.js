@@ -32,7 +32,7 @@ export default mongoose => {
                         min: 0,
                         max: 180
                     },
-                    jumpHeight: {
+                    jumpHeight: { // 起跳高度
                         type: Number,
                         min: 0
                     }

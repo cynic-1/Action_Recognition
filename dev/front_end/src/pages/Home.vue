@@ -144,7 +144,7 @@ export default {
   },
   computed: {
     courseTime() {
-      return this.course.year + '年 ' + semMap[this.course.semester] + ' 周 ' + dayMap[this.course.day] + ' 第 ' + numberMap[this.course.classNo] + '节';
+      return this.course.year + '年 ' + semMap[this.course.semester] + ' 周' + dayMap[this.course.day] + '第' + numberMap[this.course.classNo] + '节';
     },
     teachers() {
       return this.course.teachers.reduce((sum, current) => sum + current.name, "")

@@ -78,6 +78,5 @@ export const getKeyPoints = (req, res) => {
                     err.message || "Some error occurred while storing the video."
             });
         })
-
 }
 
