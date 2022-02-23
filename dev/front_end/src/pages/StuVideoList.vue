@@ -60,7 +60,7 @@ export default {
     lineChart,
     leftDrawer
   },
-  data(){
+  data() {
     const selected = ref(null)
     return {
       videos: [],
