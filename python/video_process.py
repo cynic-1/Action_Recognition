@@ -204,10 +204,11 @@ if __name__ == "__main__":
         # if (i+1) in min_imageID:
         cv2.imwrite(os.path.join(result_path, f"{i+1}.jpg"), img)
 
-    specific_image_path = os.path.join(result_path, "catch")
-    if not os.path.exists(specific_image_path):
-        os.makedirs(specific_image_path)
+    # specific_image_path = os.path.join(result_path, "catch")
+    # if not os.path.exists(specific_image_path):
+    #     os.makedirs(specific_image_path)
 
-    # 将接球的关键帧复制到result_path的catch目录中
-    for id in min_imageID:
-        shutil.copyfile(os.path.join(result_path, f"{id}.jpg"), os.path.join(specific_image_path, f"{id}.jpg"))
+    # # 将接球的关键帧复制到result_path的catch目录中
+    # # 为了模块之间的兼容，暂不复制了
+    # for id in min_imageID:
+    #     shutil.copyfile(os.path.join(result_path, f"{id}.jpg"), os.path.join(specific_image_path, f"{id}.jpg"))

@@ -3,6 +3,9 @@
     class="q-pa-md"
     style="width: 72%; margin-left: auto; margin-right: auto"
   >
+    <div class="text-grey text-h6" style="white-space: pre-wrap">
+      {{classTime}} &nbsp;&nbsp;&nbsp;&nbsp; 授课教师：{{teacher}} &nbsp;&nbsp;&nbsp;&nbsp; 课程编号：{{classIndex}}
+    </div>
     <q-table
       v-model:pagination="pagination"
       :rows="rows"
@@ -82,6 +85,9 @@ export default {
       // rowsNumber: xx if getting data from a server
     });
     return {
+      classTime: "周三第四节",
+      teacher: "李红",
+      classIndex: "PE089756",
       pagination,
       "columns": [
         {
@@ -92,22 +98,21 @@ export default {
           "field": row => row.date,
           "format": val => `${val}`
         },
-        {"name": "teacher", "align": "center", "label": "授课教师", "field": "teacher"},
         {"name": "total", "align": "center", "label": "应到人数", "field": "total", sortable: true},
         {"name": "actual", "align": "center", "label": "实到人数", "field": "actual", sortable: true},
         { "name": "check", "align": "center", "label": "操作", "field": "check" }
       ],
       "rows": [
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
-        {"date":"2021.07.03","teacher":"李红","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
+        {"date":"2021.07.03","total":56,"actual":56},
 
       ],
       "pagesNumber": computed(() => Math.ceil(this.rows.length / pagination.value.rowsPerPage)),
