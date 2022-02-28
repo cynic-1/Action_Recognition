@@ -25,7 +25,7 @@
           <template v-for="(keyPoint,index) of keyPoints">
             <q-carousel-slide :name="index+1" :img-src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
           </template>
-          <img src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`">
+<!--          <img src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`">-->
 
 <!--          <q-carousel-slide :name="1" img-src="../assets/1.webp" />-->
 <!--          <q-carousel-slide :name="2" img-src="../assets/2.webp" />-->
@@ -84,25 +84,25 @@
               <div class="text-h6 row text-center">
                 <div class="col">
                   击球部位<br>
-                  上臂 {{evaluate.position[slide-1]}}<br>
+                  上臂 {{currentKeyPoint.upper.hitPosition || "-"}}<br>
                   <span class="text-warning">击球部位靠后</span>
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="col">
                   接/击球手臂角度<br>
-                  {{evaluate.hitAngle[slide-1]}}/180<br>
+                  {{currentKeyPoint.upper.hitAngle}}/180<br>
                   <span class="text-warning">角度合适</span>
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="col">
                   手臂弯曲角度<br>
-                  {{evaluate.armBendAngle[slide-1]}}/180<br>
+                  {{currentKeyPoint.upper.angleForearmArm || "-"}}/180<br>
                   <span class="text-warning">角度偏小</span>
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="col">
                   手臂与躯干角度<br>
-                  {{evaluate.armAngle[slide-1][0]}},{{evaluate.armAngle[slide-1][1]}}/180<br>
+                  {{currentKeyPoint.upper.angleArmTrunk || "-"}} /180<br>
                   <span class="text-warning">正常</span>
                 </div>
               </div>
@@ -114,21 +114,21 @@
               <div class="text-h6 row text-center">
                 <div class="col">
                   小腿与地面角度<br>
-                  {{evaluate.legAngle[slide-1]}}/90<br>
+                  {{currentKeyPoint.lower.angleCalfThigh || "-"}}/90<br>
                   <span class="text-warning">角度太小</span>
                 </div>
 
                 <q-separator dark inset vertical/>
                 <div class="col">
                   大小腿弯曲角度<br>
-                  {{evaluate.legBendAngle[slide-1]}}/180<br>
+                  {{currentKeyPoint.lower.angleThighTrunk || "-"}}/180<br>
                   <span class="text-warning">正常</span>
                 </div>
 
                 <q-separator dark inset vertical style="margin-left: 5px;margin-right: 5px"/>
                 <div class="col">
                   人跳起高度<br>
-                  {{evaluate.height[slide-1]}}m<br>
+                  {{currentKeyPoint.lower.jumpHeight || "-"}} m<br>
                   <span class="text-warning">接球不应起跳</span>
                 </div>
               </div>
@@ -139,15 +139,15 @@
               <q-separator dark inset />
               <div class="row q-pa-md">
                 <div class="text-h6 col text-center">
-                  球的高度<br>{{evaluate.ballHeight[slide-1]}}m
+                  球的高度<br>{{currentKeyPoint.ball.lastHeight || "-"}}m
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="text-h6 col text-center">
-                  球的运动方向<br>{{evaluate.ballAngle[slide-1]}}/90
+                  球的初始角度<br>{{currentKeyPoint.ball.initialAngle || "-"}}/90
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="text-h6 col text-center">
-                  球的运行速度<br>{{evaluate.speed[slide-1]}}m/s
+                  球的运行速度<br>{{currentKeyPoint.ball.initialVelocity || "-"}}m/s
                 </div>
               </div>
             </q-card-section>
@@ -178,15 +178,15 @@
               <q-separator dark inset />
               <div class="row q-pa-md">
                 <div class="text-h6 col text-center">
-                  动作质量评估<br>{{quality[slide-1]}}
+                  动作质量评估<br>{{currentKeyPoint.rate}}
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="text-h6 col text-center">
-                  动作稳定性<br>{{stability[slide-1]}}
+                  动作协调性<br>{{currentKeyPoint.coordination}}
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="text-h6 col text-center">
-                  动作准确性<br>{{accuracy[slide-1]}}
+                  动作准确性<br>{{currentKeyPoint.accuracy}}
                 </div>
               </div>
             </q-card-section>
@@ -202,7 +202,30 @@ export default {
 name: "Analysis",
   data() {
     return {
-      keyPoints: [],
+      keyPoints: [{
+        "imgLoc": "1.jpg",
+        "data": {
+          "upper": {
+            "hitPosition": "\u672a\u63a5\u7403",
+            "hitAngle": 116.45272702462493,
+            "angleForearmArm": null,
+            "angleArmTrunk": 0
+          },
+          "lower": {
+            "angleCalfThigh": 173.41078210585206,
+            "angleThighTrunk": 173.73855214289523,
+            "jumpHeight": 0
+          },
+          "ball": {
+            "lastHeight": 313.3058668814066,
+            "initialAngle": null,
+            "initialVelocity": null
+          },
+          "coordination": 90,
+          "accuracy": 80,
+          "rate": 85
+        }
+      },],
       videoId: "",
       evaluate: {
         stability: [48,45,68,56,64],
@@ -251,7 +274,10 @@ name: "Analysis",
     },
     accuracy() {
       return this.evaluate.accuracy > 100 ? 100 : this.evaluate.accuracy < 0 ? 0 : this.evaluate.accuracy;
-    }
+    },
+    currentKeyPoint() {
+      return this.keyPoints[this.slide-1].data
+    },
   },
   created() {
     this.getVideoId()
