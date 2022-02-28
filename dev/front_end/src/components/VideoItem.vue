@@ -13,7 +13,7 @@
         <div class="text-subtitle2">授课老师：李红</div>
         <div class="text-subtitle2">上传时间：{{ video.createdAt || "2021.7.6" }}</div>
         <div class="text-subtitle2">视频评分：80</div>
-        <q-btn icon-right="arrow_forward" to="/analysis" style="margin-top: 20px">查看分析</q-btn>
+        <q-btn icon-right="arrow_forward" :to="'/analysis/' + video._id" style="margin-top: 20px">查看分析</q-btn>
       </q-card-section>
     </q-card-section>
   </q-card>

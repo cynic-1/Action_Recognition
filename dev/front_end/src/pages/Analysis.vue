@@ -42,7 +42,7 @@
           </template>
         </q-carousel>
       </div>
-      <video controls width="500" height="300" src="http://localhost:3000/api/videos/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>
+      <video controls width="500" height="300" :src="'http://localhost:3000/api/videos/'+videoId" type="video/mp4"></video>
 <!--      <q-uploader-->
 <!--        url="http://localhost:8080/api/video/upload"-->
 <!--        label="video"-->
@@ -196,29 +196,39 @@
 export default {
 name: "Analysis",
   data() {
-  return {
-    evaluate: {
-      stability: [48,45,68,56,64],
-      accuracy: [80,78,79,81,92],
-      quality: [70,56,67,73,63],
-      position: [0.3,0.2,0.4,0.1,0.3],
-      hitAngle: [60.3,65.4,100.8,123.1,119.2],
-      armBendAngle: [50.1,90.8,67.8,98.2,123.1],
-      armAngle: [[72.1,72.1],[67.5,66.5],[56.3,67.8],[78.9,89.7], [66.2,56.4]],
-      legAngle: [78,64,67,75,51],
-      legBendAngle: [155,164,145,111,145],
-      height: [0.7,0.56,1.1,0.98,0.98],
-      ballHeight:[3.6,2.4,2.3,2.1,2.8],
-      ballAngle: [28,37,45,12,56],
-      speed: [1.23,2.34,2.11,1.45,2.53]
+    return {
+      keyPoints: [],
+      videoId: "",
+      evaluate: {
+        stability: [48,45,68,56,64],
+        accuracy: [80,78,79,81,92],
+        quality: [70,56,67,73,63],
+        position: [0.3,0.2,0.4,0.1,0.3],
+        hitAngle: [60.3,65.4,100.8,123.1,119.2],
+        armBendAngle: [50.1,90.8,67.8,98.2,123.1],
+        armAngle: [[72.1,72.1],[67.5,66.5],[56.3,67.8],[78.9,89.7], [66.2,56.4]],
+        legAngle: [78,64,67,75,51],
+        legBendAngle: [155,164,145,111,145],
+        height: [0.7,0.56,1.1,0.98,0.98],
+        ballHeight:[3.6,2.4,2.3,2.1,2.8],
+        ballAngle: [28,37,45,12,56],
+        speed: [1.23,2.34,2.11,1.45,2.53]
+      },
+      slide: 1,
+      fullscreen: false,
+      commentShow: false,
+      comment:'',
+      rate: 0,
+      tab: 'evaluate'
+    }
+  },
+  methods: {
+    getKeyPoints() {
+      this.$api.get("")
     },
-    slide: 1,
-    fullscreen: false,
-    commentShow: false,
-    comment:'',
-    rate: 0,
-    tab: 'evaluate'
-  }
+    getVideoId() {
+      this.videoId = this.$route.params.id
+    },
   },
   computed: {
     quality() {
@@ -230,6 +240,12 @@ name: "Analysis",
     accuracy() {
       return this.evaluate.accuracy > 100 ? 100 : this.evaluate.accuracy < 0 ? 0 : this.evaluate.accuracy;
     }
+  },
+  watch: {
+    "$route": 'getVideoId'
+   },
+  created() {
+    this.getVideoId()
   }
 }
 </script>
