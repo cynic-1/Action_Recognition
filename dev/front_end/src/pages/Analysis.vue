@@ -22,11 +22,16 @@
           infinite
           height="300px"
         >
-          <q-carousel-slide :name="1" img-src="../assets/1.webp" />
-          <q-carousel-slide :name="2" img-src="../assets/2.webp" />
-          <q-carousel-slide :name="3" img-src="../assets/3.webp" />
-          <q-carousel-slide :name="4" img-src="../assets/4.webp" />
-          <q-carousel-slide :name="5" img-src="../assets/1.jpg" />
+          <template v-for="(keyPoint,index) of keyPoints">
+            <q-carousel-slide :name="index+1" :img-src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
+          </template>
+          <img src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`">
+
+<!--          <q-carousel-slide :name="1" img-src="../assets/1.webp" />-->
+<!--          <q-carousel-slide :name="2" img-src="../assets/2.webp" />-->
+<!--          <q-carousel-slide :name="3" img-src="../assets/3.webp" />-->
+<!--          <q-carousel-slide :name="4" img-src="../assets/4.webp" />-->
+<!--          <q-carousel-slide :name="5" img-src="../assets/1.jpg" />-->
 
           <template v-slot:control>
             <q-carousel-control
@@ -224,7 +229,14 @@ name: "Analysis",
   },
   methods: {
     getKeyPoints() {
-      this.$api.get("")
+      this.$api.get("/api/videos/"+this.videoId+"/keyPoints")
+      .then(res => {
+        this.keyPoints = res.data.keyPoints
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
     getVideoId() {
       this.videoId = this.$route.params.id
@@ -241,11 +253,9 @@ name: "Analysis",
       return this.evaluate.accuracy > 100 ? 100 : this.evaluate.accuracy < 0 ? 0 : this.evaluate.accuracy;
     }
   },
-  watch: {
-    "$route": 'getVideoId'
-   },
   created() {
     this.getVideoId()
+    this.getKeyPoints()
   }
 }
 </script>
