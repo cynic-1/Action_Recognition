@@ -1,5 +1,6 @@
 # 该模块对图像修改的方式是在原图像上增添内容，若已经增添过一次，
 # 则会重复添加，可能会出现内容互相覆盖的情况
+# 没有获取到球的帧球的位置会被标记为[0, 0]
 
 import json
 import os
@@ -7,11 +8,11 @@ import math
 import numpy as np
 
 import cv2
-from detectron2_package import VolleyballDetect as Detect
 from PIL import Image, ImageDraw, ImageFont
 
 
 def getboxes(imgpath, jsonpath, balljson):
+    from detectron2_package import VolleyballDetect as Detect
     if os.path.exists(jsonpath + "/boxes.json"):
         return
     else:
@@ -239,7 +240,7 @@ if __name__ == "__main__":
     imgpath = "pose_results"
     jsonpath = "pose_images_json"
     balljson = "volleyball_detect.json"
-    interval = 1 / 12  # 两帧间隔——1/12秒
+    interval = 1 / 30  # 两帧间隔——1/12秒
     height(imgpath, jsonpath, balljson)
     speed(imgpath, jsonpath, balljson, interval)
     direction(imgpath, jsonpath, balljson)
