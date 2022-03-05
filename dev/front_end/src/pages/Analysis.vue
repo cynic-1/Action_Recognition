@@ -8,10 +8,6 @@
   </q-dialog>
   <div class="row" style="width: 95%;margin:20px auto 20px auto">
     <div class="q-pa-md" style="width: 40%">
-<!--      <q-video-->
-<!--        :ratio="16/9"-->
-<!--        src="http://localhost:8080/api/video/get"-->
-<!--      />-->
       <div style="width: 90%;margin-bottom: 20px">
         <q-carousel
           swipeable
@@ -19,18 +15,18 @@
           arrows
           v-model="slide"
           :fullscreen.sync="fullscreen"
+          autoplay
           infinite
-          height="300px"
         >
           <template v-for="(keyPoint,index) of keyPoints">
             <q-carousel-slide :name="index+1">
-              <q-img :src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
+              <q-img :ratio="16/9" :src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
             </q-carousel-slide>
           </template>
 
           <template v-slot:control>
             <q-carousel-control
-              position="bottom-right"
+              position="top-right"
               :offset="[18, 18]"
             >
               <q-btn
@@ -42,13 +38,7 @@
           </template>
         </q-carousel>
       </div>
-      <video controls width="500" height="300" :src="'http://localhost:3000/api/videos/'+videoId" type="video/mp4"></video>
-<!--      <q-uploader-->
-<!--        url="http://localhost:8080/api/video/upload"-->
-<!--        label="video"-->
-<!--        field-name="video"-->
-<!--        style="max-width: 300px"-->
-<!--      />-->
+      <video class="q-pl-md" controls height="300" :src="'http://localhost:3000/api/videos/'+videoId" type="video/mp4"></video>
     </div>
 
     <div class="q-pa-md" style="width: 60%">
@@ -146,18 +136,6 @@
                 </div>
               </div>
             </q-card-section>
-
-    <!--        <q-card-section>-->
-    <!--          <div class="text-h4" style="text-align: center">老师评价</div>-->
-    <!--          <q-separator dark inset />-->
-    <!--          <div class="text-h5" style="margin-top: 20px;margin-bottom: 20px">评分： 85</div>-->
-    <!--&lt;!&ndash;          <q-video&ndash;&gt;-->
-    <!--&lt;!&ndash;            style="width: 60%;height: 300px;margin: 20px auto 10px auto"&ndash;&gt;-->
-    <!--&lt;!&ndash;            src="https://www.youtube.com/embed/6x73pRYlJ8Y?rel=0"&ndash;&gt;-->
-    <!--&lt;!&ndash;          />&ndash;&gt;-->
-    <!--&lt;!&ndash;            <video controls width="500" height="400" src="http://localhost:8080/api/video/get/61ff6f3e38c71eb3be910a51" type="video/mp4"></video>&ndash;&gt;-->
-    <!--        <div class="text-subtitle1">达拉克斯基的离开洒家的打开拉萨机立刻大家阿斯利康决定了空间啊滤镜老咔叽陈卡雷就拉开差距萨洛克插卡就是v出来的洒家扩大除了卡v就立刻数据来看v可垃圾啊v地理空间率考虑到了恐惧绿蜡卡拉居留卡v空间的v离开v拉开点距离看见立刻除了卡具v考虑阿娇v安洁丽卡v扩大距离v离开的v了恐惧v点卡v率的卡距离打开v就卡了大局来看v的恐惧啦v将来肯定是v建立打开吃撒吃撒从建立凯撒距离喀什滤镜啊v老咔叽定律v快乐大居留卡就 离开数据利空打击了v利空打击率及的角色v离开家</div>-->
-    <!--        </q-card-section>-->
           </q-card>
         </q-tab-panel>
         <q-tab-panel name="summary">
