@@ -1,5 +1,4 @@
 # 此文件用于放置绘图相关的函数
-
 import cv2
 import angle
 import numpy as np
@@ -87,7 +86,7 @@ def hcolor_to_bgr(hcolor):
                 # "horizontal_dist": 球到手臂的水平距离
                 # "volley_position": 球的位置}
                 # volley_position 访问方式：volley_position[num-1][第几个球]
-def annotate_img(image_path, json_path, num, dynamic_info, arguments_json):
+def annotate_img(image_path, json_path, num, dynamic_info, arguments_json, annotate_people=False):
     img = cv2.imread(os.path.join(image_path, f"{num}.jpg"))
     # print(f"[image {num}] 图片的分辨率为：{img.shape}")  # 输出 几行几列几维颜色
 
@@ -120,11 +119,14 @@ def annotate_img(image_path, json_path, num, dynamic_info, arguments_json):
                 else:
                     # print(f"[image {num}] keypoint {i} not exists.")
                     pass
+            
 
+            # 绘制人的编号
+            if annotate_people:
+                cv2.putText(img, f"Person {people_id}: ", (int(x), max(int(y)-100, 0)), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
 
-            cv2.putText(img, f"Person {people_id}: ", (int(x), max(int(y)-100, 0)), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
-
+            
             for i in range(25):
                 x, y, confidence = pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]
                 
@@ -172,13 +174,13 @@ def annotate_img(image_path, json_path, num, dynamic_info, arguments_json):
         # 只考虑0号人
         people = json_dict["people"][0]
         ball = dynamic_info["volley_position"][num-1][0]
-        # horizontal_dist = [mathtools.get_horizontal_distance(x1,y1,x2,y2,(ball[0]+ball[2])//2, (ball[1]+ball[3])//2)]
         print(f"[image {num}] 横向距离={horizontal_dist[0]}, 胳膊长度=" + "%.2f" % length)
 
         # 获取接球部位
         hitPosition = calculation.get_catch_part(people, ball)
-        cv2.putText(img,f"Person0 Catch ball! {hitPosition}", (0,3*40), \
-            cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2,cv2.LINE_AA)
+        img = cv2ImgAddText(img, f"Person0 Catch ball! {hitPosition}", 0, 3*40, (255,0,0), 2)
+        # cv2.putText(img,f"Person0 Catch ball! {hitPosition}", (0,3*40), \
+        #     cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2,cv2.LINE_AA)
         arguments_json[num-1]["data"]["upper"]["hitPosition"] = hitPosition
     else:
         arguments_json[num-1]["data"]["upper"]["hitPosition"] = "未接球"
