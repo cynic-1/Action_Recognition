@@ -66,7 +66,7 @@ export const getImage = (req, res) => {
     const id = req.params.id;
     KeyPoint.findById(id)
         .then(data => {
-            let imagePath = path.resolve(__dirname, '../../'+data.imgLoc)
+            let imagePath = path.resolve(__dirname, '../../images/'+data.imgLoc)
 
             fs.readFile(imagePath, 'binary', (err, file) => {
                 if (err) {

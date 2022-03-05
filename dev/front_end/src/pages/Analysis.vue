@@ -23,15 +23,10 @@
           height="300px"
         >
           <template v-for="(keyPoint,index) of keyPoints">
-            <q-carousel-slide :name="index+1" :img-src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
+            <q-carousel-slide :name="index+1">
+              <q-img :src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
+            </q-carousel-slide>
           </template>
-<!--          <img src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`">-->
-
-<!--          <q-carousel-slide :name="1" img-src="../assets/1.webp" />-->
-<!--          <q-carousel-slide :name="2" img-src="../assets/2.webp" />-->
-<!--          <q-carousel-slide :name="3" img-src="../assets/3.webp" />-->
-<!--          <q-carousel-slide :name="4" img-src="../assets/4.webp" />-->
-<!--          <q-carousel-slide :name="5" img-src="../assets/1.jpg" />-->
 
           <template v-slot:control>
             <q-carousel-control
@@ -286,6 +281,3 @@ name: "Analysis",
 }
 </script>
 
-<style scoped>
-
-</style>
