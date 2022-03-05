@@ -136,6 +136,7 @@ export default {
         message: "成功上传视频",
         position: 'center'
       })
+      this.getUserInfo()
     },
     onFail() {
       this.isUpload = false;
@@ -156,7 +157,6 @@ export default {
   },
   created() {
     this.getUserInfo()
-
   }
 
 

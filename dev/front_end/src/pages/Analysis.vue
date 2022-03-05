@@ -94,7 +94,7 @@
             </q-card-section>
 
             <q-card-section>
-              <div class="text-h4 q-pa-sm">下肢动作</div>
+              <div class="text-h4 q-pa-sm"><q-icon name="directions_walk" size="xl" class="q-pa-sm"/>下肢动作</div>
               <q-separator dark inset />
               <div class="text-h6 row text-center">
                 <div class="col">
@@ -144,7 +144,7 @@
             style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"
           >
             <q-card-section>
-              <div class="text-h4 q-pa-sm"><q-icon name="fas fa-volleyball-ball" class="q-pa-sm"/>
+              <div class="text-h4 q-pa-sm"><q-icon name="star_rate" size="xl" class="q-pa-sm"/>
                 动作评估
                 <q-btn label="发布评价" color="blue" @click="commentShow = true" align="right" rounded size="lg" style="margin-left: 400px"/>
               </div>
