@@ -57,8 +57,10 @@ def get_angle_point(human, pos):  #human是每个人得到的json文件转化的
         pos_list = (9,10,11)
     elif pos == 'right_ankle':
         pos_list = (2,9,11)
+    elif pos == 'right_elbow_trunk':
+        pos_list = (8,1,7)
     else:
-        # print('Unknown  [%s]', pos)
+        # print('Unknown  [%s]' % pos)
         return pnts
 
     for i in range(3):
@@ -68,6 +70,36 @@ def get_angle_point(human, pos):  #human是每个人得到的json文件转化的
 
         pnts.append((int( human[pos_list[i]][0]), int( human[pos_list[i]][1])))
     return pnts
+
+# 大腿与躯干的夹角
+def angle_thigh_trunk(human):
+    trunk = (8,1)
+    thigh = (12,13)
+    # 计算两个向量之间的夹角
+    V1 = (human[trunk[1]][0]-human[trunk[0]][0], human[trunk[1]][1]-human[trunk[0]][1])
+    V2 = (human[thigh[1]][0]-human[thigh[0]][0], human[thigh[1]][1]-human[thigh[0]][1])
+    d_V1 = math.sqrt(V1[0]**2 + V1[1]**2)
+    d_V2 = math.sqrt(V2[0]**2 + V2[1]**2)
+    if d_V1 == 0 or d_V2 == 0:
+        return -1
+    else:
+        cos_theta = (V1[0] * V2[0] + V1[1] * V2[1]) / (d_V1 * d_V2)
+        theta = math.acos(cos_theta)
+        return theta / math.pi * 180.0
+
+
+def angle_rightElbow_trunk(human):
+    pnts = get_angle_point(human, 'right_elbow_trunk')
+    if len(pnts) != 3:
+        # print('component incomplete')
+        return -1
+
+    angle = 0
+    if pnts is not None:
+        angle = angle_between_points(pnts[0], pnts[1], pnts[2])
+        # print('left shoulder angle: %f'%(angle))
+    return angle
+
 
 def angle_left_shoulder(human):
     pnts = get_angle_point(human, 'left_shoulder')
@@ -140,6 +172,22 @@ def angle_right_elbow(human):
         angle = angle_between_points(pnts[0], pnts[1], pnts[2])
         # print('right elbow angle:%f'%(angle))
     return angle
+
+# 获取前臂与水平方向的夹角
+def angle_frontElbow_horizon(human):
+    front_elbow = (3, 4)
+    x1, y1 = human[front_elbow[0]][0], human[front_elbow[0]][1]
+    x2, y2 = human[front_elbow[1]][0], human[front_elbow[1]][1]
+
+    # 有不存在的关键点
+    if human[front_elbow[0]][2] <= 0.1 or human[front_elbow[0]][2] <= 0.1:
+        return -1
+    else:
+        radian = abs(math.atan2(y2-y1, x2-x1)) if x2-x1 != 0 else math.pi/2
+        degree = radian / math.pi * 180.0
+        return degree
+
+
 
 def angle_right_knee(human):
     pnts = get_angle_point(human, 'right_knee')

@@ -1,17 +1,20 @@
 # 本程序用于以命令行方式调用OpenPoseDemo.exe，得到想要的JSON文件
-# 目前暂时使用图像为材料，后期会考虑使用视频
+# 本程序以视频为原料，输出视频中每帧的关键参数，并在图像上进行数据的标注
 from audioop import reverse
 import json
 import os
 
 import cv2
 import numpy as np
+from sympy import residue
 
 import graphics
 import keypoints
 import cut_video
 import mathtools
 import shutil
+
+import ball_flight
 
 # 低分辨率开关
 is_low_resolution = True
@@ -135,19 +138,24 @@ if __name__ == "__main__":
     os.chdir(dir_path)
 
     if os.path.exists(save_path):
-        print("检测到视频切片数据已经生成，就不再生成了")
+        print("检测到视频切片数据已经生成，就不再生成了。")
     else:
-        print("正在生成视频切片数据")
+        print("正在生成视频切片数据。")
         cut_video.process_video(mp4_path, save_path, 1)
-        print("视频切片数据生成完毕")
+        print("视频切片数据生成完毕。")
 
     # 对视频里的所有图片生成json
     if not os.path.exists(json_path):
+        print("图像的人体姿态json未生成，将开始生成。")
         produce_json(save_path, json_path)
+    else:
+        print("图像的人体姿态JSON已生成，将不再生成。")
     
+
     if not os.path.exists(result_path):
         print("输出目录不存在，将自动创建。")
         os.makedirs(result_path)
+
 
     total_num = len(os.listdir(save_path))
 
@@ -171,6 +179,7 @@ if __name__ == "__main__":
         with open(volley_position_path, "w") as f:
             f.write(str)
 
+    # 读取生成好的排球JSON文件
     with open(volley_position_path, "r") as f:
         volley_position = json.load(f)
 
@@ -195,15 +204,47 @@ if __name__ == "__main__":
     dynamic_info = {"min_imageID": min_imageID, \
                     "distance": distance1, "horizontal_dist": horizontal_dist, 
                     "volley_position": volley_position}
-    print(min_imageID)
+    print(f"图像关键帧： {min_imageID}")
+
+    arguments_json = [
+        {
+            "imgLoc": f"{i+1}.jpg",
+            "data": {
+                "upper": {}, "lower": {}, "ball": {}
+            }
+        }  for i in range(total_num)]
 
     for i in range(total_num):
-        img = graphics.annotate_img(save_path, json_path, i+1, dynamic_info)
+        img = graphics.annotate_img(save_path, json_path, i+1, dynamic_info, arguments_json)
         # cv2.imshow("image", img)
         # cv2.waitKey()
         # if (i+1) in min_imageID:
         cv2.imwrite(os.path.join(result_path, f"{i+1}.jpg"), img)
 
+    inteval = 1/30  # 设置间隔两帧的时间为1/30 s
+    height_all = ball_flight.height(result_path, json_path, volley_position_path)
+    print("[info] 已成功获取全部图像中球的高度。")
+    speed_all = ball_flight.speed(result_path, json_path, volley_position_path, inteval)
+    print("[info] 已成功获取到全部图像中球的速度。")
+    direction_all = ball_flight.direction(result_path, json_path, volley_position_path)
+    print("[info] 已成功获取到全部图像中球的方向。")
+    for i in range(1, total_num+1):
+        arguments_json[i-1]["data"]["ball"]["lastHeight"] = height_all.get(i)
+        arguments_json[i-1]["data"]["ball"]["initialAngle"] = direction_all.get(i)
+        arguments_json[i-1]["data"]["ball"]["initialVelocity"] = speed_all.get(i)
+
+        arguments_json[i-1]["data"]["coordination"] = 90
+        arguments_json[i-1]["data"]["accuracy"] = 80
+        arguments_json[i-1]["data"]["rate"] = 85
+    
+    
+    with open("result.json", "w") as f:
+        str = json.dumps(arguments_json)
+        f.write(str)
+        print("数据json生成完毕！")
+
+        
+    # 创建一个存放排球接球关键帧的目录
     # specific_image_path = os.path.join(result_path, "catch")
     # if not os.path.exists(specific_image_path):
     #     os.makedirs(specific_image_path)

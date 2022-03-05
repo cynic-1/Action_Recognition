@@ -28,6 +28,7 @@ def person_height(humanpoints, ballloc): #humanpoints 是关节坐标的三维�
     left_foot = humanpoints[0][14]
     right_foot = humanpoints[0][11]
     head = humanpoints[0][0]
+    # 都是numpy.nparray类型
     center = (left_foot + right_foot)/2
     return (center[1] - head[1])*21/length
 
@@ -57,4 +58,5 @@ if __name__ == "__main__":
 
     ballloc = [303.33194, 499.16248, 333.36005, 532.0776]
     ball_hei = ball_height(humanpoints, ballloc)
-    print(ball_hei)
+    person_hei = person_height(humanpoints, ballloc)
+    print("球的高度是%.2fcm, 人的身高是%.2fcm." % (ball_hei, person_hei))

@@ -77,7 +77,7 @@ def hcolor_to_bgr(hcolor):
 
 
 # 将传入的源图像转化为标注图像
-# 标注内容：关节、肢体连接、身体部位角度等
+# 标注内容：关节、肢体连接、身体部位角度
 # image_path: 原图像目录
 # json_path:  图像转化成的JSON文件目录
 # num:        图像的次序标号
@@ -87,7 +87,7 @@ def hcolor_to_bgr(hcolor):
                 # "horizontal_dist": 球到手臂的水平距离
                 # "volley_position": 球的位置}
                 # volley_position 访问方式：volley_position[num-1][第几个球]
-def annotate_img(image_path, json_path, num, dynamic_info):
+def annotate_img(image_path, json_path, num, dynamic_info, arguments_json):
     img = cv2.imread(os.path.join(image_path, f"{num}.jpg"))
     # print(f"[image {num}] 图片的分辨率为：{img.shape}")  # 输出 几行几列几维颜色
 
@@ -121,15 +121,6 @@ def annotate_img(image_path, json_path, num, dynamic_info):
                     # print(f"[image {num}] keypoint {i} not exists.")
                     pass
 
-            # 参照位置：鼻子
-            keypoint_id = 0
-            x, y = pose_keypoints_2d[keypoint_id*3], pose_keypoints_2d[keypoint_id*3+1]
-
-            # 计算出鼻子到腿的距离为dist
-            dist_pair = (0, 14)
-            y1 = json_dict["people"][people_id]["pose_keypoints_2d"][dist_pair[0]*3+1]
-            y2 = json_dict["people"][people_id]["pose_keypoints_2d"][dist_pair[1]*3+1]
-            dist = abs(y2-y1)
 
             cv2.putText(img, f"Person {people_id}: ", (int(x), max(int(y)-100, 0)), 
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
@@ -164,7 +155,7 @@ def annotate_img(image_path, json_path, num, dynamic_info):
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
 
 
-    # 获取横向距离
+    # 获取横向距离,仅调试用
     pose_keypoints_2d = json_dict["people"][people_id]["pose_keypoints_2d"]
     elbow_pair = (6, 7)
     x1 = int(pose_keypoints_2d[elbow_pair[0]*3])
@@ -178,16 +169,30 @@ def annotate_img(image_path, json_path, num, dynamic_info):
     # 打印接到球的信息！
     # 接到球满足两个条件：1. 距离胳膊较近  2. 与胳膊中垂线距离不超过胳膊长度
     if num in dynamic_info["min_imageID"]:
+        # 只考虑0号人
         people = json_dict["people"][0]
         ball = dynamic_info["volley_position"][num-1][0]
         # horizontal_dist = [mathtools.get_horizontal_distance(x1,y1,x2,y2,(ball[0]+ball[2])//2, (ball[1]+ball[3])//2)]
         print(f"[image {num}] 横向距离={horizontal_dist[0]}, 胳膊长度=" + "%.2f" % length)
 
         # 获取接球部位
-        catch_part = calculation.get_catch_part(people, ball)
-        cv2.putText(img,f"Person0 Catch ball! {catch_part}", (0,3*40), \
+        hitPosition = calculation.get_catch_part(people, ball)
+        cv2.putText(img,f"Person0 Catch ball! {hitPosition}", (0,3*40), \
             cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2,cv2.LINE_AA)
+        arguments_json[num-1]["data"]["upper"]["hitPosition"] = hitPosition
+    else:
+        arguments_json[num-1]["data"]["upper"]["hitPosition"] = "未接球"
 
+    people_id = 0
+    arguments_json[num-1]["data"]["upper"]["hitAngle"] = angle.angle_frontElbow_horizon(humanpoints[people_id])
+    arguments_json[num-1]["data"]["upper"]["angleForearmArm"] = angle.angle_left_elbow(humanpoints[people_id])
+    arguments_json[num-1]["data"]["upper"]["angleArmTrunk"] = angle.angle_rightElbow_trunk(humanpoints[people_id])
+
+    arguments_json[num-1]["data"]["lower"]["angleCalfThigh"] = angle.angle_left_knee(humanpoints[people_id])
+    arguments_json[num-1]["data"]["lower"]["angleThighTrunk"] = angle.angle_thigh_trunk(humanpoints[people_id])
+    # 跳起的高度先默认为0
+    arguments_json[num-1]["data"]["lower"]["jumpHeight"] = 0
+    
 
     #打印角度 -1 代表不构成三角形
     # for i in range(people_cnt):
