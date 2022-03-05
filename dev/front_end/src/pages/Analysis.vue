@@ -8,19 +8,20 @@
   </q-dialog>
   <div class="row" style="width: 95%;margin:20px auto 20px auto">
     <div class="q-pa-md" style="width: 40%">
-      <div style="width: 90%;margin-bottom: 20px">
+      <div style="margin-bottom: 20px">
         <q-carousel
           swipeable
           animated
           arrows
           v-model="slide"
           :fullscreen.sync="fullscreen"
-          autoplay
           infinite
+          style="height: 300px; width: 533px;"
+          class="no-padding"
         >
           <template v-for="(keyPoint,index) of keyPoints">
-            <q-carousel-slide :name="index+1">
-              <q-img :ratio="16/9" :src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
+            <q-carousel-slide :name="index+1" class="no-padding">
+              <q-img :ratio="16/9" style="height: 300px" :src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
             </q-carousel-slide>
           </template>
 
@@ -38,7 +39,7 @@
           </template>
         </q-carousel>
       </div>
-      <video class="q-pl-md" controls height="300" :src="'http://localhost:3000/api/videos/'+videoId" type="video/mp4"></video>
+      <video controls width="533" height="300" :src="'http://localhost:3000/api/videos/'+videoId" type="video/mp4"></video>
     </div>
 
     <div class="q-pa-md" style="width: 60%">
