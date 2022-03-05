@@ -75,19 +75,19 @@
                 <q-separator dark inset vertical/>
                 <div class="col">
                   接/击球手臂角度<br>
-                  {{currentKeyPoint.upper.hitAngle}}/180<br>
+                  {{currentKeyPoint.upper.hitAngle}} / 180<br>
                   <span class="text-warning">角度合适</span>
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="col">
                   手臂弯曲角度<br>
-                  {{currentKeyPoint.upper.angleForearmArm || "-"}}/180<br>
+                  {{currentKeyPoint.upper.angleForearmArm || "-"}} / 180<br>
                   <span class="text-warning">角度偏小</span>
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="col">
                   手臂与躯干角度<br>
-                  {{currentKeyPoint.upper.angleArmTrunk || "-"}} /180<br>
+                  {{currentKeyPoint.upper.angleArmTrunk || "-"}} / 180<br>
                   <span class="text-warning">正常</span>
                 </div>
               </div>
@@ -99,21 +99,21 @@
               <div class="text-h6 row text-center">
                 <div class="col">
                   小腿与地面角度<br>
-                  {{currentKeyPoint.lower.angleCalfThigh || "-"}}/90<br>
+                  {{currentKeyPoint.lower.angleCalfThigh || "-"}} / 90<br>
                   <span class="text-warning">角度太小</span>
                 </div>
 
                 <q-separator dark inset vertical/>
                 <div class="col">
                   大小腿弯曲角度<br>
-                  {{currentKeyPoint.lower.angleThighTrunk || "-"}}/180<br>
+                  {{currentKeyPoint.lower.angleThighTrunk || "-"}} / 180<br>
                   <span class="text-warning">正常</span>
                 </div>
 
                 <q-separator dark inset vertical style="margin-left: 5px;margin-right: 5px"/>
                 <div class="col">
                   人跳起高度<br>
-                  {{currentKeyPoint.lower.jumpHeight || "-"}} m<br>
+                  {{currentKeyPoint.lower.jumpHeight || 0}} m<br>
                   <span class="text-warning">接球不应起跳</span>
                 </div>
               </div>
@@ -124,15 +124,15 @@
               <q-separator dark inset />
               <div class="row q-pa-md">
                 <div class="text-h6 col text-center">
-                  球的高度<br>{{currentKeyPoint.ball.lastHeight || "-"}}m
+                  球的高度<br>{{currentKeyPoint.ball.lastHeight || "-"}} cm
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="text-h6 col text-center">
-                  球的初始角度<br>{{currentKeyPoint.ball.initialAngle || "-"}}/90
+                  球的初始角度<br>{{currentKeyPoint.ball.initialAngle || "-"}} / 90
                 </div>
                 <q-separator dark inset vertical/>
                 <div class="text-h6 col text-center">
-                  球的运行速度<br>{{currentKeyPoint.ball.initialVelocity || "-"}}m/s
+                  球的运行速度<br>{{currentKeyPoint.ball.initialVelocity || "-"}} m/s
                 </div>
               </div>
             </q-card-section>
@@ -200,21 +200,6 @@ name: "Analysis",
         }
       },],
       videoId: "",
-      evaluate: {
-        stability: [48,45,68,56,64],
-        accuracy: [80,78,79,81,92],
-        quality: [70,56,67,73,63],
-        position: [0.3,0.2,0.4,0.1,0.3],
-        hitAngle: [60.3,65.4,100.8,123.1,119.2],
-        armBendAngle: [50.1,90.8,67.8,98.2,123.1],
-        armAngle: [[72.1,72.1],[67.5,66.5],[56.3,67.8],[78.9,89.7], [66.2,56.4]],
-        legAngle: [78,64,67,75,51],
-        legBendAngle: [155,164,145,111,145],
-        height: [0.7,0.56,1.1,0.98,0.98],
-        ballHeight:[3.6,2.4,2.3,2.1,2.8],
-        ballAngle: [28,37,45,12,56],
-        speed: [1.23,2.34,2.11,1.45,2.53]
-      },
       slide: 1,
       fullscreen: false,
       commentShow: false,
