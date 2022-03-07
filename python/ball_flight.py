@@ -135,7 +135,7 @@ def height(imgpath, jsonpath, balljson):  # humanpoints 是关节坐标的三维
             # 画图
             img1 = cv2.imread(imgpath + "/" + str(i) + ".jpg")
             img1 = cv2ImgAddText(img1, "球离地面的高度：%.0f cm" % height_3d, ball_loc[i][2] + 20, ball_loc[i][3] - 50,
-                                 (0, 100, 0), 20)
+                                 (255, 255, 255), 20)
             cv2.imwrite(imgpath + "/" + str(i) + ".jpg", img1)
     return height_all
 
@@ -165,7 +165,7 @@ def speed(imgpath, jsonpath, balljson, interval):  # interval 是时间间隔
     for j in range(2, len(files)+1):
         img2 = cv2.imread(imgpath + "/" + str(j) + ".jpg")
         img4 = cv2ImgAddText(img2, "球的速度：%.2f m/s" % speed_all.get(j), ball_loc[j][2] + 20, ball_loc[j][3] - 30,
-                             (0, 100, 0), 20)
+                             (255, 255, 255), 20)
         cv2.imwrite(imgpath + "/" + str(j) + ".jpg", img4)
     return speed_all
 
@@ -218,7 +218,7 @@ def direction(imgpath, jsonpath, balljson):  # length是文件夹中的个数, b
         # 在图中标注
         img1 = cv2.imread(imgpath + "/" + str(i) + ".jpg")
         img2 = cv2ImgAddText(img1, "球方向与水平线的夹角：%.0f" % direction_all.get(i) + chr(0x00b0), ball_loc[i][2] + 20,
-                             ball_loc[i][3] - 10, (0, 100, 0), 20)
+                             ball_loc[i][3] - 10, (255, 255, 255), 20)
 
         v = math.sqrt(v1x**2 + v1y**2)
         std_x = v1x / v * 50 if v != 0 else 0
