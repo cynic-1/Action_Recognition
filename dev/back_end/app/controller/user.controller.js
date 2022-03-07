@@ -83,6 +83,24 @@ export const findById = (req, res) => {
                 .send({ message: "Error retrieving user with id=" + id });
         });
 }
+
+export const findVideosByUser = (req, res) => {
+    const id = req.params.id;
+    User.findById(id)
+        .populate('videos')
+        .select('videos')
+        .then(data => {
+            if (!data)
+                res.status(404).send({ message: "Not found user with id " + id });
+            else res.send(data);
+        })
+        .catch(() => {
+            res
+                .status(500)
+                .send({ message: "Error retrieving user with id=" + id });
+        });
+}
+
 // Update a user by the id in the request
 export const updateById = (req, res) => {
     if (!req.body) {

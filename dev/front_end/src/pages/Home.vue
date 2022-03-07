@@ -33,7 +33,12 @@
       </div>
       <div class="flex">
         <template v-for="video in videos">
-          <video-item :video="video" style="width: 48%"/>
+          <video-item
+            :time="video.createdAt"
+            :video_id="video._id"
+            :uploader_name="name"
+            :uploader_id="id"
+            style="width: 45%"/>
         </template>
       </div>
     </div>
@@ -100,13 +105,14 @@ export default {
       let courseId;
       this.$api.get('api/user/'+this.userId)
       .then(res => {
+        console.log(res)
+
         this.name = res.data.name;
         this.email = res.data.mail;
         this.id = res.data.id;
         this.college = res.data.college;
         this.videos = res.data.videos;
         courseId = res.data.courses[res.data.courses.length-1]
-        console.log(courseId)
         this.$api.get('api/courses/'+courseId)
         .then(res => {
           this.course = res.data;
@@ -117,9 +123,7 @@ export default {
     getUrl() {
       return "http://localhost:3000/api/videos/upload";
     },
-    onRejected (rejectedEntries) {
-      // Notify plugin needs to be installed
-      // https://quasar.dev/quasar-plugins/notify#Installation
+    onRejected () {
       this.$q.notify({
         type: 'negative',
         message: "文件未通过属性验证"
@@ -144,7 +148,7 @@ export default {
   },
   computed: {
     courseTime() {
-      return this.course.year + '年 ' + semMap[this.course.semester] + ' 周 ' + dayMap[this.course.day] + ' 第 ' + numberMap[this.course.classNo] + '节';
+      return this.course.year + '年 ' + semMap[this.course.semester] + ' 周' + dayMap[this.course.day] + '第' + numberMap[this.course.classNo] + '节';
     },
     teachers() {
       return this.course.teachers.reduce((sum, current) => sum + current.name, "")

@@ -5,10 +5,11 @@ import multer from 'multer'
 import path from 'path'
 // import fs from 'fs'
 import { fileURLToPath } from 'url';
-// import { dirname } from 'path';
+import fs from "fs";
+import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+const __dirname = dirname(__filename);
 
 const imageStorage = multer.diskStorage({
     destination: 'images', // Destination to store video
@@ -61,16 +62,24 @@ export const store = (req, res) => {
         })
 }
 
-export const getKeyPoints = (req, res) => {
-    const kid = req.params.kid;
-    KeyPoint.findById(kid)
+export const getImage = (req, res) => {
+    const id = req.params.id;
+    KeyPoint.findById(id)
         .then(data => {
-            // let imgPath = path.resolve(__dirname, '../../'+data.raw)
-            //
-            // let readStream = fs.createReadStream(videoPath)
+            let imagePath = path.resolve(__dirname, '../../images/'+data.imgLoc)
 
-            // readStream.pipe(res);
-            res.send(data)
+            fs.readFile(imagePath, 'binary', (err, file) => {
+                if (err) {
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while storing the video."
+                    });
+                    return
+                }
+                res.writeHead(200, {'Content-Type': 'image/jpeg'})
+                res.write(file, 'binary')
+                res.end()
+            })
         })
         .catch(err => {
             res.status(500).send({
@@ -78,6 +87,5 @@ export const getKeyPoints = (req, res) => {
                     err.message || "Some error occurred while storing the video."
             });
         })
-
 }
 

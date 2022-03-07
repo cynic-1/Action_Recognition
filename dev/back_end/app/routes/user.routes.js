@@ -7,6 +7,7 @@ export default app => {
     router.post("/", user.create);
     // Retrieve all Users
     router.get("/", user.findAllByName);
+    router.get("/:id/videos", user.findVideosByUser)
     router.post("/login", user.logIn);
     // Retrieve a single User with id
     router.get("/:id", user.findById);

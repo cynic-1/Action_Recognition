@@ -121,3 +121,17 @@ export const getVideoChunk = function(req, res) {
         })
 }
 
+export const getKeyPoints = (req, res) => {
+    const id = req.params.id
+    Video.findById(id)
+        .populate('keyPoints')
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while fetching keyPoints."
+            });
+        })
+}

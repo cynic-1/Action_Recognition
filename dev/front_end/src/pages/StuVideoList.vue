@@ -30,10 +30,11 @@
           </template>
           <template #main>
             <template
-              v-for="x in 3"
-              :key="x">
+              v-for="(video, index) in videos"
+              :key="index"
+            >
               <div style="margin-left: auto;margin-right: auto">
-                <video-item/>
+                <video-item :video="video"/>
               </div>
             </template>
           </template>
@@ -59,9 +60,10 @@ export default {
     lineChart,
     leftDrawer
   },
-  data(){
+  data() {
     const selected = ref(null)
     return {
+      videos: [],
       tab: 'list',
       selected,
       props: [
@@ -99,6 +101,21 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    getVideos() {
+      const id = sessionStorage.getItem('userId')
+      this.$api.get('/api/user/'+id+'/videos')
+      .then(res => {
+        this.videos = res.data.videos
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+  },
+  created() {
+    this.getVideos()
   }
 }
 </script>

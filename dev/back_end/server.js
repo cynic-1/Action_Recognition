@@ -5,6 +5,7 @@ import db from './app/models/index.js'
 import userRoutes from "./app/routes/user.routes.js";
 import videoRoutes from "./app/routes/video.routes.js";
 import courseRoutes from "./app/routes/course.routes.js";
+import keyPointRoutes from "./app/routes/keyPoint.routes.js";
 // import fs from 'fs'
 
 const app = express();
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 userRoutes(app);
 videoRoutes(app);
 courseRoutes(app);
+keyPointRoutes(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
 
