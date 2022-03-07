@@ -8,6 +8,7 @@ import keypoints
 import mathtools
 import calculation
 from PIL import Image, ImageDraw, ImageFont
+from mathtools import round_safe
 
 
 # 支持绘制中文的绘图函数
@@ -52,17 +53,18 @@ def drawLineAndRadius(img, humanpoints, people_id):
     radius.append(angle.angle_right_shoulder(humanpoints[people_id]))
     radius.append(angle.angle_right_elbow(humanpoints[people_id]))
     radius.append(angle.angle_right_knee(humanpoints[people_id]))
-    for n in range(6):
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        if radius[n] is not None:
-            # cv2.putText(img,"%d"%radius[n],
-            #     (int(humanpoints[people_id][radius_point[n]][0])-20, (int(humanpoints[people_id][radius_point[n]][1]))-20),
-            #     font, 0.4, (255, 255, 255), 1)
-            img = cv2ImgAddText(img, "%d" % radius[n] + chr(0x00b0), (int(humanpoints[people_id][radius_point[n]][0]) + 20),
-                                (int(humanpoints[people_id][radius_point[n]][1]) - 40), (255, 255, 255), 20)
-            cv2.line(img, (int(humanpoints[people_id][radius_point[n]][0]) + 8, (int(humanpoints[people_id][radius_point[n]][1])) - 3),
-                     (int(humanpoints[people_id][radius_point[n]][0]) + 20, (int(humanpoints[people_id][radius_point[n]][1])) - 20),
-                     (255, 255, 255), 2, cv2.LINE_AA)
+    # 在图像上注释角度,因为太眼花缭乱了，所以删去
+    # for n in range(6):
+    #     font = cv2.FONT_HERSHEY_SIMPLEX
+    #     if radius[n] is not None:
+    #         # cv2.putText(img,"%d"%radius[n],
+    #         #     (int(humanpoints[people_id][radius_point[n]][0])-20, (int(humanpoints[people_id][radius_point[n]][1]))-20),
+    #         #     font, 0.4, (255, 255, 255), 1)
+    #         img = cv2ImgAddText(img, "%d" % radius[n] + chr(0x00b0), (int(humanpoints[people_id][radius_point[n]][0]) + 20),
+    #                             (int(humanpoints[people_id][radius_point[n]][1]) - 40), (255, 255, 255), 20)
+    #         cv2.line(img, (int(humanpoints[people_id][radius_point[n]][0]) + 8, (int(humanpoints[people_id][radius_point[n]][1])) - 3),
+    #                  (int(humanpoints[people_id][radius_point[n]][0]) + 20, (int(humanpoints[people_id][radius_point[n]][1])) - 20),
+    #                  (255, 255, 255), 2, cv2.LINE_AA)
 
     return img
 
@@ -178,7 +180,7 @@ def annotate_img(image_path, json_path, num, dynamic_info, arguments_json, annot
 
         # 获取接球部位
         hitPosition = calculation.get_catch_part(people, ball)
-        img = cv2ImgAddText(img, f"Person0 Catch ball! {hitPosition}", 0, 3*40, (255,0,0), 2)
+        img = cv2ImgAddText(img, f"Person0 Catch ball! {hitPosition}", 0, 2*40, (0,0,255), 20)
         # cv2.putText(img,f"Person0 Catch ball! {hitPosition}", (0,3*40), \
         #     cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2,cv2.LINE_AA)
         arguments_json[num-1]["data"]["upper"]["hitPosition"] = hitPosition
@@ -186,15 +188,14 @@ def annotate_img(image_path, json_path, num, dynamic_info, arguments_json, annot
         arguments_json[num-1]["data"]["upper"]["hitPosition"] = "未接球"
 
     people_id = 0
-    arguments_json[num-1]["data"]["upper"]["hitAngle"] = angle.angle_frontElbow_horizon(humanpoints[people_id])
-    arguments_json[num-1]["data"]["upper"]["angleForearmArm"] = angle.angle_left_elbow(humanpoints[people_id])
-    arguments_json[num-1]["data"]["upper"]["angleArmTrunk"] = angle.angle_rightElbow_trunk(humanpoints[people_id])
+    arguments_json[num-1]["data"]["upper"]["hitAngle"] = round_safe(angle.angle_frontElbow_horizon(humanpoints[people_id]), 1)
+    arguments_json[num-1]["data"]["upper"]["angleForearmArm"] = round_safe(angle.angle_left_elbow(humanpoints[people_id]), 1)
+    arguments_json[num-1]["data"]["upper"]["angleArmTrunk"] = round_safe(angle.angle_rightElbow_trunk(humanpoints[people_id]), 1)
 
-    arguments_json[num-1]["data"]["lower"]["angleCalfThigh"] = angle.angle_left_knee(humanpoints[people_id])
-    arguments_json[num-1]["data"]["lower"]["angleThighTrunk"] = angle.angle_thigh_trunk(humanpoints[people_id])
+    arguments_json[num-1]["data"]["lower"]["angleCalfThigh"] = round_safe(angle.angle_left_knee(humanpoints[people_id]), 1)
+    arguments_json[num-1]["data"]["lower"]["angleThighTrunk"] = round_safe(angle.angle_thigh_trunk(humanpoints[people_id]), 1)
     # 跳起的高度先默认为0
     arguments_json[num-1]["data"]["lower"]["jumpHeight"] = 0
-    
 
     #打印角度 -1 代表不构成三角形
     # for i in range(people_cnt):

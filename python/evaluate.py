@@ -1,3 +1,6 @@
+from mathtools import round_safe
+
+
 def evaluate(arguments_json):
     comment = ""
     mistake_count = 0
@@ -19,8 +22,10 @@ def evaluate(arguments_json):
     if arguments_json["data"]["lower"]["jumpHeight"] is not None and arguments_json["data"]["lower"]["jumpHeight"] > 10:
         comment += "击球时保持身体稳定，不要跳起;\n"
         mistake_count += 1
-    # if arguments_json["data"]["ball"]["lastHeight"] is not None and arguments_json["data"]["ball"]["lastHeight"] > 300:
+    # if arguments_json["data"]["ball"]["lastHeight"] is not None \
+    #         and arguments_json["data"]["ball"]["lastHeight"] > 300:
     #     comment += "击球过高，请减小发力;\n"
-        mistake_count += 1
-    arguments_json["data"]["comment"] = comment
-    arguments_json["data"]["accuracy"] = 50 + (50 - mistake_count * 50 / 6)
+    #     mistake_count += 1
+
+    # arguments_json["data"]["comment"] = comment
+    arguments_json["data"]["accuracy"] = round_safe(50 + (50 - mistake_count * 50 / 6), 1)

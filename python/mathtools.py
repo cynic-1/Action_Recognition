@@ -94,6 +94,13 @@ def people_track(json_dict):
     json_dict["people"].sort(key=cmp_to_key(cmp2))
 
 
+def round_safe(num, accuracy):
+    if num is None:
+        return num
+    else:
+        return round(num, accuracy)
+
+
 if __name__ == "__main__":
     print(get_horizontal_distance(13, 15, 21, 56, 7, 7))
     pass

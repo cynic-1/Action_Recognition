@@ -1,5 +1,6 @@
 # 本程序用于以命令行方式调用OpenPoseDemo.exe，得到想要的JSON文件
 # 本程序以视频为原料，输出视频中每帧的关键参数，并在图像上进行数据的标注
+import codecs
 import json
 import os
 import shutil
@@ -13,6 +14,7 @@ import mathtools
 import keyImage
 
 import ball_flight
+from mathtools import round_safe
 
 
 # save_path = "pose_images"
@@ -243,12 +245,15 @@ if __name__ == "__main__":
     direction_all = ball_flight.direction(result_path, json_path, volley_position_path)
     print("[info] 已成功获取到全部图像中球的方向。")
     for i in range(1, total_num + 1):
-        arguments_json[i - 1]["data"]["ball"]["lastHeight"] = height_all.get(i)
-        arguments_json[i - 1]["data"]["ball"]["initialAngle"] = direction_all.get(i)
-        arguments_json[i - 1]["data"]["ball"]["initialVelocity"] = speed_all.get(i)
+        arguments_json[i - 1]["data"]["ball"]["lastHeight"] = round_safe(height_all.get(i), 2)
+        arguments_json[i - 1]["data"]["ball"]["initialAngle"] = round_safe(direction_all.get(i), 2)
+        arguments_json[i - 1]["data"]["ball"]["initialVelocity"] = round_safe(speed_all.get(i), 2)
+
+        arguments_json[i - 1]["data"]["coordination"] = 90
+        arguments_json[i - 1]["data"]["accuracy"] = 80
+        arguments_json[i - 1]["data"]["rate"] = 85
 
         if i in catch_images:
-            arguments_json[i - 1]["data"]["isKeyImage"] = True
             try:
                 evaluate.evaluate(arguments_json[i - 1])
             except Exception as e:
@@ -256,17 +261,15 @@ if __name__ == "__main__":
         else:
             arguments_json[i - 1]["data"]["isKeyImage"] = False
 
-        # arguments_json[i - 1]["data"]["coordination"] = 90
-        # arguments_json[i - 1]["data"]["accuracy"] = 80
-        # arguments_json[i - 1]["data"]["rate"] = 85
 
+    # 只生成关键帧的json
     final_json = []
     for i in range(0, total_num):
         if (i+1) in catch_images:
             final_json.append(arguments_json[i])
 
-    with open("result.json", "w") as f:
-        str = json.dumps(final_json, ensure_ascii=False)
+    with codecs.open("result.json", "w", encoding="utf-8") as f:
+        str = json.dumps(final_json, ensure_ascii=False) # 以UTF-8格式写入文件
         f.write(str)
         print("数据json生成完毕！")
 

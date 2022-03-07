@@ -10,4 +10,6 @@ python/pose_images_json
 python/pose_results
 python/__pycache__
 python/demo/predict_ball
+python/pose_keyimages
 .gitignore
+.idea/
