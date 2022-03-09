@@ -5,18 +5,20 @@
         <img :src="this.imgUrl" alt="用户头像">
       </q-avatar>
       <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
-        <span class="text-weight-bold text-h4">姓名--{{ name }}</span>
+        <span class="text-weight-bold text-h4">{{ name }}</span>
       </div>
       <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
-        <span class="text-grey text-h5">学号--{{ id }}</span>
+        <span class="text-grey text-h5">{{ id }}</span>
       </div>
       <q-card class="info q-pa-md">
         <div class="text-h4 row">
           <span>课程信息</span>
-          <q-btn rounded icon-right="read_more" flat class="text-right text-subtitle2">查看更多</q-btn>
         </div>
         <div class="text-h5 text-grey" style="margin: 20px">当前课程：{{courseTime}}</div>
         <div class="text-h5 text-grey" style="margin: 20px">任课老师：{{teachers}}</div>
+        <div class="text-center">
+          <q-btn rounded icon-right="read_more" flat class="text-light-blue text-subtitle2">展 示 更 多 课 程</q-btn>
+        </div>
       </q-card>
     </div>
 
@@ -38,7 +40,7 @@
             :video_id="video._id"
             :uploader_name="name"
             :uploader_id="id"
-            style="width: 45%"/>
+            style="width: 48%"/>
         </template>
       </div>
     </div>
