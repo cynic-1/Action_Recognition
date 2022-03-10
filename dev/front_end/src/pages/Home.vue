@@ -14,10 +14,11 @@
         <div class="text-h4 row">
           <span>课程信息</span>
         </div>
-        <div class="text-h5 text-grey" style="margin: 20px">当前课程：{{courseTime}}</div>
-        <div class="text-h5 text-grey" style="margin: 20px">任课老师：{{teachers}}</div>
+        <template v-for="course of courses">
+          <course-info-item :course="course"/>
+        </template>
         <div class="text-center">
-          <q-btn rounded icon-right="read_more" flat class="text-light-blue text-subtitle2">展 示 更 多 课 程</q-btn>
+          <q-btn rounded icon-right="read_more" flat class="text-blue-7 text-weight-bold text-subtitle2">展 示 更 多 课 程</q-btn>
         </div>
       </q-card>
     </div>
@@ -66,17 +67,15 @@ import {defineAsyncComponent} from 'vue';
 import { useQuasar } from 'quasar';
 const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
 const videoItem = defineAsyncComponent(() => import("components/VideoItem"));
-
-const dayMap = ['零', '一', '二', '三', '四', '五', '六', '日']
-const numberMap = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
-const semMap = ['', '秋季学期', '春季学期']
+const courseInfoItem = defineAsyncComponent(() => import("../components/courseInfoItem"))
 
 const $q = useQuasar()
 export default {
   name: "PersonalUpload",
   components: {
     lineChart,
-    videoItem
+    videoItem,
+    courseInfoItem
   },
   data() {
     return  {
@@ -86,17 +85,20 @@ export default {
       name: 'cynic',
       college: 23,
       isUpload: false,
-      course: {
-        year: 2022,
-        semester: 1,
-        day: 3,
-        classNo: 4,
-        teachers: [{
-          _id: "62020090fc4badc851a96a99",
-          name: "梁秀英"
+      courseIds: [],
+      courses: [
+        {
+          year: 2019,
+          semester: 1,
+          day: 3,
+          classNo: 4,
+          teachers: [{
+            _id: "62020090fc4badc851a96a99",
+            name: "梁秀英"
+          }
+          ]
         }
-        ]
-      },
+      ],
       email: 'ca1312@163.com',
       userId: this.$route.params.id,
       videos: []
@@ -114,13 +116,21 @@ export default {
         this.id = res.data.id;
         this.college = res.data.college;
         this.videos = res.data.videos;
-        courseId = res.data.courses[res.data.courses.length-1]
-        this.$api.get('api/courses/'+courseId)
-        .then(res => {
-          this.course = res.data;
-          console.log(this.course)
-        })
+        this.courseIds = res.data.courses;
+        courseId = res.data.courses[res.data.courses.length-1];
+        this.getCourseInfo(courseId, false)
       })
+    },
+    getCourseInfo(courseId, append=true) {
+      this.$api.get('api/courses/'+courseId)
+        .then(res => {
+          if (append) {
+            this.courses.push(res.data)
+          } else {
+            this.courses[0] = res.data
+          }
+          // console.log(this.course)
+        })
     },
     getUrl() {
       return "http://localhost:3000/api/videos/upload";
@@ -149,19 +159,10 @@ export default {
       })
     }
   },
-  computed: {
-    courseTime() {
-      return this.course.year + '年 ' + semMap[this.course.semester] + ' 周' + dayMap[this.course.day] + '第' + numberMap[this.course.classNo] + '节';
-    },
-    teachers() {
-      return this.course.teachers.reduce((sum, current) => sum + current.name, "")
-    }
-  },
+
   created() {
     this.getUserInfo()
   }
-
-
 }
 </script>
 
