@@ -11,15 +11,18 @@
         <span class="text-grey text-h5">{{ id }}</span>
       </div>
       <q-card class="info q-pa-md">
-        <div class="text-h4 row">
+        <div class="text-h4 q-pb-md">
           <span>课程信息</span>
         </div>
         <template v-for="course of courses">
           <course-info-item :course="course"/>
         </template>
-        <div class="text-center">
-          <q-btn rounded icon-right="read_more" flat class="text-blue-7 text-weight-bold text-subtitle2">展 示 更 多 课 程</q-btn>
-        </div>
+        <template v-if="courses.length !== courseIds.length">
+          <div class="text-center">
+            <q-btn @click="getCourseInfo" rounded icon-right="read_more" flat class="text-blue-7 text-weight-bold text-subtitle2">展 示 更 多 课 程</q-btn>
+          </div>
+        </template>
+
       </q-card>
     </div>
 
@@ -86,19 +89,7 @@ export default {
       college: 23,
       isUpload: false,
       courseIds: [],
-      courses: [
-        {
-          year: 2019,
-          semester: 1,
-          day: 3,
-          classNo: 4,
-          teachers: [{
-            _id: "62020090fc4badc851a96a99",
-            name: "梁秀英"
-          }
-          ]
-        }
-      ],
+      courses: [],
       email: 'ca1312@163.com',
       userId: this.$route.params.id,
       videos: []
@@ -106,7 +97,6 @@ export default {
   },
   methods : {
     getUserInfo() {
-      let courseId;
       this.$api.get('api/user/'+this.userId)
       .then(res => {
         console.log(res)
@@ -117,18 +107,14 @@ export default {
         this.college = res.data.college;
         this.videos = res.data.videos;
         this.courseIds = res.data.courses;
-        courseId = res.data.courses[res.data.courses.length-1];
-        this.getCourseInfo(courseId, false)
+        this.getCourseInfo()
       })
     },
-    getCourseInfo(courseId, append=true) {
+    getCourseInfo() {
+      const courseId = this.courseIds[this.courses.length]
       this.$api.get('api/courses/'+courseId)
         .then(res => {
-          if (append) {
-            this.courses.push(res.data)
-          } else {
-            this.courses[0] = res.data
-          }
+          this.courses.push(res.data)
           // console.log(this.course)
         })
     },
