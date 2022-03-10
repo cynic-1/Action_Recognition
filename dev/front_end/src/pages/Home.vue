@@ -7,7 +7,7 @@
         </q-avatar>
         <div class="my-element text-center text-h6 text-weight-medium text-white">更 换 头 像</div>
       </div>
-      <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
+      <div class="q-pt-xl" style="margin-left: auto;margin-right: auto">
         <span class="text-weight-bold text-h4">{{ name }}</span>
       </div>
       <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
@@ -171,7 +171,7 @@ export default {
         position: 'center'
       })
     },
-    cropSuccess(imgDataUrl, field){
+    cropSuccess(imgDataUrl){
       console.log('-------- crop success --------');
       this.imgDataUrl = imgDataUrl;
     },
@@ -236,7 +236,7 @@ export default {
   height: 2em;
   border-radius: 10px;
   background-color: black;
-  position: relative;
+  position: absolute;
   margin-left: 60px;
 }
 .my-element::before {
