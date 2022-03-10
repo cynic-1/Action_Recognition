@@ -184,6 +184,9 @@
                 </div>
               </div>
             </q-card-section>
+            <q-card-section>
+              <polar-bar-chart v-if="flag"/>
+            </q-card-section>
           </q-card>
         </q-tab-panel>
       </q-tab-panels>
@@ -192,8 +195,12 @@
 </template>
 
 <script>
+import polarBarChart from "components/polarBarChart";
 export default {
-name: "Analysis",
+  name: "Analysis",
+  components: {
+    polarBarChart
+  },
   data() {
     return {
       keyPoints: [{
@@ -226,7 +233,9 @@ name: "Analysis",
       commentShow: false,
       comment:'',
       rate: 0,
-      tab: 'evaluate'
+      tab: 'evaluate',
+      angles: [158.2 , 81.5, 127.8, 135.7, 102.85],
+      flag: true,
     }
   },
   methods: {
