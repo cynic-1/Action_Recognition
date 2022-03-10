@@ -1,6 +1,52 @@
 import db from "../models/index.js"
 const User = db.user;
 import sha256 from 'crypto-js/sha256.js';
+import multer from 'multer'
+import path from 'path'
+import { fileURLToPath } from 'url';
+import fs from "fs";
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const imageStorage = multer.diskStorage({
+    destination: 'images/avatars', // Destination to store image
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '_' + Date.now()
+            + path.extname(file.originalname))
+    }
+});
+
+export const imageUpload = multer({
+    storage: imageStorage,
+    limits: {
+        fileSize: 1000000 // 1000000 Bytes = 1 MB
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(png|jpg)$/)) {
+            // upload only png and jpg format
+            return cb(new Error('Please upload a Image'))
+        }
+        cb(undefined, true)
+    }
+})
+
+export const store = (req, res) => {
+    const id = req.params.id;
+    User.findByIdAndUpdate(id,
+        {avatar: req.file.path})
+        .then(() => {
+            res.send(req.file)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "user id is invalid."
+            });
+        })
+}
+
 // Create and Save a new user
 export const create = (req, res) => {
     // Validate request

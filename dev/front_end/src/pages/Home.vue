@@ -1,9 +1,12 @@
 <template>
   <div class="row" style="width: 85%;margin-left: auto;margin-right: auto">
     <div class="personal-menu-card">
-      <q-avatar size="280px">
-        <img :src="this.imgUrl" alt="用户头像">
-      </q-avatar>
+      <div class="my-father cursor-pointer">
+        <q-avatar size="280px" @click="toggleIsUploadAvatar" class="my-avatar">
+          <img :src="this.imgUrl" alt="用户头像">
+        </q-avatar>
+        <div class="my-element text-center text-h6 text-weight-medium text-white">更 换 头 像</div>
+      </div>
       <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
         <span class="text-weight-bold text-h4">{{ name }}</span>
       </div>
@@ -34,7 +37,7 @@
       </q-card>
       <div class="text-h5 text-grey row q-mb-lg" style="margin-top: 20px">
         <span style="margin-right: 60%">我的上传</span>
-        <q-btn @click="isUpload=true" rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
+        <q-btn @click="toggleIsUpload" rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
         <q-btn rounded color="blue" icon="read_more" to="/videos">更多</q-btn>
       </div>
       <div class="flex">
@@ -55,7 +58,7 @@
       auto-upload
       accept="mp4"
       @rejected="onRejected"
-      @finish="isUpload=false;"
+      @finish="toggleIsUpload"
       @uploaded="onSuccess"
       @failed="onFail"
       :form-fields="[{name: 'id', value: this.userId}]"
@@ -63,11 +66,25 @@
       :url="getUrl"
     />
   </q-dialog>
+    <my-upload field="img"
+               @crop-success="cropSuccess"
+               @crop-upload-success="cropUploadSuccess"
+               @crop-upload-fail="cropUploadFail"
+               v-model="isUploadAvatar"
+               :width="300"
+               :height="300"
+               :url="`http://localhost:3000/api/user/${userId}/avatar/upload`"
+               :params="params"
+               :headers="headers"
+               img-format="png">
+
+    </my-upload>
 </template>
 
 <script>
 import {defineAsyncComponent} from 'vue';
 import { useQuasar } from 'quasar';
+import myUpload from 'vue-image-crop-upload/upload-3'
 const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
 const videoItem = defineAsyncComponent(() => import("components/VideoItem"));
 const courseInfoItem = defineAsyncComponent(() => import("../components/courseInfoItem"))
@@ -78,7 +95,8 @@ export default {
   components: {
     lineChart,
     videoItem,
-    courseInfoItem
+    courseInfoItem,
+    myUpload
   },
   data() {
     return  {
@@ -92,7 +110,16 @@ export default {
       courses: [],
       email: 'ca1312@163.com',
       userId: this.$route.params.id,
-      videos: []
+      videos: [],
+      isUploadAvatar: false,
+      params: {
+        token: '123456798',
+        name: 'avatar'
+      },
+      headers: {
+        smail: '*_~'
+      },
+      imgDataUrl: ''
     }
   },
   methods : {
@@ -143,7 +170,39 @@ export default {
         message: "文件上传失败",
         position: 'center'
       })
-    }
+    },
+    cropSuccess(imgDataUrl, field){
+      console.log('-------- crop success --------');
+      this.imgDataUrl = imgDataUrl;
+    },
+    /**
+     * upload success
+     *
+     * [param] jsonData   服务器返回数据，已进行json转码
+     * [param] field
+     */
+    cropUploadSuccess(jsonData, field){
+      console.log('-------- upload success --------');
+      console.log(jsonData);
+      console.log('field: ' + field);
+    },
+    /**
+     * upload fail
+     *
+     * [param] status    server api return error status, like 500
+     * [param] field
+     */
+    cropUploadFail(status, field){
+      console.log('-------- upload fail --------');
+      console.log(status);
+      console.log('field: ' + field);
+    },
+    toggleIsUpload() {
+      this.isUpload = !this.isUpload
+    },
+    toggleIsUploadAvatar() {
+      this.isUploadAvatar = !this.isUploadAvatar
+    },
   },
 
   created() {
@@ -166,7 +225,29 @@ export default {
   width: 75%;
   margin-top: 30px;
 }
-/*.width-80-center {*/
-/*  width: 80%; margin-left: auto; margin-right: auto;*/
-/*}*/
+.my-element {
+  display: none;
+  width: 160px;
+  height: 2em;
+  border-radius: 10px;
+  background-color: black;
+  position: relative;
+  margin-left: 60px;
+}
+.my-element::before {
+  position: absolute;
+  top: -20px;
+  left: 70px;
+  content: '';
+  width: 0;
+  height: 0;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid black;
+  border-left: 10px solid transparent;
+  border-top: 10px solid transparent;
+}
+.my-father:hover .my-element {
+  display: block;
+}
+
 </style>
