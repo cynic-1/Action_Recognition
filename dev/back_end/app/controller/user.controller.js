@@ -35,7 +35,7 @@ export const imageUpload = multer({
 export const store = (req, res) => {
     const id = req.params.id;
     User.findByIdAndUpdate(id,
-        {avatar: req.file.path})
+        {avatar: req.file.filename})
         .then(() => {
             res.send(req.file)
         })
@@ -43,6 +43,33 @@ export const store = (req, res) => {
             res.status(500).send({
                 message:
                     err.message || "user id is invalid."
+            });
+        })
+}
+
+export const getImage = (req, res) => {
+    const id = req.params.id;
+    User.findById(id)
+        .then(data => {
+            let imagePath = path.resolve(__dirname, '../../images/avatars/'+data.avatar)
+
+            fs.readFile(imagePath, 'binary', (err, file) => {
+                if (err) {
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while getting the avatar."
+                    });
+                    return
+                }
+                res.writeHead(200, {'Content-Type': 'image/jpeg'})
+                res.write(file, 'binary')
+                res.end()
+            })
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while storing the video."
             });
         })
 }

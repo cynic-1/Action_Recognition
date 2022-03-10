@@ -1,6 +1,5 @@
 import {Router} from 'express'
 import * as user from "../controller/user.controller.js"
-import * as video from "../controller/video.controller.js";
 
 export default app => {
     const router = Router()
@@ -19,6 +18,7 @@ export default app => {
     router.post("/:id/avatar/upload", user.imageUpload.single('img'), user.store, (req, res) => {
         res.status(400).send({ error: "Error!!!" })
     });
+    router.get("/:id/avatar", user.getImage)
 
     app.use('/api/user', router);
 };

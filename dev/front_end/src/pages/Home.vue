@@ -3,7 +3,7 @@
     <div class="personal-menu-card">
       <div class="my-father cursor-pointer">
         <q-avatar size="280px" @click="toggleIsUploadAvatar" class="my-avatar">
-          <img :src="this.imgUrl" alt="用户头像">
+          <img :src="avatarURL" alt="用户头像">
         </q-avatar>
         <div class="my-element text-center text-h6 text-weight-medium text-white">更 换 头 像</div>
       </div>
@@ -119,21 +119,21 @@ export default {
       headers: {
         smail: '*_~'
       },
-      imgDataUrl: ''
+      imgDataUrl: '',
+      hasAvatar: false
     }
   },
   methods : {
     getUserInfo() {
       this.$api.get('api/user/'+this.userId)
       .then(res => {
-        console.log(res)
-
         this.name = res.data.name;
-        this.email = res.data.mail;
         this.id = res.data.id;
+        this.hasAvatar = !!res.data.avatar;
         this.college = res.data.college;
         this.videos = res.data.videos;
         this.courseIds = res.data.courses;
+        console.log(this.hasAvatar)
         this.getCourseInfo()
       })
     },
@@ -204,7 +204,12 @@ export default {
       this.isUploadAvatar = !this.isUploadAvatar
     },
   },
-
+  computed: {
+    avatarURL() {
+      return this.hasAvatar ? "http://localhost:3000/api/user/" + this.userId + "/avatar"
+        : "https://cdn.quasar.dev/img/boy-avatar.png"
+    }
+  },
   created() {
     this.getUserInfo()
   }
