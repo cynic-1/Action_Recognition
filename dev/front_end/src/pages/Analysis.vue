@@ -99,14 +99,14 @@
               <q-separator dark inset />
               <div class="text-h6 row text-center">
                 <div class="col">
-                  小腿与地面角度<br>
+                  小腿与大腿角度<br>
                   {{currentKeyPoint.lower.angleCalfThigh || "-"}} / 90<br>
                   <span class="text-warning">角度太小</span>
                 </div>
 
                 <q-separator dark inset vertical/>
                 <div class="col">
-                  大小腿弯曲角度<br>
+                  大腿与躯干角度<br>
                   {{currentKeyPoint.lower.angleThighTrunk || "-"}} / 180<br>
                   <span class="text-warning">正常</span>
                 </div>
@@ -134,6 +134,26 @@
                 <q-separator dark inset vertical/>
                 <div class="text-h6 col text-center">
                   球的运行速度<br>{{currentKeyPoint.ball.initialVelocity || "-"}} m/s
+                </div>
+              </div>
+            </q-card-section>
+
+            <q-card-section>
+              <div class="text-h4 q-pa-sm"><q-icon name="star_rate" size="xl" class="q-pa-sm"/>
+                动作评估
+              </div>
+              <q-separator dark inset />
+              <div class="row q-pa-md">
+                <div class="text-h6 col text-center">
+                  动作质量评估<br>{{currentKeyPoint.rate}}
+                </div>
+                <q-separator dark inset vertical/>
+                <div class="text-h6 col text-center">
+                  动作协调性<br>{{currentKeyPoint.coordination}}
+                </div>
+                <q-separator dark inset vertical/>
+                <div class="text-h6 col text-center">
+                  动作准确性<br>{{currentKeyPoint.accuracy}}
                 </div>
               </div>
             </q-card-section>
