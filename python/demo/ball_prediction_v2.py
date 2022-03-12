@@ -83,9 +83,11 @@ def fill_curve(left, mid, right, volley_position, vpc, is_exist, is_start, is_en
     f_left = getLineFunc(vpc, left+2, mid-2)
     f_right = getLineFunc(vpc, mid+2, right-2)
     shape = "^" if (vpc[left+1][0] - vpc[left][0] > 0) else "V"
-    left_index = 1 if is_start else vpc[left][1]
-    right_index = len(volley_position) if is_end else (vpc[right][1]-3)
-    for i in range(left_index, right_index+1):
+    # left_index = 1 if is_start else vpc[left][1]
+    # right_index = len(volley_position) if is_end else (vpc[right][1]-3)
+    fill_range = 4
+    for i in range(max(vpc[mid][1]-fill_range, 0),
+                   min(vpc[mid][1]+fill_range, len(volley_position))):
         if not is_exist[i]:
             is_exist[i] = True
             value = min(f_left(i), f_right(i)) if shape == "^" else \
@@ -147,6 +149,16 @@ def predict_speed_x(__volley_position: list):
     return speed
 
 
+def get_volley_position_axis(volley_position):
+    imageID = []
+    positions = []
+    for i in range(len(volley_position)):
+        if len(volley_position[i]) != 0:
+            imageID.append(i+1)
+            positions.append(volley_position[i][0])
+    return imageID, positions
+
+
 if __name__ == "__main__":
     volley_position = get_volleyCenter("../volleyball_detect.json")
     _volley_position = deepcopy(volley_position)
@@ -181,26 +193,21 @@ if __name__ == "__main__":
         fill_curve(left, mid, right, volley_position, vpc, is_exist,
                    is_start=(i == 0), is_end=(i == len(extrema)-2))
 
+
+    # # 利用传统方法补全未预测的帧
+    # print(volley_position)
+    # for i, pos in enumerate(volley_position):
+    #     if len(pos) == 0:
+    #         pass
+    #         pos.append(_volley_position1[i][0])
+
     # 265-276是变形最厉害的一段范围
-    annotate_image("../pose_images/", "predict_ball/", volley_position, _volley_position)
+    # annotate_image("../pose_images/", "predict_ball/", volley_position, _volley_position)
 
-    # # 利用matplot作图
-    # fig = plt.figure(num=1)
-    # plt.scatter(range(total_num), [i[0] for i in volley_position])
-    # plt.show()
-
-    print(volley_position)
-    imageID = []
-    pos_list = []
-    for i, pos in enumerate(volley_position):
-        if len(pos) != 0:
-            imageID.append(i+1)
-            pos_list.append(pos[0])
-        else:
-            print(f"found image {i} not predicted")
-
+    # 利用matplot作图
     fig = plt.figure(num=1)
-    plt.scatter(imageID, pos_list)
+    x, y = get_volley_position_axis(volley_position)
+    plt.scatter(x, y)
     plt.show()
 
     # 将速度信息输出到csv文件
