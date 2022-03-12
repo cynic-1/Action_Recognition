@@ -19,8 +19,6 @@ import { UniversalTransition } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
 import { onMounted, onUnmounted, watch } from "vue";
 
-import { useStore } from 'vuex'
-
 echarts.use([
   TitleComponent,
   ToolboxComponent,

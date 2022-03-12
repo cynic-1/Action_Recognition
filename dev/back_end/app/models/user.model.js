@@ -18,6 +18,7 @@ export default mongoose => {
                 required: true,
                 max: 20
             },
+            avatar: String,
             college: {
                 type: Number,
                 enum: [1,2,3,4,5,6,7,8,9,10,

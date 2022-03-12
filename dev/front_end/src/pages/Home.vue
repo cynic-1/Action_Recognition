@@ -1,22 +1,31 @@
 <template>
   <div class="row" style="width: 85%;margin-left: auto;margin-right: auto">
     <div class="personal-menu-card">
-      <q-avatar size="280px">
-        <img :src="this.imgUrl" alt="用户头像">
-      </q-avatar>
-      <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
-        <span class="text-weight-bold text-h4">姓名--{{ name }}</span>
+      <div class="my-father cursor-pointer">
+        <q-avatar size="280px" @click="toggleIsUploadAvatar" class="my-avatar">
+          <img :src="avatarURL" alt="用户头像">
+        </q-avatar>
+        <div class="my-element text-center text-h6 text-weight-medium text-white">更 换 头 像</div>
+      </div>
+      <div class="q-pt-xl" style="margin-left: auto;margin-right: auto">
+        <span class="text-weight-bold text-h4">{{ name }}</span>
       </div>
       <div class="q-py-sm" style="margin-left: auto;margin-right: auto">
-        <span class="text-grey text-h5">学号--{{ id }}</span>
+        <span class="text-grey text-h5">{{ id }}</span>
       </div>
       <q-card class="info q-pa-md">
-        <div class="text-h4 row">
+        <div class="text-h4 q-pb-md">
           <span>课程信息</span>
-          <q-btn rounded icon-right="read_more" flat class="text-right text-subtitle2">查看更多</q-btn>
         </div>
-        <div class="text-h5 text-grey" style="margin: 20px">当前课程：{{courseTime}}</div>
-        <div class="text-h5 text-grey" style="margin: 20px">任课老师：{{teachers}}</div>
+        <template v-for="course of courses">
+          <course-info-item :course="course"/>
+        </template>
+        <template v-if="courses.length !== courseIds.length">
+          <div class="text-center">
+            <q-btn @click="getCourseInfo" rounded icon-right="read_more" flat class="text-blue-7 text-weight-bold text-subtitle2">展 示 更 多 课 程</q-btn>
+          </div>
+        </template>
+
       </q-card>
     </div>
 
@@ -28,7 +37,7 @@
       </q-card>
       <div class="text-h5 text-grey row q-mb-lg" style="margin-top: 20px">
         <span style="margin-right: 60%">我的上传</span>
-        <q-btn @click="isUpload=true" rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
+        <q-btn @click="toggleIsUpload" rounded color="blue" icon="upload" style="margin-right: 20px">上传视频</q-btn>
         <q-btn rounded color="blue" icon="read_more" to="/videos">更多</q-btn>
       </div>
       <div class="flex">
@@ -38,7 +47,7 @@
             :video_id="video._id"
             :uploader_name="name"
             :uploader_id="id"
-            style="width: 45%"/>
+            style="width: 48%"/>
         </template>
       </div>
     </div>
@@ -49,7 +58,7 @@
       auto-upload
       accept="mp4"
       @rejected="onRejected"
-      @finish="isUpload=false;"
+      @finish="toggleIsUpload"
       @uploaded="onSuccess"
       @failed="onFail"
       :form-fields="[{name: 'id', value: this.userId}]"
@@ -57,24 +66,37 @@
       :url="getUrl"
     />
   </q-dialog>
+    <my-upload field="img"
+               @crop-success="cropSuccess"
+               @crop-upload-success="cropUploadSuccess"
+               @crop-upload-fail="cropUploadFail"
+               v-model="isUploadAvatar"
+               :width="300"
+               :height="300"
+               :url="`http://localhost:3000/api/user/${userId}/avatar/upload`"
+               :params="params"
+               :headers="headers"
+               img-format="png">
+
+    </my-upload>
 </template>
 
 <script>
 import {defineAsyncComponent} from 'vue';
 import { useQuasar } from 'quasar';
+import myUpload from 'vue-image-crop-upload/upload-3'
 const lineChart = defineAsyncComponent(() => import("../components/LineChart"));
 const videoItem = defineAsyncComponent(() => import("components/VideoItem"));
-
-const dayMap = ['零', '一', '二', '三', '四', '五', '六', '日']
-const numberMap = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
-const semMap = ['', '秋季学期', '春季学期']
+const courseInfoItem = defineAsyncComponent(() => import("../components/courseInfoItem"))
 
 const $q = useQuasar()
 export default {
   name: "PersonalUpload",
   components: {
     lineChart,
-    videoItem
+    videoItem,
+    courseInfoItem,
+    myUpload
   },
   data() {
     return  {
@@ -84,41 +106,44 @@ export default {
       name: 'cynic',
       college: 23,
       isUpload: false,
-      course: {
-        year: 2022,
-        semester: 1,
-        day: 3,
-        classNo: 4,
-        teachers: [{
-          _id: "62020090fc4badc851a96a99",
-          name: "梁秀英"
-        }
-        ]
-      },
+      courseIds: [],
+      courses: [],
       email: 'ca1312@163.com',
       userId: this.$route.params.id,
-      videos: []
+      videos: [],
+      isUploadAvatar: false,
+      params: {
+        token: '123456798',
+        name: 'avatar'
+      },
+      headers: {
+        smail: '*_~'
+      },
+      imgDataUrl: '',
+      hasAvatar: false
     }
   },
   methods : {
     getUserInfo() {
-      let courseId;
       this.$api.get('api/user/'+this.userId)
       .then(res => {
-        console.log(res)
-
         this.name = res.data.name;
-        this.email = res.data.mail;
         this.id = res.data.id;
+        this.hasAvatar = !!res.data.avatar;
         this.college = res.data.college;
         this.videos = res.data.videos;
-        courseId = res.data.courses[res.data.courses.length-1]
-        this.$api.get('api/courses/'+courseId)
-        .then(res => {
-          this.course = res.data;
-          console.log(this.course)
-        })
+        this.courseIds = res.data.courses;
+        console.log(this.hasAvatar)
+        this.getCourseInfo()
       })
+    },
+    getCourseInfo() {
+      const courseId = this.courseIds[this.courses.length]
+      this.$api.get('api/courses/'+courseId)
+        .then(res => {
+          this.courses.push(res.data)
+          // console.log(this.course)
+        })
     },
     getUrl() {
       return "http://localhost:3000/api/videos/upload";
@@ -136,6 +161,7 @@ export default {
         message: "成功上传视频",
         position: 'center'
       })
+      this.getUserInfo()
     },
     onFail() {
       this.isUpload = false;
@@ -144,22 +170,49 @@ export default {
         message: "文件上传失败",
         position: 'center'
       })
-    }
+    },
+    cropSuccess(imgDataUrl){
+      console.log('-------- crop success --------');
+      this.imgDataUrl = imgDataUrl;
+    },
+    /**
+     * upload success
+     *
+     * [param] jsonData   服务器返回数据，已进行json转码
+     * [param] field
+     */
+    cropUploadSuccess(jsonData, field){
+      console.log('-------- upload success --------');
+      console.log(jsonData);
+      console.log('field: ' + field);
+    },
+    /**
+     * upload fail
+     *
+     * [param] status    server api return error status, like 500
+     * [param] field
+     */
+    cropUploadFail(status, field){
+      console.log('-------- upload fail --------');
+      console.log(status);
+      console.log('field: ' + field);
+    },
+    toggleIsUpload() {
+      this.isUpload = !this.isUpload
+    },
+    toggleIsUploadAvatar() {
+      this.isUploadAvatar = !this.isUploadAvatar
+    },
   },
   computed: {
-    courseTime() {
-      return this.course.year + '年 ' + semMap[this.course.semester] + ' 周' + dayMap[this.course.day] + '第' + numberMap[this.course.classNo] + '节';
-    },
-    teachers() {
-      return this.course.teachers.reduce((sum, current) => sum + current.name, "")
+    avatarURL() {
+      return this.hasAvatar ? "http://localhost:3000/api/user/" + this.userId + "/avatar"
+        : "https://cdn.quasar.dev/img/boy-avatar.png"
     }
   },
   created() {
     this.getUserInfo()
-
   }
-
-
 }
 </script>
 
@@ -177,7 +230,29 @@ export default {
   width: 75%;
   margin-top: 30px;
 }
-/*.width-80-center {*/
-/*  width: 80%; margin-left: auto; margin-right: auto;*/
-/*}*/
+.my-element {
+  display: none;
+  width: 160px;
+  height: 2em;
+  border-radius: 10px;
+  background-color: black;
+  position: absolute;
+  margin-left: 60px;
+}
+.my-element::before {
+  position: absolute;
+  top: -20px;
+  left: 70px;
+  content: '';
+  width: 0;
+  height: 0;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid black;
+  border-left: 10px solid transparent;
+  border-top: 10px solid transparent;
+}
+.my-father:hover .my-element {
+  display: block;
+}
+
 </style>
