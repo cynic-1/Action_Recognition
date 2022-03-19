@@ -193,7 +193,7 @@ def deepcopy(obj):
 
 
 if __name__ == "__main__":
-    volley_position = get_volleyCenter("../volleyball_detect.json")
+    volley_position = get_volleyCenter("../../volleyball_detect.json")
     _volley_position = deepcopy(volley_position)
     size = len(volley_position)
     speed = predict_speed_x(_volley_position)
@@ -224,10 +224,10 @@ if __name__ == "__main__":
 
     # 265-276是变形最厉害的一段范围
     # 将x坐标预测值绘制到图像上
-    output_path = "predict_ball/"
+    output_path = "../predict_ball/"
     if not os.path.exists(output_path):
         os.mkdir(output_path)
-    input_path = "../pose_images/"
+    input_path = "../../pose_images/"
     total_num = len(os.listdir(input_path))
     # for i in range(1, total_num+1):
     #     img = cv2.imread(input_path + f"{i}.jpg")
