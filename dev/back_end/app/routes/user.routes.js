@@ -15,6 +15,10 @@ export default app => {
     router.put("/:id", user.updateById);
     // Delete a User with id
     router.delete("/:id", user.deleteById);
+    router.post("/:id/avatar/upload", user.imageUpload.single('img'), user.store, (req, res) => {
+        res.status(400).send({ error: "Error!!!" })
+    });
+    router.get("/:id/avatar", user.getImage)
 
     app.use('/api/user', router);
 };

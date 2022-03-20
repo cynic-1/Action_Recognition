@@ -8,19 +8,20 @@
   </q-dialog>
   <div class="row" style="width: 95%;margin:20px auto 20px auto">
     <div class="q-pa-md" style="width: 40%">
-      <div style="width: 90%;margin-bottom: 20px">
+      <div style="margin-bottom: 20px">
         <q-carousel
           swipeable
           animated
           arrows
           v-model="slide"
           :fullscreen.sync="fullscreen"
-          autoplay
           infinite
+          style="height: 300px; width: 533px;"
+          class="no-padding"
         >
           <template v-for="(keyPoint,index) of keyPoints">
-            <q-carousel-slide :name="index+1">
-              <q-img :ratio="16/9" :src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
+            <q-carousel-slide :name="index+1" class="no-padding">
+              <q-img :ratio="16/9" style="height: 300px" :src="`http://localhost:3000/api/keyPoints/${keyPoint._id}/image`"/>
             </q-carousel-slide>
           </template>
 
@@ -38,7 +39,7 @@
           </template>
         </q-carousel>
       </div>
-      <video class="q-pl-md" controls height="300" :src="'http://localhost:3000/api/videos/'+videoId" type="video/mp4"></video>
+      <video controls width="533" height="300" :src="'http://localhost:3000/api/videos/'+videoId" type="video/mp4"></video>
     </div>
 
     <div class="q-pa-md" style="width: 60%">
@@ -94,18 +95,18 @@
             </q-card-section>
 
             <q-card-section>
-              <div class="text-h4 q-pa-sm">下肢动作</div>
+              <div class="text-h4 q-pa-sm"><q-icon name="directions_walk" size="xl" class="q-pa-sm"/>下肢动作</div>
               <q-separator dark inset />
               <div class="text-h6 row text-center">
                 <div class="col">
-                  小腿与地面角度<br>
+                  小腿与大腿角度<br>
                   {{currentKeyPoint.lower.angleCalfThigh || "-"}} / 90<br>
                   <span class="text-warning">角度太小</span>
                 </div>
 
                 <q-separator dark inset vertical/>
                 <div class="col">
-                  大小腿弯曲角度<br>
+                  大腿与躯干角度<br>
                   {{currentKeyPoint.lower.angleThighTrunk || "-"}} / 180<br>
                   <span class="text-warning">正常</span>
                 </div>
@@ -136,17 +137,10 @@
                 </div>
               </div>
             </q-card-section>
-          </q-card>
-        </q-tab-panel>
-        <q-tab-panel name="summary">
-          <q-card
-            class="my-card text-white"
-            style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"
-          >
+
             <q-card-section>
-              <div class="text-h4 q-pa-sm"><q-icon name="fas fa-volleyball-ball" class="q-pa-sm"/>
+              <div class="text-h4 q-pa-sm"><q-icon name="star_rate" size="xl" class="q-pa-sm"/>
                 动作评估
-                <q-btn label="发布评价" color="blue" @click="commentShow = true" align="right" rounded size="lg" style="margin-left: 400px"/>
               </div>
               <q-separator dark inset />
               <div class="row q-pa-md">
@@ -165,14 +159,48 @@
             </q-card-section>
           </q-card>
         </q-tab-panel>
+        <q-tab-panel name="summary">
+          <q-card
+            class="my-card text-white"
+            style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"
+          >
+            <q-card-section>
+              <div class="text-h4 q-pa-sm"><q-icon name="star_rate" size="xl" class="q-pa-sm"/>
+                动作评估
+                <q-btn label="发布评价" color="blue" @click="commentShow = true" align="right" rounded size="lg" style="margin-left: 400px"/>
+              </div>
+              <q-separator dark inset />
+              <div class="row q-pa-md">
+                <div class="text-h6 col text-center">
+                  动作质量评估<br>{{currentKeyPoint.rate}}
+                </div>
+                <q-separator dark inset vertical/>
+                <div class="text-h6 col text-center">
+                  动作协调性<br>{{currentKeyPoint.coordination}}
+                </div>
+                <q-separator dark inset vertical/>
+                <div class="text-h6 col text-center">
+                  动作准确性<br>{{currentKeyPoint.accuracy}}
+                </div>
+              </div>
+            </q-card-section>
+            <q-card-section>
+              <polar-bar-chart v-if="flag"/>
+            </q-card-section>
+          </q-card>
+        </q-tab-panel>
       </q-tab-panels>
     </div>
   </div>
 </template>
 
 <script>
+import polarBarChart from "components/polarBarChart";
 export default {
   name: "Analysis",
+  components: {
+    polarBarChart
+  },
   data() {
     return {
       keyPoints: [{
@@ -205,7 +233,9 @@ export default {
       commentShow: false,
       comment:'',
       rate: 0,
-      tab: 'evaluate'
+      tab: 'evaluate',
+      angles: [158.2 , 81.5, 127.8, 135.7, 102.85],
+      flag: true,
     }
   },
   methods: {
