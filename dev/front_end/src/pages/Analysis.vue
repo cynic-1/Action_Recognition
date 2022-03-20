@@ -172,7 +172,7 @@
 
 <script>
 export default {
-name: "Analysis",
+  name: "Analysis",
   data() {
     return {
       keyPoints: [{

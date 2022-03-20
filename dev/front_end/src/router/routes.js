@@ -21,6 +21,10 @@ const routes = [
     "path": "/register",
     "component": () => import("pages/Register")
   },
+  {
+    "path": "/3d",
+    "component": () => import("pages/WebGL")
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
