@@ -44,6 +44,9 @@ def fill_curve(left, mid, right, volley_position, vpc, is_exist, is_start, is_en
             volley_position[i-1].append(value)
 
 
+# volley_position: 填充好的数据
+# _volley_position: 原始的数据
+# extrema: 极值点
 def annotate_image(input_path, output_path,  # fixed parameters
                    volley_position, _volley_position, extrema):  # 待变参数
     # 将x坐标预测值绘制到图像上
@@ -58,7 +61,8 @@ def annotate_image(input_path, output_path,  # fixed parameters
             color = (0, 0, 100)
         else:
             color = (0, 0, 255)
-        cv2.circle(img, (int(volley_position[i-1][0]), 40), 10, color, -1)
+        if len(volley_position[i-1]) >= 2:
+            cv2.circle(img, (int(volley_position[i-1][0]), int(volley_position[i-1][1])), 10, color, -1)
         # img = img.copy()
         if (i-1) in extrema:
             cv2.putText(img, "catch ball", (20, 20),
@@ -141,11 +145,26 @@ def turning_point_predict(volley_position):
 # 返回的extrema：从0开始
 def get_new_turning_point(vp):
     extrema = []
+    const_range = 10
     for i in range(1, len(vp) - 1):
         if vp[i][0] > vp[i - 1][0] and vp[i][0] > vp[i + 1][0]:
-            extrema.append(i)
+            is_local_max = True
+            for j in range(max(0, i-const_range), min(len(vp), i+const_range)):
+                if vp[j][0] > vp[i][0]:
+                    is_local_max = False
+
+            if is_local_max:
+                extrema.append(i)
+
         elif vp[i][0] < vp[i - 1][0] and vp[i][0] < vp[i + 1][0]:
-            extrema.append(i)
+            is_local_min = True
+            for j in range(max(0, i - const_range), min(len(vp), i + const_range)):
+                if vp[j][0] < vp[i][0]:
+                    is_local_min = False
+
+            if is_local_min:
+                extrema.append(i)
+
     return extrema
 
 

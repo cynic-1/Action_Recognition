@@ -70,7 +70,7 @@ def volley_position_to_plot(volley_position, axis=0):
     imageID = []
     positions = []
     for i in range(len(volley_position)):
-        if len(volley_position[i]) != 0:
+        if len(volley_position[i]) >= (axis+1):
             imageID.append(i+1)
             positions.append(volley_position[i][axis])
     return imageID, positions

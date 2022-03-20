@@ -2,18 +2,23 @@ import matplotlib.pyplot as plt
 from ball_prediction_common import *
 import ball_predict_x
 
-annotate_ball_data = True
+annotate_ball_data = False
 
 
 def main():
     volley_position = get_volleyCenter("../volleyball_detect.json")
     _volley_position = deepcopy(volley_position)
-    extrema = ball_predict_x.predict_xAxis(volley_position)
+    extrema, _ = ball_predict_x.predict_xAxis(volley_position)
 
     # 利用matplotlib作图
     fig = plt.figure(num=1)
     x, y = volley_position_to_plot(volley_position)
-    plt.scatter(x, y)
+    color = ["blue"] * len(x)
+    x.extend(extrema)
+    y.extend([700] * len(extrema))
+    color.extend(["red" for i in extrema])
+    plt.scatter(x, y, color=color)
+
     plt.show()
 
     # 265-276是变形最厉害的一段范围,应该重点检测
