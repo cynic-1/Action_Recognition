@@ -228,31 +228,31 @@ export default {
     gui.add(bones[11].rotation, 'z', bones[11].rotation.z,  bones[11].rotation.z + Math.PI/4*3);
     gui.add(bones[12].rotation, 'z', bones[12].rotation.z,  bones[12].rotation.z + Math.PI/4*3);
 
-    gui.__controllers[0].name("重置身体");
-    gui.__controllers[1].name("身体-旋转");
-    gui.__controllers[2].name("身体-前趴");
-    gui.__controllers[3].name("身体-下移");
+    gui.controllers[0].name("重置身体");
+    gui.controllers[1].name("身体-旋转");
+    gui.controllers[2].name("身体-前趴");
+    gui.controllers[3].name("身体-下移");
 
-    gui.__controllers[4].name("头-左右转");
-    gui.__controllers[5].name("头-上下转");
+    gui.controllers[4].name("头-左右转");
+    gui.controllers[5].name("头-上下转");
 
-    gui.__controllers[6].name("腰-扭动");
+    gui.controllers[6].name("腰-扭动");
 
-    gui.__controllers[7].name("左大腿");
-    gui.__controllers[8].name("右大腿");
-    gui.__controllers[9].name("左小腿");
-    gui.__controllers[10].name("右小腿");
+    gui.controllers[7].name("左大腿");
+    gui.controllers[8].name("右大腿");
+    gui.controllers[9].name("左小腿");
+    gui.controllers[10].name("右小腿");
 
-    gui.__controllers[11].name("左大臂-侧平举");
-    gui.__controllers[12].name("左大臂-内旋");
-    gui.__controllers[13].name("左大臂-前平举");
+    gui.controllers[11].name("左大臂-侧平举");
+    gui.controllers[12].name("左大臂-内旋");
+    gui.controllers[13].name("左大臂-前平举");
 
-    gui.__controllers[14].name("右大臂-侧平举");
-    gui.__controllers[15].name("右大臂-内旋");
-    gui.__controllers[16].name("右大臂-前平举");
+    gui.controllers[14].name("右大臂-侧平举");
+    gui.controllers[15].name("右大臂-内旋");
+    gui.controllers[16].name("右大臂-前平举");
 
-    gui.__controllers[17].name("左小臂");
-    gui.__controllers[18].name("右小臂");
+    gui.controllers[17].name("左小臂");
+    gui.controllers[18].name("右小臂");
 
 
   },
