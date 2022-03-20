@@ -29,6 +29,7 @@ def getLineFunc(vpc, start, end):
 # 参数fill_range: 规定补全的位置区域，默认为10，越大，转折点处的拟合效果越好
 # 建议不要超过30
 def fill_curve(left, mid, right, volley_position, vpc, is_exist, is_start, is_end, fill_range=default_fill_range):
+    # 适当与具体的left, mid, right有一些偏移，避免接触到坏点或者越界
     f_left = getLineFunc(vpc, left+2, mid-2)
     f_right = getLineFunc(vpc, mid+2, right-2)
     shape = "^" if (vpc[left+1][0] - vpc[left][0] > 0) else "V"
@@ -134,7 +135,10 @@ def turning_point_predict(volley_position):
         fill_curve(left, mid, right, volley_position, vpc, is_exist,
                    is_start=(i == 0), is_end=(i == len(extrema) - 2))
 
+    return extrema
 
+
+# 返回的extrema：从0开始
 def get_new_turning_point(vp):
     extrema = []
     for i in range(1, len(vp) - 1):
@@ -145,12 +149,13 @@ def get_new_turning_point(vp):
     return extrema
 
 
+# 在volley_position基础上进行增添，补全未检测到帧的x坐标
 def predict_xAxis(volley_position):
     _volley_position = deepcopy(volley_position)
 
     # 传统的紧邻速度直接推算法预测
     predict_speed_x(_volley_position)
-    turning_point_predict(volley_position)
+    _extrema = turning_point_predict(volley_position)
 
     # 经过这一步，所有位置都被补全
     if repair_use_conventional_data:
@@ -159,4 +164,4 @@ def predict_xAxis(volley_position):
             if len(pos) == 0:
                 pos.append(_volley_position[i][0])
 
-    return get_new_turning_point(volley_position)
+    return get_new_turning_point(volley_position), _extrema
