@@ -130,7 +130,7 @@ class VideoProcessor:
                     box = list(map(lambda x: float(x), box))
                     boxes_new.append(box)
                 lst.append(boxes_new)
-                print(f"[image {i + 1}] completed.")
+                print(f"[image {i + 1}, total {self.total_num}] completed.")
             str = json.dumps(lst)
             with open(self.volley_position_path, "w") as f:
                 f.write(str)
@@ -198,7 +198,7 @@ def calc_distance(image_path, json_path, num, volley_position, distance1, distan
 if __name__ == "__main__":
     # 在pose_images文件夹生成视频的全切片
     save_path = "pose_images"
-    mp4_path = "video/错误对垫姿势3.mp4"
+    mp4_path = "video/错误对垫姿势1.mp4"
     json_path = "pose_images_json"
     result_path = "pose_results"
     keyImage_path = "pose_keyimages"
