@@ -3,6 +3,7 @@ import argparse
 import os
 import time
 import math
+from tqdm import tqdm
 
 
 def parse_args():
@@ -39,7 +40,7 @@ def process_video(input_video, output_path, num):
     print(f"视频共有{num_frames}帧，每隔{num}帧截取一次图像。")
     frame_cnt = 0
     image_cnt = 0
-    while True:
+    for _ in tqdm(range(int(num_frames))):
         # 读取帧
         ret, frame = cap.read()
         frame_cnt += 1
@@ -50,7 +51,7 @@ def process_video(input_video, output_path, num):
             image_cnt += 1
             path = os.path.join(output_path, f"{image_cnt}.jpg")
             success = cv2.imwrite(path, frame)  # 文件路径还不能出现中文！！！
-            print(path, "success" if success else "failure")
+            # print(path, "success" if success else "failure")
 
 
 if __name__ == "__main__":

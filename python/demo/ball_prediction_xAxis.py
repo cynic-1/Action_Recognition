@@ -18,12 +18,14 @@ def main():
     y.extend([700] * len(extrema))
     color.extend(["red" for i in extrema])
     plt.scatter(x, y, color=color)
-
+    # x = x0 + v*t
+    # y = y0 + v0*t + 1/2 * a * t^2
+    # vy = v0 + a * t
     plt.show()
 
     # 265-276是变形最厉害的一段范围,应该重点检测
-    if annotate_ball_data:
-        ball_predict_x.annotate_image("../pose_images/", "predict_ball/", volley_position, _volley_position, extrema)
+    # if annotate_ball_data:
+    #     ball_predict_x.annotate_image("../pose_images/", "predict_ball/", volley_position, _volley_position, extrema)
 
     # 将速度信息输出到csv文件
     # produceCSVTable("speed.csv", [(i+1) for i in range(total_num)], speed[:, 0],
