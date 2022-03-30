@@ -21,7 +21,10 @@ export default {
       let option = {
         color: ['#67F9D8', '#FFE434', '#56A3F1', '#FF917C'],
         title: {
-          text: '能力评价'
+          text: '能力评价',
+          textStyle: {
+            color: '#FFFFFF'
+          }
         },
         legend: {},
         radar: [

@@ -31,9 +31,13 @@ export default {
       let option = {
         title: [
           {
-            text: '视频中各类夹角的均值'
+            text: '夹角均值',
+            textStyle: {
+              color: '#FFFFFF'
+            }
           }
         ],
+        color: ['#67F9D8', '#FFE434', '#56A3F1', '#FF917C'],
         polar: {
           radius: [30, '80%'],
           tooltip: {
