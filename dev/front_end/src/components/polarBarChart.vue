@@ -41,6 +41,9 @@ export default {
             borderColor: 'rgba(211, 253, 250, 0.8)'
           }
         },
+        textStyle: {
+          color: '#FFFFFF'
+        },
         angleAxis: {
           max: 360,
           startAngle: 105
