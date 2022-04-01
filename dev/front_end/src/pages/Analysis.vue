@@ -197,12 +197,12 @@
 
 <script>
 import polarBarChart from "components/polarBarChart";
-import radarChart from "components/RadarChart";
+// import radarChart from "components/RadarChart";
 export default {
   name: "Analysis",
   components: {
     polarBarChart,
-    radarChart,
+    // radarChart,
   },
   data() {
     return {

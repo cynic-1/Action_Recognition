@@ -1,1 +1,338 @@
-[{"imgLoc": "65.jpg", "data": {"upper": {"hitPosition": "前臂-27%", "hitAngle": 15.5, "angleForearmArm": 148.1, "angleArmTrunk": 84.7}, "lower": {"angleCalfThigh": 170.0, "angleThighTrunk": 155.6, "jumpHeight": 0}, "ball": {"lastHeight": 140.36, "initialAngle": 115.94, "initialVelocity": 5.67}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "149.jpg", "data": {"upper": {"hitPosition": "前臂--44%", "hitAngle": 26.7, "angleForearmArm": 143.5, "angleArmTrunk": 99.1}, "lower": {"angleCalfThigh": 154.6, "angleThighTrunk": 146.9, "jumpHeight": 0}, "ball": {"lastHeight": 157.77, "initialAngle": 47.86, "initialVelocity": 97.94}, "coordination": 90, "accuracy": 100.0, "rate": 85}}, {"imgLoc": "150.jpg", "data": {"upper": {"hitPosition": "前臂--27%", "hitAngle": 8.4, "angleForearmArm": 132.3, "angleArmTrunk": 94.5}, "lower": {"angleCalfThigh": 162.9, "angleThighTrunk": 152.1, "jumpHeight": 0}, "ball": {"lastHeight": 146.87, "initialAngle": 132.03, "initialVelocity": 0.62}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "234.jpg", "data": {"upper": {"hitPosition": "前臂--37%", "hitAngle": 4.7, "angleForearmArm": 39.0, "angleArmTrunk": 88.7}, "lower": {"angleCalfThigh": 173.6, "angleThighTrunk": 171.5, "jumpHeight": 0}, "ball": {"lastHeight": 134.93, "initialAngle": 56.6, "initialVelocity": 79.62}, "coordination": 90, "accuracy": 83.3, "rate": 85}}, {"imgLoc": "235.jpg", "data": {"upper": {"hitPosition": "前臂--41%", "hitAngle": 9.4, "angleForearmArm": 58.4, "angleArmTrunk": 83.1}, "lower": {"angleCalfThigh": 176.5, "angleThighTrunk": 174.4, "jumpHeight": 0}, "ball": {"lastHeight": 129.36, "initialAngle": 75.82, "initialVelocity": 3.52}, "coordination": 90, "accuracy": 83.3, "rate": 85}}, {"imgLoc": "236.jpg", "data": {"upper": {"hitPosition": "前臂--93%", "hitAngle": 16.9, "angleForearmArm": 60.9, "angleArmTrunk": 120.9}, "lower": {"angleCalfThigh": 172.6, "angleThighTrunk": 174.3, "jumpHeight": 0}, "ball": {"lastHeight": 170.94, "initialAngle": 73.6, "initialVelocity": 7.66}, "coordination": 90, "accuracy": 75.0, "rate": 85}}, {"imgLoc": "327.jpg", "data": {"upper": {"hitPosition": "前臂--47%", "hitAngle": 5.5, "angleForearmArm": 135.4, "angleArmTrunk": 75.5}, "lower": {"angleCalfThigh": 176.7, "angleThighTrunk": 156.6, "jumpHeight": 0}, "ball": {"lastHeight": 128.96, "initialAngle": 102.12, "initialVelocity": 7.49}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "328.jpg", "data": {"upper": {"hitPosition": "前臂--55%", "hitAngle": 4.4, "angleForearmArm": 114.1, "angleArmTrunk": 89.1}, "lower": {"angleCalfThigh": 175.9, "angleThighTrunk": 158.4, "jumpHeight": 0}, "ball": {"lastHeight": 122.74, "initialAngle": 69.67, "initialVelocity": 1.83}, "coordination": 90, "accuracy": 83.3, "rate": 85}}, {"imgLoc": "390.jpg", "data": {"upper": {"hitPosition": "前臂-8%", "hitAngle": 31.8, "angleForearmArm": 171.7, "angleArmTrunk": 36.0}, "lower": {"angleCalfThigh": 173.0, "angleThighTrunk": 167.0, "jumpHeight": 0}, "ball": {"lastHeight": 323.91, "initialAngle": 132.47, "initialVelocity": 88.6}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "391.jpg", "data": {"upper": {"hitPosition": "前臂-21%", "hitAngle": 33.9, "angleForearmArm": 165.2, "angleArmTrunk": 36.0}, "lower": {"angleCalfThigh": 176.6, "angleThighTrunk": 163.7, "jumpHeight": 0}, "ball": {"lastHeight": 367.41, "initialAngle": 1.79, "initialVelocity": 0.12}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "407.jpg", "data": {"upper": {"hitPosition": "前臂-4%", "hitAngle": 11.4, "angleForearmArm": 153.7, "angleArmTrunk": 83.9}, "lower": {"angleCalfThigh": 179.2, "angleThighTrunk": 165.2, "jumpHeight": 0}, "ball": {"lastHeight": 134.54, "initialAngle": 107.05, "initialVelocity": 5.98}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "408.jpg", "data": {"upper": {"hitPosition": "前臂--6%", "hitAngle": 6.0, "angleForearmArm": 156.8, "angleArmTrunk": 96.6}, "lower": {"angleCalfThigh": 179.6, "angleThighTrunk": 170.3, "jumpHeight": 0}, "ball": {"lastHeight": 148.9, "initialAngle": 65.84, "initialVelocity": 2.33}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "409.jpg", "data": {"upper": {"hitPosition": "前臂--58%", "hitAngle": 5.5, "angleForearmArm": 162.0, "angleArmTrunk": 93.2}, "lower": {"angleCalfThigh": 176.9, "angleThighTrunk": 173.8, "jumpHeight": 0}, "ball": {"lastHeight": 174.98, "initialAngle": 70.69, "initialVelocity": 7.03}, "coordination": 90, "accuracy": 91.7, "rate": 85}}, {"imgLoc": "410.jpg", "data": {"upper": {"hitPosition": "前臂--234%", "hitAngle": 23.3, "angleForearmArm": 121.1, "angleArmTrunk": 110.3}, "lower": {"angleCalfThigh": 176.7, "angleThighTrunk": 174.0, "jumpHeight": 0}, "ball": {"lastHeight": 198.1, "initialAngle": 67.06, "initialVelocity": 5.9}, "coordination": 90, "accuracy": 83.3, "rate": 85}}]
+[
+  {
+    "imgLoc": "56.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-90%",
+        "hitAngle": 32.0,
+        "angleForearmArm": null,
+        "angleArmTrunk": -1
+      },
+      "lower": {
+        "angleCalfThigh": 105.9,
+        "angleThighTrunk": 133.1,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 144.88,
+        "initialAngle": 44.66,
+        "initialVelocity": 126.15
+      },
+      "coordination": 90,
+      "accuracy": 100.0,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "140.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-31%",
+        "hitAngle": 25.3,
+        "angleForearmArm": 159.3,
+        "angleArmTrunk": 86.2
+      },
+      "lower": {
+        "angleCalfThigh": 130.3,
+        "angleThighTrunk": 125.9,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 125.64,
+        "initialAngle": 48.88,
+        "initialVelocity": 121.55
+      },
+      "coordination": 90,
+      "accuracy": 100.0,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "224.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-29%",
+        "hitAngle": 21.0,
+        "angleForearmArm": 158.2,
+        "angleArmTrunk": 81.5
+      },
+      "lower": {
+        "angleCalfThigh": 127.8,
+        "angleThighTrunk": 135.7,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 149.22,
+        "initialAngle": 102.85,
+        "initialVelocity": 1.82
+      },
+      "coordination": 90,
+      "accuracy": 100.0,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "309.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-29%",
+        "hitAngle": 25.1,
+        "angleForearmArm": 167.0,
+        "angleArmTrunk": 95.0
+      },
+      "lower": {
+        "angleCalfThigh": 103.7,
+        "angleThighTrunk": 116.8,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 122.65,
+        "initialAngle": 109.75,
+        "initialVelocity": 6.84
+      },
+      "coordination": 90,
+      "accuracy": 100.0,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "310.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-21%",
+        "hitAngle": 16.9,
+        "angleForearmArm": 147.4,
+        "angleArmTrunk": 104.9
+      },
+      "lower": {
+        "angleCalfThigh": 109.9,
+        "angleThighTrunk": 122.3,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 114.3,
+        "initialAngle": 107.72,
+        "initialVelocity": 2.43
+      },
+      "coordination": 90,
+      "accuracy": 91.7,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "311.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂--5%",
+        "hitAngle": 5.6,
+        "angleForearmArm": 148.7,
+        "angleArmTrunk": 100.2
+      },
+      "lower": {
+        "angleCalfThigh": 114.9,
+        "angleThighTrunk": 127.1,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 136.68,
+        "initialAngle": 65.98,
+        "initialVelocity": 7.43
+      },
+      "coordination": 90,
+      "accuracy": 91.7,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "393.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-24%",
+        "hitAngle": 15.9,
+        "angleForearmArm": 174.1,
+        "angleArmTrunk": 98.5
+      },
+      "lower": {
+        "angleCalfThigh": 125.1,
+        "angleThighTrunk": 122.3,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 145.4,
+        "initialAngle": 44.81,
+        "initialVelocity": 122.08
+      },
+      "coordination": 90,
+      "accuracy": 100.0,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "478.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-21%",
+        "hitAngle": 20.8,
+        "angleForearmArm": 160.9,
+        "angleArmTrunk": 94.2
+      },
+      "lower": {
+        "angleCalfThigh": 122.8,
+        "angleThighTrunk": 109.3,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 114.59,
+        "initialAngle": 105.7,
+        "initialVelocity": 7.13
+      },
+      "coordination": 90,
+      "accuracy": 100.0,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "479.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂-9%",
+        "hitAngle": 17.5,
+        "angleForearmArm": 152.9,
+        "angleArmTrunk": 104.7
+      },
+      "lower": {
+        "angleCalfThigh": 123.6,
+        "angleThighTrunk": 110.3,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 126.07,
+        "initialAngle": 46.46,
+        "initialVelocity": 0.6
+      },
+      "coordination": 90,
+      "accuracy": 91.7,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "480.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂--17%",
+        "hitAngle": 2.9,
+        "angleForearmArm": 157.8,
+        "angleArmTrunk": 104.6
+      },
+      "lower": {
+        "angleCalfThigh": 129.6,
+        "angleThighTrunk": 117.8,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 129.48,
+        "initialAngle": 70.39,
+        "initialVelocity": 7.78
+      },
+      "coordination": 90,
+      "accuracy": 91.7,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "568.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂--34%",
+        "hitAngle": 8.7,
+        "angleForearmArm": 107.1,
+        "angleArmTrunk": 56.6
+      },
+      "lower": {
+        "angleCalfThigh": 165.0,
+        "angleThighTrunk": 157.8,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 149.42,
+        "initialAngle": 52.1,
+        "initialVelocity": 116.48
+      },
+      "coordination": 90,
+      "accuracy": 83.3,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "570.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂--44%",
+        "hitAngle": 8.1,
+        "angleForearmArm": 123.2,
+        "angleArmTrunk": 51.0
+      },
+      "lower": {
+        "angleCalfThigh": 164.5,
+        "angleThighTrunk": 159.2,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 125.23,
+        "initialAngle": 52.91,
+        "initialVelocity": 118.77
+      },
+      "coordination": 90,
+      "accuracy": 91.7,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "571.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂--39%",
+        "hitAngle": 18.4,
+        "angleForearmArm": 134.6,
+        "angleArmTrunk": 51.2
+      },
+      "lower": {
+        "angleCalfThigh": 164.4,
+        "angleThighTrunk": 160.8,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 142.69,
+        "initialAngle": 92.7,
+        "initialVelocity": 1.06
+      },
+      "coordination": 90,
+      "accuracy": 91.7,
+      "rate": 85
+    }
+  },
+  {
+    "imgLoc": "572.jpg",
+    "data": {
+      "upper": {
+        "hitPosition": "前臂--29%",
+        "hitAngle": 23.7,
+        "angleForearmArm": 129.6,
+        "angleArmTrunk": 48.5
+      },
+      "lower": {
+        "angleCalfThigh": 166.1,
+        "angleThighTrunk": 162.6,
+        "jumpHeight": 0
+      },
+      "ball": {
+        "lastHeight": 108.68,
+        "initialAngle": 106.71,
+        "initialVelocity": 1.09
+      },
+      "coordination": 90,
+      "accuracy": 91.7,
+      "rate": 85
+    }
+  }
+]

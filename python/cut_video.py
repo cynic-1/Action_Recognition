@@ -1,8 +1,6 @@
 import cv2
 import argparse
 import os
-import time
-import math
 from tqdm import tqdm
 
 
