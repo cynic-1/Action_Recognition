@@ -6,9 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
 
-# 待拟合的数据
-X = np.array([1, 2, 3, 4, 5, 6])
-Y = np.array([9.1, 18.3, 32, 47, 69.5, 94.8])
+# # 待拟合的数据
+# X = np.array([1, 2, 3, 4, 5, 6])
+# Y = np.array([9.1, 18.3, 32, 47, 69.5, 94.8])
 
 
 # 二次函数的标准形式
@@ -23,11 +23,16 @@ def error(params, x, y):
 
 
 # 对参数求解
-def slovePara():
+def slovePara(X, Y):
     p0 = [10, 10, 10]
     Para = leastsq(error, p0, args=(X, Y))
     return Para
 
+
+# 返回a, b, c
+def getRegression(X, Y):
+    Para = slovePara(X, Y)
+    return Para[0]
 
 # 输出最后的结果
 def solution():
