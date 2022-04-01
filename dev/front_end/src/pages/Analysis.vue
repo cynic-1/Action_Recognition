@@ -185,8 +185,10 @@
               </div>
             </q-card-section>
             <q-card-section>
-              <polar-bar-chart v-if="flag"/>
-              <radar-chart/>
+              <div class="row">
+                <polar-bar-chart v-if="flag"/>
+                <radar-chart class="q-pl-lg"/>
+              </div>
             </q-card-section>
           </q-card>
         </q-tab-panel>
