@@ -15,6 +15,7 @@ import keyImage
 
 import ball_flight
 from mathtools import round_safe
+import demo.ball_prediction_new
 
 
 # save_path = "pose_images"
@@ -33,14 +34,14 @@ class VideoProcessor:
         self.total_num = 0
         self.volley_position_path = volley_position_path
         self.volley_position = None
+        self.extrema = []  # 转折点列表
         self.__prepare_source()
 
     # 获取VolleyPosition
     def getVolleyPosition(self):
         if self.volley_position is None:
-            # 读取生成好的排球JSON文件
-            with open(self.volley_position_path, "r") as f:
-                self.volley_position = json.load(f)
+            # 读取经过补全的排球位置
+            self.volley_position, self.extrema = demo.ball_prediction_new.enhanced_volley_detect(self.volley_position_path)
         return self.volley_position
 
     def __prepare_source(self):
@@ -238,11 +239,11 @@ if __name__ == "__main__":
         cv2.imwrite(os.path.join(result_path, f"{i + 1}.jpg"), img)
 
     inteval = 1 / 30  # 设置间隔两帧的时间为1/30 s
-    height_all = ball_flight.height(result_path, json_path, volley_position_path)
+    height_all = ball_flight.height(result_path, volley_position, volley_position_path)
     print("[info] 已成功获取全部图像中球的高度。")
-    speed_all = ball_flight.speed(result_path, json_path, volley_position_path, inteval)
+    speed_all = ball_flight.speed(result_path, volley_position, volley_position_path, inteval)
     print("[info] 已成功获取到全部图像中球的速度。")
-    direction_all = ball_flight.direction(result_path, json_path, volley_position_path)
+    direction_all = ball_flight.direction(result_path, volley_position, volley_position_path)
     print("[info] 已成功获取到全部图像中球的方向。")
     for i in range(1, total_num + 1):
         arguments_json[i - 1]["data"]["ball"]["lastHeight"] = round_safe(height_all.get(i), 2)

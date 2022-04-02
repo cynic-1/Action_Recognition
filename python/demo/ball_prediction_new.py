@@ -1,10 +1,7 @@
-import json
-import os
-import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from ball_prediction_common import *
-import ball_predict_x
+from demo.ball_prediction_common import *
+import demo.ball_predict_x
 from demo.参考的程序 import regression
 
 
@@ -34,6 +31,7 @@ def globalRegression(_volley_position, volley_position, extrema):
                     y = a * x ** 2 + b * x + c
                     volley_position[j].append(y)
             extremaPos += 1
+
 
 def local_regress(pos, _volley_position, extrema):
     max_ele_limit = 10
@@ -99,7 +97,6 @@ def local_regress(pos, _volley_position, extrema):
         return 0, 0, 0
 
 
-
 def localRegression(_volley_position, volley_position, extrema):
     for i in range(len(_volley_position)):
         if len(_volley_position[i]) < 2:
@@ -109,11 +106,54 @@ def localRegression(_volley_position, volley_position, extrema):
             volley_position[i].append(y)
 
 
+def getAverageRadius(ball_path):
+    with open(ball_path, "r") as f:
+        _volley_position = json.load(f)
+
+    average = Average()
+    for i in range(len(_volley_position)):
+        if len(_volley_position[i]) != 0:
+            x1, y1, x2, y2 = _volley_position[i][0]
+            average.add(x2-x1)
+            average.add(y2-y1)
+    return average.getAverage() / 2
+
+
+# 模块主要函数
+# 函数功能：获取全部的排球位置信息
+# 参数：用detectron2生成的排球位置json文件文件名 一般为volleyball_detect.json
+# 返回值：元组 volley_position, extrema
+# volley_position: 补全后的排球位置数组, 下标从0开始，访问方式：volley_position[i] = [x, y]
+# extrema：转折点数组，内部下标从0开始，包含起点0和终点len(volley_position)
+def enhanced_volley_detect(json_name):
+    volley_position = get_volleyCenter(json_name)
+    _volley_position = deepcopy(volley_position)
+    # 因为x坐标很好求，求出一些参数来做辅助
+    extrema, _ = demo.ball_predict_x.predict_xAxis(volley_position)
+
+    # 这里的extrema是严格的交界点
+    extrema.insert(0, 0)
+    extrema.append(len(volley_position) - 1)
+    localRegression(_volley_position, volley_position, extrema)
+
+    with open(json_name, "r") as f:
+        # 复用_volley_position变量
+        _volley_position = json.load(f)
+
+    r = getAverageRadius(json_name)
+    for i in range(len(_volley_position)):
+        if len(_volley_position[i]) == 0:
+            x, y = volley_position[i]
+            _volley_position[i].append([x - r, y - r, x + r, y + r])
+
+    return _volley_position, extrema
+
+
 def main():
     volley_position = get_volleyCenter("../volleyball_detect.json")
     _volley_position = deepcopy(volley_position)
     # 因为x坐标很好求，求出一些参数来做辅助
-    extrema, _ = ball_predict_x.predict_xAxis(volley_position)
+    extrema, _ = demo.ball_predict_x.predict_xAxis(volley_position)
 
     # 这里的extrema是严格的交界点
     extrema.insert(0, 0)
@@ -121,10 +161,9 @@ def main():
     # globalRegression(_volley_position, volley_position, extrema)
     localRegression(_volley_position, volley_position, extrema)
 
-    # ball_predict_x.annotate_image("../pose_images/", "predict_ball/",
-    #                               volley_position, _volley_position, extrema)
-
-    # ball_predict_x.annotate_image_each("../pose_images/", "predict_ball/",
+    demo.ball_predict_x.annotate_image("../pose_images/", "predict_ball/",
+                                       volley_position, _volley_position, extrema)
+    # demo.ball_predict_x.annotate_image_each("../pose_images/", "predict_ball/",
     #                               volley_position, _volley_position, extrema)
 
     # 利用matplotlib作图
@@ -137,9 +176,12 @@ def main():
         #     color.append("red")
         # else:
         #     color.append("blue")
-    x.extend(extrema)
-    y.extend(len(extrema) * [0])
-    color.extend(len(extrema) * ["purple"])
+
+    _draw_extrema = False
+    if _draw_extrema == True:
+        x.extend(extrema)
+        y.extend(len(extrema) * [0])
+        color.extend(len(extrema) * ["purple"])
     plt.scatter(x, y, color=color)
     plt.show()
 
