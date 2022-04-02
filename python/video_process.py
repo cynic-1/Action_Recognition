@@ -42,6 +42,7 @@ class VideoProcessor:
         if self.volley_position is None:
             # 读取经过补全的排球位置
             self.volley_position, self.extrema = demo.ball_prediction_new.enhanced_volley_detect(self.volley_position_path)
+            print("排球位置补全完成！")
         return self.volley_position
 
     def __prepare_source(self):
@@ -239,11 +240,11 @@ if __name__ == "__main__":
         cv2.imwrite(os.path.join(result_path, f"{i + 1}.jpg"), img)
 
     inteval = 1 / 30  # 设置间隔两帧的时间为1/30 s
-    height_all = ball_flight.height(result_path, volley_position, volley_position_path)
+    height_all = ball_flight.height(result_path, json_path, volley_position)
     print("[info] 已成功获取全部图像中球的高度。")
-    speed_all = ball_flight.speed(result_path, volley_position, volley_position_path, inteval)
+    speed_all = ball_flight.speed(result_path, json_path, volley_position, inteval)
     print("[info] 已成功获取到全部图像中球的速度。")
-    direction_all = ball_flight.direction(result_path, volley_position, volley_position_path)
+    direction_all = ball_flight.direction(result_path, json_path, volley_position)
     print("[info] 已成功获取到全部图像中球的方向。")
     for i in range(1, total_num + 1):
         arguments_json[i - 1]["data"]["ball"]["lastHeight"] = round_safe(height_all.get(i), 2)

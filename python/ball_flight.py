@@ -47,6 +47,7 @@ def find_distance(imgpath, jsonpath, json_dict):
     for i in range(1, len(files) + 1):  # 遍历文件夹
         # 获得humanpoints
         with open(jsonpath + "/" + str(i) + "_keypoints.json", "r") as f:
+            # 复用json_dict
             json_dict = json.load(f)
         people_cnt = len(json_dict["people"])
         humanpoints = np.zeros((10, 25, 3))
