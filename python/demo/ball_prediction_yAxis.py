@@ -210,8 +210,8 @@ def main():
             not_predicted += 1
     print("Not predicted: " + str(not_predicted))
 
-    ball_predict_x.annotate_image("../pose_images/", "predict_ball/",
-                                  volley_position, _volley_position, extrema)
+    # ball_predict_x.annotate_image("../pose_images/", "predict_ball/",
+    #                               volley_position, _volley_position, extrema)
 
     # 利用matplotlib作图
     fig = plt.figure(num=1)

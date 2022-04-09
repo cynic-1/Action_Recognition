@@ -185,7 +185,10 @@
               </div>
             </q-card-section>
             <q-card-section>
-              <polar-bar-chart v-if="flag"/>
+              <div class="row">
+                <polar-bar-chart v-if="flag"/>
+                <radar-chart class="q-pl-lg"/>
+              </div>
             </q-card-section>
           </q-card>
         </q-tab-panel>
@@ -196,10 +199,12 @@
 
 <script>
 import polarBarChart from "components/polarBarChart";
+// import radarChart from "components/RadarChart";
 export default {
   name: "Analysis",
   components: {
-    polarBarChart
+    polarBarChart,
+    // radarChart,
   },
   data() {
     return {

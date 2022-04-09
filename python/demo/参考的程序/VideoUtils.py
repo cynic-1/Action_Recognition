@@ -13,7 +13,7 @@ if __name__ == "__main__":
     os.chdir(file_path)
 
     # print(os.getcwd())
-    img = cv2.imread("../images/1.jpg", cv2.IMREAD_COLOR)
+    img = cv2.imread("../../images/1.jpg", cv2.IMREAD_COLOR)
     # print(img)
     box = Detect.detect_ball(img)
     print(box)

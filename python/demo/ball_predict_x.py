@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
-from ball_prediction_common import *
+from demo.ball_prediction_common import *
 
 repair_use_conventional_data = True
 default_fill_range = 15
@@ -47,7 +47,7 @@ def fill_curve(left, mid, right, volley_position, vpc, is_exist, is_start, is_en
 # volley_position: 填充好的数据
 # _volley_position: 原始的数据
 # extrema: 极值点
-def annotate_image(input_path, output_path,  # fixed parameters
+def annotate_image_each(input_path, output_path,  # fixed parameters
                    volley_position, _volley_position, extrema):  # 待变参数
     # 将x坐标预测值绘制到图像上
     if not os.path.exists(output_path):
@@ -68,6 +68,36 @@ def annotate_image(input_path, output_path,  # fixed parameters
             cv2.putText(img, "catch ball", (20, 20),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
         cv2.imwrite(output_path + f"{i}.jpg", img)
+
+
+# volley_position: 填充好的数据
+# _volley_position: 原始的数据
+# extrema: 极值点
+def annotate_image(input_path, output_path,  # fixed parameters
+                   volley_position, _volley_position, extrema):  # 待变参数
+    # 将x坐标预测值绘制到图像上
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    total_num = len(os.listdir(input_path))
+    print(f"开始在图像上标记排球横坐标位置，输出目录在{output_path}，总数为{total_num}")
+    img = cv2.imread(input_path + "1.jpg")
+
+    for i in tqdm(range(1, total_num+1)):
+        # 缺失帧
+        if len(_volley_position[i-1]) == 0:
+            color = (0, 200, 0)
+
+        # 非缺失帧
+        else:
+            color = (0, 0, 255)
+        if len(volley_position[i-1]) >= 2:
+            cv2.circle(img, (int(volley_position[i-1][0]), int(volley_position[i-1][1])), 10, color, -1)
+        # img = img.copy()
+        if (i-1) in extrema:
+            cv2.putText(img, "catch ball", (20, 20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
+            cv2.imwrite(output_path + f"{i}.jpg", img)
+            img = cv2.imread(input_path + f"{i}.jpg")
 
 
 # 函数 predict_speed_x()

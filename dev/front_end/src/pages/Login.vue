@@ -10,7 +10,7 @@
           height="225" width="45"
           />
         <div class="q-mb-lg">
-          <div class="text-h6 q-mt-xl q-pa-sm text-weight-bold">计算机科学方法论</div>
+          <div class="text-h6 q-mt-xl q-pa-sm text-weight-bold">灵动——智慧排球教学系统</div>
           <div class="text-h5 text-primary q-pa-sm text-weight-bold">课程中心</div>
           <br><br>
         </div>

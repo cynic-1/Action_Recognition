@@ -32,13 +32,11 @@ def getboxes(imgpath, jsonpath, balljson):
             json.dump(boxes, file_object)
 
 
-def find_distance(imgpath, jsonpath, balljson):
+def find_distance(imgpath, jsonpath, json_dict):
     # getboxes(imgpath, jsonpath, balljson)  # 得到boxes信息的json文件
     files = os.listdir(imgpath)  # 得到图片文件夹下的所有文件名称
     ball_loc = [[0] for n in range(1000)]  # 声明二维数组装每张图片的球信息——# x1, y1, x2, y2, diatance
     # 获取球的位置信息
-    with open(balljson, "r") as f:  # 获取boxes信息
-        json_dict = json.load(f)
     boxes = []
     for i in range(0, len(json_dict)):
         if json_dict[i]:
@@ -49,6 +47,7 @@ def find_distance(imgpath, jsonpath, balljson):
     for i in range(1, len(files) + 1):  # 遍历文件夹
         # 获得humanpoints
         with open(jsonpath + "/" + str(i) + "_keypoints.json", "r") as f:
+            # 复用json_dict
             json_dict = json.load(f)
         people_cnt = len(json_dict["people"])
         humanpoints = np.zeros((10, 25, 3))
@@ -101,8 +100,8 @@ def cv2ImgAddText(img, text, left, top, textColor, textSize):
     return cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
 
 
-def height(imgpath, jsonpath, balljson):  # humanpoints 是关节坐标的三维数组：[人][关节][横/纵坐标]；balloc是球坐标的一维数组[左下x，左下y，右上x，右上y]
-    ball_loc = find_distance(imgpath, jsonpath, balljson)
+def height(imgpath, jsonpath, json_dict):  # humanpoints 是关节坐标的三维数组：[人][关节][横/纵坐标]；balloc是球坐标的一维数组[左下x，左下y，右上x，右上y]
+    ball_loc = find_distance(imgpath, jsonpath, json_dict)
     files = os.listdir(imgpath)
     height_all = {}
 
@@ -140,9 +139,9 @@ def height(imgpath, jsonpath, balljson):  # humanpoints 是关节坐标的三维
     return height_all
 
 
-def speed(imgpath, jsonpath, balljson, interval):  # interval 是时间间隔
+def speed(imgpath, jsonpath, json_dict, interval):  # interval 是时间间隔
     # ball_loc的下标访问从1开始
-    ball_loc = find_distance(imgpath, jsonpath, balljson)
+    ball_loc = find_distance(imgpath, jsonpath, json_dict)
     files = os.listdir(imgpath)
     # 不需要 寻找所需的图片中的球位置——与手臂离得最近的2张(target存放选中的连续两张图片中第二张的下标)
     # 直接对每两帧之间求速度
@@ -170,8 +169,8 @@ def speed(imgpath, jsonpath, balljson, interval):  # interval 是时间间隔
     return speed_all
 
 
-def direction(imgpath, jsonpath, balljson):  # length是文件夹中的个数, ball_loc是计算好的球的x1,y1,x2,y2,distance数组
-    ball_loc = find_distance(imgpath, jsonpath, balljson)
+def direction(imgpath, jsonpath, json_dict):  # length是文件夹中的个数, ball_loc是计算好的球的x1,y1,x2,y2,distance数组
+    ball_loc = find_distance(imgpath, jsonpath, json_dict)
     files = os.listdir(imgpath)
     # 寻找所需的图片中的球位置——与手臂离得最近的2张
     # target = find_keypic(len(files), ball_loc)
@@ -236,7 +235,7 @@ def direction(imgpath, jsonpath, balljson):  # length是文件夹中的个数, b
 if __name__ == "__main__":
     # imgpath = os.path.dirname(os.path.realpath(__file__)) + "/images/rightPadding"
     # jsonpath = os.path.dirname(os.path.realpath(__file__)) + "/pose_images_json"
-    # balljson = os.path.dirname(os.path.realpath(__file__)) + "/volleyball_detect.json"
+    # json_dict = os.path.dirname(os.path.realpath(__file__)) + "/volleyball_detect.json"
     imgpath = "pose_results"
     jsonpath = "pose_images_json"
     balljson = "volleyball_detect.json"

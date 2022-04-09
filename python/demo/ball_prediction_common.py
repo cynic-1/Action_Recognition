@@ -10,6 +10,7 @@ def produceCSVTable(csv_name, x, y, xAxis_name, yAxis_name):
             f.write(f"{x[i]},{y[i]}\n")
 
 
+# 函数功能：求球的中心点
 # 输入参数：ball_path
 # 输出参数：volley_position = list[], 表示球的位置的列表
 # 访问方式：volley_position[图片下标，从0开始] = [x, y]

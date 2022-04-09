@@ -1,0 +1,2 @@
+{"_id":{"$oid":"6212454b338a581f38db9bfd"},"year":2022,"semester":1,"day":3,"classNo":5,"name":"排球1","teachers":[{"_id":{"$oid":"62020090fc4badc851a96a99"},"name":"梁秀英"}],"students":[{"$oid":"620473b1eee4baf583222965"}],"lessons":[],"__v":0}
+{"_id":{"$oid":"6229611e5843e23dc6fb855f"},"year":2021,"semester":2,"day":2,"classNo":6,"name":"排球1","teachers":[{"_id":{"$oid":"6204739beee4baf583222961"},"name":"杨伟"},{"_id":{"$oid":"6204738deee4baf58322295f"},"name":"廖秀英"}],"students":[{"$oid":"620923b5233939db934fa1e1"}],"lessons":[],"__v":0}
