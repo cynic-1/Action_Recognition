@@ -227,6 +227,7 @@ export default {
 <style>
 .login-register {
   background-image: url('../assets/bg1.jpg');
+  background-size: 100% 120%;
   width: 100%;
   height: 100vh;
 }

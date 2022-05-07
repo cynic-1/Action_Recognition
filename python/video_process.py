@@ -4,6 +4,7 @@ import codecs
 import json
 import os
 import shutil
+import sys
 
 import cv2
 
@@ -24,13 +25,17 @@ import demo.ball_prediction_new
 #     result_path = "pose_results"
 #     keyimage_path = "pose_keyimages"
 class VideoProcessor:
-    def __init__(self, save_path, mp4_path, json_path, result_path, keyImage_path, volley_position_path, is_low_resolution):
+    def __init__(self, save_path, mp4_path, json_path,
+                 result_path, keyImage_path, volley_position_path, is_low_resolution,
+                 is_produce_motion_data=True):
         self.save_path = save_path
         self.mp4_path = mp4_path
         self.json_path = json_path
         self.result_path = result_path
         self.keyImage_path = keyImage_path
         self.is_low_resolution = is_low_resolution
+        self.is_produce_motion_data = is_produce_motion_data
+
         self.total_num = 0
         self.volley_position_path = volley_position_path
         self.volley_position = None
@@ -58,19 +63,20 @@ class VideoProcessor:
             print("视频切片数据生成完毕。")
 
         self.total_num = len(os.listdir(save_path))
+        self.__produce_volley_json()  # 生成排球位置数据：前置要求：视频已经切片
 
-        # 对视频里的所有图片生成json
-        if not os.path.exists(self.json_path):
-            print("图像的人体姿态json未生成，将开始生成。")
-            self.__produce_json(self.save_path, self.json_path)
-        else:
-            print("图像的人体姿态JSON已生成，将不再生成。")
+        if self.is_produce_motion_data:
+            # 对视频里的所有图片生成json
+            if not os.path.exists(self.json_path):
+                print("图像的人体姿态json未生成，将开始生成。")
+                self.__produce_json(self.save_path, self.json_path)
+            else:
+                print("图像的人体姿态JSON已生成，将不再生成。")
 
-        if not os.path.exists(self.result_path):
-            print("输出目录不存在，将自动创建。")
-            os.makedirs(result_path)
+            if not os.path.exists(self.result_path):
+                print("输出目录不存在，将自动创建。")
+                os.makedirs(result_path)
 
-        self.__produce_volley_json()
 
     # 命令行调用OpenPoseDemo程序，生成JSON
     # 具体就是将image_dir里的图片内容转化为姿态JSON
@@ -199,16 +205,26 @@ def calc_distance(image_path, json_path, num, volley_position, distance1, distan
 
 if __name__ == "__main__":
     # 在pose_images文件夹生成视频的全切片
-    save_path = "pose_images"
-    mp4_path = "video/错误对垫姿势1.mp4"
-    json_path = "pose_images_json"
-    result_path = "pose_results"
-    keyImage_path = "pose_keyimages"
-    volley_position_path = "volleyball_detect.json"
+    # save_path = "pose_images"
+    # mp4_path = "video/错误对垫姿势1.mp4"
+    # json_path = "pose_images_json"
+    # result_path = "pose_results"
+    # keyImage_path = "pose_keyimages"
+    # volley_position_path = "volleyball_detect.json"
+    # json_result = "result.json"
+    save_path = sys.argv[1]  # folder
+    mp4_path = sys.argv[2]
+    json_path = sys.argv[3]  # folder
+    result_path = sys.argv[4]
+    keyImage_path = sys.argv[5]
+    volley_position_path = sys.argv[6]  # if exists, use; else, create
+    json_result = sys.argv[7]
 
     videoProcessor = VideoProcessor(save_path, mp4_path, json_path, result_path,
                                     keyImage_path, volley_position_path,
-                                    is_low_resolution=True)
+                                    is_low_resolution=False, is_produce_motion_data=False)
+    quit()
+
 
     volley_position = videoProcessor.getVolleyPosition()
     total_num = videoProcessor.total_num
@@ -270,7 +286,7 @@ if __name__ == "__main__":
         if (i+1) in catch_images:
             final_json.append(arguments_json[i])
 
-    with codecs.open("result.json", "w", encoding="utf-8") as f:
+    with codecs.open(json_result, "w", encoding="utf-8") as f:
         str = json.dumps(final_json, ensure_ascii=False) # 以UTF-8格式写入文件
         f.write(str)
         print("数据json生成完毕！")
