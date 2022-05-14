@@ -2,19 +2,14 @@
 # 目前暂时使用图像为材料，后期会考虑使用视频
 import json
 import os
-import sys
-import time
 
 import cv2
-import numpy
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 import angle
 import keypoints
-import cut_video
 import pic_info
-
 # 引入排球识别
 from detectron2_package import VolleyballDetect as Detect
 

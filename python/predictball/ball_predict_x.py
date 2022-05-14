@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
-from demo.ball_prediction_common import *
+from predictball.ball_prediction_common import *
 
 repair_use_conventional_data = True
 default_fill_range = 15

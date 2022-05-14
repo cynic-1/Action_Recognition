@@ -76,7 +76,6 @@ def hcolor_to_bgr(hcolor):
     return (b, g, r)
 
 
-
 # 将传入的源图像转化为标注图像
 # 标注内容：关节、肢体连接、身体部位角度
 # image_path: 原图像目录
@@ -88,7 +87,9 @@ def hcolor_to_bgr(hcolor):
                 # "horizontal_dist": 球到手臂的水平距离
                 # "volley_position": 球的位置}
                 # volley_position 访问方式：volley_position[num-1][第几个球]
-def annotate_img(image_path, json_path, num, dynamic_info, arguments_json, annotate_people=False):
+# annotate_people: 是否绘制人的编号
+def annotate_img(image_path: str, json_path: str, num: int,
+                 dynamic_info: dict, arguments_json: list[dict], annotate_people: bool = False):
     img = cv2.imread(os.path.join(image_path, f"{num}.jpg"))
     # print(f"[image {num}] 图片的分辨率为：{img.shape}")  # 输出 几行几列几维颜色
 
@@ -111,7 +112,7 @@ def annotate_img(image_path, json_path, num, dynamic_info, arguments_json, annot
             # 在图像上标注关节序号
             for i in range(25):
                 x, y, confidence = pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]
-                
+
                 # 确保confidence参数不为0
                 if abs(confidence) > 0.0001:
                     # 只标注有限的关键点
@@ -121,17 +122,17 @@ def annotate_img(image_path, json_path, num, dynamic_info, arguments_json, annot
                 else:
                     # print(f"[image {num}] keypoint {i} not exists.")
                     pass
-            
+
 
             # 绘制人的编号
             if annotate_people:
-                cv2.putText(img, f"Person {people_id}: ", (int(x), max(int(y)-100, 0)), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1, cv2.LINE_AA)
+                cv2.putText(img, f"Person {people_id}: ", (int(x), max(int(y)-100, 0)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
-            
+
             for i in range(25):
                 x, y, confidence = pose_keypoints_2d[i*3], pose_keypoints_2d[i*3+1], pose_keypoints_2d[i*3+2]
-                
+
                 # 确保confidence参数不为0
                 if abs(confidence) > 0.0001:
                     if(i < len(keypoints.color_table)):
@@ -176,7 +177,7 @@ def annotate_img(image_path, json_path, num, dynamic_info, arguments_json, annot
         # 只考虑0号人
         people = json_dict["people"][0]
         ball = dynamic_info["volley_position"][num-1][0]
-        print(f"[image {num}] 横向距离={horizontal_dist[0]}, 胳膊长度=" + "%.2f" % length)
+        # print(f"[image {num}] 横向距离={horizontal_dist[0]}, 胳膊长度=" + "%.2f" % length)
 
         # 获取接球部位
         hitPosition = calculation.get_catch_part(people, ball)

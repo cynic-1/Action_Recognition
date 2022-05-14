@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from demo.ball_prediction_common import *
-import demo.ball_predict_x
-from demo.参考的程序 import regression
+from predictball.ball_prediction_common import *
+from predictball import regression
+import predictball.ball_predict_x
 
 
 def construct_array(_volley_position, begin, end):
@@ -129,7 +129,7 @@ def enhanced_volley_detect(json_name):
     volley_position = get_volleyCenter(json_name)
     _volley_position = deepcopy(volley_position)
     # 因为x坐标很好求，求出一些参数来做辅助
-    extrema, _ = demo.ball_predict_x.predict_xAxis(volley_position)
+    extrema, _ = predictball.ball_predict_x.predict_xAxis(volley_position)
 
     # 这里的extrema是严格的交界点
     extrema.insert(0, 0)
@@ -153,7 +153,7 @@ def main():
     volley_position = get_volleyCenter("../volleyball_detect.json")
     _volley_position = deepcopy(volley_position)
     # 因为x坐标很好求，求出一些参数来做辅助
-    extrema, _ = demo.ball_predict_x.predict_xAxis(volley_position)
+    extrema, _ = predictball.ball_predict_x.predict_xAxis(volley_position)
 
     # 这里的extrema是严格的交界点
     extrema.insert(0, 0)
@@ -161,9 +161,9 @@ def main():
     # globalRegression(_volley_position, volley_position, extrema)
     localRegression(_volley_position, volley_position, extrema)
 
-    demo.ball_predict_x.annotate_image("../pose_images/", "predict_ball/",
+    predictball.ball_predict_x.annotate_image("../pose_images/", "predict_ball/",
                                        volley_position, _volley_position, extrema)
-    # demo.ball_predict_x.annotate_image_each("../pose_images/", "predict_ball/",
+    # predictball.ball_predict_x.annotate_image_each("../pose_images/", "predict_ball/",
     #                               volley_position, _volley_position, extrema)
 
     # 利用matplotlib作图

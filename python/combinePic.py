@@ -3,7 +3,7 @@ import cv2
 
 
 # 函数功能：将某个目录下连续的*.jpg文件存为视频
-# 参数img_root：目录路径，注意要以/结尾
+# 参数img_root：目录路径，注意要以/结尾，不包含中文
 # 参数video_name: 保存视频的名称
 def save_video(img_root, video_name, fps=30):
     # # 获取到运行文件的路径，不是当前模块的路径
@@ -25,7 +25,7 @@ def save_video(img_root, video_name, fps=30):
 
 
 if __name__ == "__main__":
-    img_root = '../pose_results/'  # 这里写你的文件夹路径，比如：/home/youname/data/img/,注意最后一个文件夹要有斜杠
+    img_root = "..\\info\\VID_20220420_110204(1)\\pose_results\\"  # 这里写你的文件夹路径，比如：/home/youname/data/img/,注意最后一个文件夹要有斜杠
     fps = 30  # 保存视频的FPS，可以适当调整
     frame = cv2.imread(img_root + "1.jpg")
     size = (frame.shape[1], frame.shape[0])

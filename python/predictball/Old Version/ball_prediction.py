@@ -43,7 +43,7 @@ def predict_speed_x(__volley_position: list):
             valid_list[i] = True
 
     # 合格帧定义：该帧和上一帧都能检测到球的位置
-    print("合格帧整体比例：%.2f%%" % (valid_num / size * 100))
+    print("排球位置合格帧整体比例：%.2f%%" % (valid_num / size * 100))
 
     # 预测速度和坐标
     for i in range(1, size):

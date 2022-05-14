@@ -1,4 +1,4 @@
-# A large PanopticFPN for demo purposes.
+# A large PanopticFPN for predictball purposes.
 # Use GN on backbone to support semantic seg.
 # Use Cascade + Deform Conv to improve localization.
 _BASE_: "../COCO-PanopticSegmentation/Base-Panoptic-FPN.yaml"

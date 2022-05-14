@@ -1,3 +1,8 @@
+# 自动在目标机器上生成球位置json
+# requires video_path == "E:\volleyball"
+# ensures volleyball_json_path == "volley_json\"
+# xx.mp4 --> xx.json 名称相同
+
 import json
 import os
 import cv2

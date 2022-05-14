@@ -1,7 +1,12 @@
 import math
 from functools import cmp_to_key
 
+
 # 获取球到手臂两点连线的距离
+# assignable \nothing;
+from typing import Optional
+
+
 def get_vertical_distance(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int):
     # ax + by + c = 0
     if x2-x1 != 0:
@@ -16,6 +21,8 @@ def get_vertical_distance(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int):
     return distance
 
 
+# 获取球到手臂两点连线上(x0,y0)点的垂直距离（即平行于连线直线的距离）
+# assignable \nothing;
 def get_horizontal_distance_on(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int, x0: int, y0: int):
     # 求过点(x0, y0)且与当前直线垂直的直线
     if y2-y1 != 0:
@@ -33,6 +40,7 @@ def get_horizontal_distance_on(x1: int, y1: int, x2: int, y2: int, cx: int, cy: 
 
 
 # 获取球到手臂两点连线中垂线的距离
+# assignable \nothing;
 def get_horizontal_distance(x1: int, y1: int, x2: int, y2: int, cx: int, cy: int):
     # 求直线的中点
     x0 = (x1+x2) / 2
@@ -58,18 +66,21 @@ def get_distance(x1, y1, x2, y2):
     return math.sqrt((x1-x2)**2 + (y1-y2)**2)
 
 
+# 判断某个部位被检测到
 def is_part_in_people(people, part_id):
     confidence = people["pose_keypoints_2d"][part_id*3+2]
     return confidence > 0.1
 
 
+# 无关人物过滤算法
+# assignable json_dict;
 def people_track(json_dict):
     # 如果人数大于3，则把远处的人（鼻子到腿最短）删去
     dist_pair = (0, 14)
     if(len(json_dict["people"]) >= 3):
         # 删去不含有上面两个部位对应的单人数据
         # 记住：删除列表中的特定元素或者保留列表中的特定元素需要用filter
-        json_dict["people"] = list(filter(lambda people: (is_part_in_people(people, dist_pair[0]) \
+        json_dict["people"] = list(filter(lambda people: (is_part_in_people(people, dist_pair[0])
             and is_part_in_people(people, dist_pair[0])), json_dict["people"]))
 
         def cmp(people1, people2):
@@ -94,7 +105,8 @@ def people_track(json_dict):
     json_dict["people"].sort(key=cmp_to_key(cmp2))
 
 
-def round_safe(num, accuracy):
+# 安全的保留小数函数
+def round_safe(num: Optional[float], accuracy: int):
     if num is None:
         return num
     else:
@@ -103,4 +115,3 @@ def round_safe(num, accuracy):
 
 if __name__ == "__main__":
     print(get_horizontal_distance(13, 15, 21, 56, 7, 7))
-    pass
