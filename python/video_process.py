@@ -5,16 +5,20 @@ import json
 import os
 import shutil
 import sys
+from functools import cmp_to_key
+from typing import ClassVar
 
 import cv2
 from tqdm import tqdm
 
 import ball_flight
+import combinePic
 import config
 import evaluate
 import graphics
 import keyImage
 import mathtools
+import peopleTrack
 from VideoInfoLoader import VideoInfoLoader
 from mathtools import round_safe
 
@@ -33,11 +37,12 @@ global gl_config
 # 此阶段原则：尽早抛出异常
 def calc_distance(image_path, json_path, num, volley_position, distance1, distance2, horizontal_dist):
     img = cv2.imread(os.path.join(image_path, f"{num}.jpg"))
+
     # 读取和转化JSON文件
     with open(os.path.join(json_path, f"{num}_keypoints.json"), "r") as f:
         json_dict = json.load(f)
         # 无关人过滤算法
-        mathtools.people_track(json_dict)
+        peopleTrack.people_track(json_dict)
 
     # 获取球的信息，并在图像上标注球
     boxes = volley_position[num - 1]
@@ -48,12 +53,20 @@ def calc_distance(image_path, json_path, num, volley_position, distance1, distan
 
     people_cnt = len(json_dict["people"])
 
-    # TODO: 多个球时，目前只考虑一个球的情况，究竟应该选择哪个球呢？
     # 目前选的是第一个球
     if len(boxes) != 0:
+        if len(boxes) > 1:
+            # 筛选体积最大的球
+            def box_size_cmp(box1, box2):
+                size1: int = int((box1[2] + box1[3] - box1[0] - box1[1]) / 2)
+                size2: int = int((box2[2] + box2[3] - box2[0] - box2[1]) / 2)
+                return size1 - size2
+            boxes.sort(key=cmp_to_key(box_size_cmp), reverse=True)
+
         box = boxes[0]
         x1, y1, x2, y2 = box
         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+
 
         # 以绿色边框描出球的位置
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
@@ -102,6 +115,9 @@ def calc_distance(image_path, json_path, num, volley_position, distance1, distan
             horizontal_dist[num].append(dist2)
             # horizontal_dist存储球中心与人胳膊中垂线的距离
             # 存储方式与distance1完全相同
+    else:
+        distance1.append([])
+        horizontal_dist.append([])
 
 
 def video_basic_info(videoProcessor: VideoInfoLoader):
@@ -117,8 +133,27 @@ def video_basic_info(videoProcessor: VideoInfoLoader):
     valid_percent = int(detected_frame / total_frame * 100)
     print(f"排球帧总数:{total_frame}, 检测到帧的数目:{detected_frame}, 合格率: {valid_percent}%")
 
-    # 2. ...
+    # 2. 检查姿态json文件是否完整
+    if not os.path.exists(os.path.join(videoProcessor.json_path, "2_keypoints.json")):
+        raise Exception("姿态数据json不全!")
 
+
+# 类的类型标注
+class DistanceInfo:
+    keyImages: ClassVar[list[int]]
+    distance1: ClassVar[list]
+    # distance1数组访问方式：
+    # distance1[图片编号][people_id(人物编号，从0开始)] = 距离
+    # 特点：可以直接用图片编号访问
+    # 没识别到球的位置默认为空数组，即distance1[图片编号] = []
+    horizontal_dist: ClassVar[list]
+    volley_position: ClassVar[list]
+
+    def __init__(self, keyImages, distance1, horizontal_dist, volley_position):
+        self.keyImages = keyImages
+        self.distance1 = distance1
+        self.horizontal_dist = horizontal_dist
+        self.volley_position = volley_position
 
 
 # 命令行参数：
@@ -146,6 +181,10 @@ def main():
     volley_position_path = sys.argv[6]  # if exists, use; else, create
     json_result = sys.argv[7]
 
+    # # 3. 检查当前项目是否已生成
+    # if os.path.exists(result_path):
+    #     raise Exception("此项目已经生成!")
+
     videoInfo = VideoInfoLoader(save_path, mp4_path, json_path, result_path,
                                 keyImage_path, volley_position_path,
                                 is_low_resolution=False, is_produce_motion_data=False)
@@ -162,8 +201,7 @@ def main():
         calc_distance(save_path, json_path, i + 1, volley_position, distance1, distance2, horizontal_dist)
 
     keyImages = keyImage.getCatchBallImage(distance2, volley_position, horizontal_dist)
-    distanceInfos = {"min_imageID": keyImages, "distance": distance1,
-                     "horizontal_dist": horizontal_dist, "volley_position": volley_position}
+    distanceInfo = DistanceInfo(keyImages, distance1, horizontal_dist, volley_position)
     print(f"图像关键帧列表： {keyImages}")
 
     # 输出的信息json
@@ -182,8 +220,14 @@ def main():
     print("开始绘制基础信息... (level=1)")
     # 绘制信息
     for i in tqdm(range(total_num)):
-        img = graphics.annotate_img(save_path, json_path, i + 1, distanceInfos, arguments_json)
-        cv2.imwrite(os.path.join(result_path, f"{i + 1}.jpg"), img)
+        img = graphics.annotate_img(save_path, json_path, i + 1, distanceInfo, arguments_json)
+        if config.gl_config["keyImageOnly"]:
+            if (i+1) in keyImages:
+                cv2.imwrite(os.path.join(result_path, f"{i + 1}.jpg"), img)
+        else:
+            cv2.imwrite(os.path.join(result_path, f"{i + 1}.jpg"), img)
+
+    print("已完成pose_result的写入")
 
     # 球的信息标注属于第3级渲染
     if config.gl_config["render_level"] >= 3:
@@ -231,6 +275,11 @@ def main():
     # 将接球的关键帧复制到result_path的catch目录中
     for i in keyImages:
         shutil.copyfile(os.path.join(result_path, f"{i}.jpg"), os.path.join(specific_image_path, f"{i}.jpg"))
+
+    if config.gl_config["combinePic"]:
+        print("开始将结果合成视频！")
+        combinePic.save_video(videoInfo.result_path, video_name=os.path.join(videoInfo.keyImage_path, "video.mp4"))
+        print("合成完毕！")
 
 
 if __name__ == "__main__":

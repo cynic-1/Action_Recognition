@@ -1,4 +1,4 @@
-def getCatchBallImage(distance2, volley_position, horizontal_dist):
+def getCatchBallImage(distance2, volley_position, horizontal_dist) -> list[int]:
     lst = distance2[0]
     keyImages = []
     for i in range(len(lst)):

@@ -26,7 +26,7 @@ class VideoInfoLoader:
         self.__prepare_source()
 
     # 获取VolleyPosition
-    def getVolleyPosition(self):
+    def getVolleyPosition(self) -> list:
         if self.volley_position is None:
             # 读取经过补全的排球位置
             if config.gl_config["use_volley_pos_fill"]:

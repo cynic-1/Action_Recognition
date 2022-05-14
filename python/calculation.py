@@ -19,8 +19,11 @@ def get_part_position(people, part_pair, cx, cy):
     # 在part0->part1的射线延长线上
     if left_dist > dist and right_dist < left_dist:
         return -(right_dist/dist)
-    else:
+    elif dist != 0:
         return right_dist/dist
+    else:
+        # 此时dist为0，若不处理，会出现除以0异常
+        return 0
 
 # 获取接球部位
 def get_catch_part(people, ball):

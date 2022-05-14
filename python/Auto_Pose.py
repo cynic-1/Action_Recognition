@@ -21,9 +21,9 @@ if __name__ == "__main__":
     folders = os.listdir(main_out_path)
     for filename in files:
         if filename.endswith(".mp4"):
-            print(f"file: {filename}")
+            # print(f"file: {filename}")
             if filename[:-4] not in folders:
-                print("json数据未生成, 跳过此文件")
+                # print("json数据未生成, 跳过此文件")
                 continue
 
             os.system('chcp 65001')
@@ -39,12 +39,11 @@ if __name__ == "__main__":
             print(volley_path)
             json_result = os.path.join(dir_name, "result.json")
 
-            retcode = subprocess.call(f"python video_process.py {image_path} {input_video} {json_path} "
-                            f"{result_path} {keyImage_path} {volley_path} {json_result}")
+            retCode = subprocess.call(f"python video_process.py {image_path} {input_video} {json_path} "
+                                      f"{result_path} {keyImage_path} {volley_path} {json_result}")
 
-            print(f"retcode: {retcode}")
-            if retcode != 0:
+            print(f"Return Code: {retCode}")
+            if retCode != 0:
                 print("出现异常！")
-                quit()
 
             print(f"Finish {filename}.")
